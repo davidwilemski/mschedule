@@ -1,0 +1,13 @@
+
+{{assign var="scale" value=$map->$size.x/$map->large.x}}
+
+{{foreach from=$waypoints item=waypoint}}
+
+	{{assign var="locx" value=$scale*$waypoint->x}}
+	{{assign var="locy" value=$scale*$waypoint->y}}
+
+	<div class="mapWaypointContainer" style="left: {{$locx}}; top: {{$locy}};" {{popup text=$waypoint->popupHTML bgcolor="#666666" fgcolor="#cccccc"}}>
+		<div class="mapWaypoint_{{$size}}"></div>
+	</div>
+	
+{{/foreach}}

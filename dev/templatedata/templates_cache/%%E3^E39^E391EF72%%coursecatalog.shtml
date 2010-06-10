@@ -1,0 +1,68 @@
+a:4:{s:8:"template";a:1:{s:19:"coursecatalog.shtml";b:1;}s:9:"timestamp";i:1272085375;s:7:"expires";i:1272088975;s:13:"cache_serials";a:0:{}}
+
+
+<form action="coursecatalog.php" name="courseCatalogSearch" method="post">
+
+	<table cellpadding="0" cellspacing="0">
+		<tr>
+							<td style="border:1px solid black">
+					<span class="normaltext">
+						catalog# 
+					</span>
+				</td>
+							<td style="border:1px solid black">
+					<span class="normaltext">
+						department 
+					</span>
+				</td>
+							<td style="border:1px solid black">
+					<span class="normaltext">
+						course# 
+					</span>
+				</td>
+							<td style="border:1px solid black">
+					<span class="normaltext">
+						section 
+					</span>
+				</td>
+					</tr>
+		<tr>
+							<td style="border:1px solid black">
+					<input type="text" name="classid" value="" size="8" maxlength="8">
+				</td>
+							<td style="border:1px solid black">
+					<input type="text" name="dept" value="" size="10" maxlength="10">
+				</td>
+							<td style="border:1px solid black">
+					<input type="text" name="number" value="" size="3" maxlength="3">
+				</td>
+							<td style="border:1px solid black">
+					<input type="text" name="section" value="" size="3" maxlength="3">
+				</td>
+					</tr>
+	</table>
+
+		
+	<input type="submit" value="search">
+</form>
+
+
+
+
+
+
+
+<table>
+	<tr>
+		<td class="normaltext" style="border:1px solid black">CourseID</td>
+		<td class="normaltext" style="border:1px solid black">Status</td>
+		<td class="normaltext" style="border:1px solid black">Department</td>
+		<td class="normaltext" style="border:1px solid black">Number</td>
+		<td class="normaltext" style="border:1px solid black">Component</td>
+		<td class="normaltext" style="border:1px solid black">Section</td>
+		<td class="normaltext" style="border:1px solid black">Descr</td>
+		<td class="normaltext" style="border:1px solid black">Credits</td>
+		<td class="normaltext" style="border:1px solid black">Open Seats</td>
+		<td class="normaltext" style="border:1px solid black">Wait#</td>
+	</tr>
+	</table>

@@ -1,0 +1,12 @@
+Here's some of the things that we are currently working on:
+
+Kyle:
+Old Mschedule functions imported to new Mschedule
+Class Search Function streamlined
+update function for database
+
+
+Matt:
+writing the smarty templates
+writing the smarty PHP interface (MSSmarty, MSViewableObject and derivatives)
+

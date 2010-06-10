@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="utf-8"?>
+<wc-entries
+   xmlns="svn:">
+<entry
+   committed-rev="84"
+   name=""
+   committed-date="2005-01-05T05:08:18.838543Z"
+   url="svn://kylemulka.com/repository/templatedata/templates/email"
+   last-author="mjpizz"
+   kind="dir"
+   uuid="41d9ff47-783f-d44a-9eaa-32177a15ade1"
+   revision="113"/>
+<entry
+   committed-rev="84"
+   name="newmsauthuser.shtml"
+   text-time="2005-01-05T23:29:35.453750Z"
+   committed-date="2005-01-05T05:08:18.838543Z"
+   checksum="d1df7e84f2500fd77b9353f6189d5304"
+   last-author="mjpizz"
+   kind="file"
+   prop-time="2005-01-05T23:29:35.391250Z"/>
+<entry
+   committed-rev="84"
+   name="officialcontainer.shtml"
+   text-time="2005-01-05T23:29:35.469375Z"
+   committed-date="2005-01-05T05:08:18.838543Z"
+   checksum="f2886470b951f65d4d89173f3ac41e98"
+   last-author="mjpizz"
+   kind="file"
+   prop-time="2005-01-05T23:29:35.422500Z"/>
+</wc-entries>

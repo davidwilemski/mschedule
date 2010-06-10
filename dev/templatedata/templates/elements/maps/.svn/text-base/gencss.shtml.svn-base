@@ -1,0 +1,40 @@
+
+#mapThumb_{{$map->name}} {
+	
+	background-image: url('{{$cfg.maps.path}}/{{$map->name}}_thumb.gif');
+	width: {{$map->thumb.x}}px;
+	height: {{$map->thumb.y}}px;
+	border: 1px solid black;
+
+	position: relative;
+	left: 0px;
+	top: 0px;
+
+	z-index: 20;
+	overflow: hidden;
+}
+
+#mapSmall_{{$map->name}} {
+	
+	background-image: url('{{$cfg.maps.path}}/{{$map->name}}_small.gif');
+	width: {{$map->small.x}}px;
+	height: {{$map->small.y}}px;
+
+	position: relative;
+	left: 0px;
+	top: 0px;
+}
+
+#mapLarge_{{$map->name}} {
+
+	background: #222;
+	background-image: url('{{$cfg.maps.path}}/{{$map->name}}_large.gif');
+	width: {{$map->large.x}}px;
+	height: {{$map->large.y}}px;
+
+	position: relative;
+	left: 0px;
+	top: 0px;
+
+	z-index: 10;
+}

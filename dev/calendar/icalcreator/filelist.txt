@@ -1,0 +1,12 @@
+contributions.txt		contributors
+filelist.txt			this file
+iCalcreator.class.php		class file
+images				iCal/xCal images directory
+ReleaseNotes_0.9.9.txt		recent changes
+TODO.txt			what to do next
+docs/LPGL.txt			license
+docs/samples.php		using examples, read this first!
+docs/using.html			howto use iCalcreator, command reference
+testSuite			directory, testing setting properties, notice READING.txt
+www.calconnect.org		folder with usecase implemententions
+

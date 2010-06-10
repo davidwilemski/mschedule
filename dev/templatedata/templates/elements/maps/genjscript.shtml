@@ -1,0 +1,1 @@
+var mapLargeScale_{{$map->name}} = {{$map->large.x}}/{{$map->thumb.x}};

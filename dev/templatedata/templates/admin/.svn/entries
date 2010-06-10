@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="utf-8"?>
+<wc-entries
+   xmlns="svn:">
+<entry
+   committed-rev="100"
+   name=""
+   committed-date="2005-01-07T16:47:23.639032Z"
+   url="svn://kylemulka.com/repository/templatedata/templates/admin"
+   last-author="mjpizz"
+   kind="dir"
+   uuid="41d9ff47-783f-d44a-9eaa-32177a15ade1"
+   revision="113"/>
+<entry
+   committed-rev="100"
+   name="editlocations.shtml"
+   text-time="2005-01-07T17:34:47.281250Z"
+   committed-date="2005-01-07T16:47:23.639032Z"
+   checksum="2c3b7ce418dbddec7276c0d2d2cc87fc"
+   last-author="mjpizz"
+   kind="file"
+   prop-time="2005-01-07T17:34:47.156250Z"/>
+</wc-entries>

@@ -1,0 +1,4 @@
+AuthType Basic
+AuthName "Mschedule Admin Area"
+AuthUserFile "/home/mschedul/.htpasswds/dev/admin/passwd"
+require valid-user

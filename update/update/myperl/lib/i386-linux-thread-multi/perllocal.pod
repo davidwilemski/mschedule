@@ -1,0 +1,22 @@
+=head2 Mon Mar 26 22:55:29 2007: C<Module> L<DBD::mysql|DBD::mysql>
+
+=over 4
+
+=item *
+
+C<installed into: /home/scottjg/myperl/lib>
+
+=item *
+
+C<LINKTYPE: dynamic>
+
+=item *
+
+C<VERSION: 4.004>
+
+=item *
+
+C<EXE_FILES: >
+
+=back
+

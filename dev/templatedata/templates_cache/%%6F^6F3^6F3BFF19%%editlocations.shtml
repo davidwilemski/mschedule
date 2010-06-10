@@ -1,0 +1,1202 @@
+a:4:{s:8:"template";a:4:{s:25:"admin/editlocations.shtml";b:1;s:24:"elements/maps/init.shtml";b:1;s:30:"elements/maps/genjscript.shtml";b:1;s:26:"elements/maps/gencss.shtml";b:1;}s:9:"timestamp";i:1157465728;s:7:"expires";i:1157469328;s:13:"cache_serials";a:0:{}}
+
+<script type="text/javascript" src="http://dev.mschedule.com/javascripts/msbrowserdetect.js"></script>
+<script type="text/javascript" src="http://dev.mschedule.com/javascripts/mscoords.js"></script>
+<script type="text/javascript" src="http://dev.mschedule.com/javascripts/msmapbrowse.js"></script>
+
+<script type="text/javascript">
+	var mapZoomContainerSize = new Coordinate(400,300); //gives the size (W/H) of the mapZoomContainer CSS element
+</script>
+
+
+<style type="text/css">
+	.mapZoomContainer {
+		
+		background: black;
+		border: 1px solid black;
+		width: 400px;
+		height: 300px;
+		overflow: hidden;
+	}
+
+	.mapWaypoint_thumb {
+		position: relative;
+		left: -4px;
+		top: -4px;
+		background-image: url("http://dev.mschedule.com/images/maps/star_thumb.gif");
+
+		width: 8px;
+		height: 8px;
+	}
+	
+	.mapWaypoint_small {
+		position: relative;
+		left: -7px;
+		top: -7px;
+		background-image: url("http://dev.mschedule.com/images/maps/star_small.gif");
+
+		width: 15px;
+		height: 15px;
+	}
+
+	.mapWaypoint_large {
+		position: relative;
+		left: -12px;
+		top: -12px;
+		background-image: url("http://dev.mschedule.com/images/maps/star_large.gif");
+		
+		width: 25px;
+		height: 25px;
+	}
+
+	.mapWaypointContainer {
+		position: absolute;
+		width: 1px;
+		height: 1px;
+	}
+	
+	.mapPreviewBox {
+
+		border: 0px solid #0066CC;
+		//background: #99CCFF;
+		position: relative;
+
+		//z-index: 25;
+	}
+</style>
+<script type="text/javascript">
+			var mapLargeScale_north = 1300/135;			var mapLargeScale_medical = 1435/135;			var mapLargeScale_central = 1313/135;			var mapLargeScale_south = 1295/135;	</script>
+
+
+
+
+<style type="text/css">
+			
+#mapThumb_north {
+	
+	background-image: url('http://dev.mschedule.com/images/maps/north_thumb.gif');
+	width: 135px;
+	height: 103px;
+	border: 1px solid black;
+
+	position: relative;
+	left: 0px;
+	top: 0px;
+
+	z-index: 20;
+	overflow: hidden;
+}
+
+#mapSmall_north {
+	
+	background-image: url('http://dev.mschedule.com/images/maps/north_small.gif');
+	width: 600px;
+	height: 457px;
+
+	position: relative;
+	left: 0px;
+	top: 0px;
+}
+
+#mapLarge_north {
+
+	background: #222;
+	background-image: url('http://dev.mschedule.com/images/maps/north_large.gif');
+	width: 1300px;
+	height: 990px;
+
+	position: relative;
+	left: 0px;
+	top: 0px;
+
+	z-index: 10;
+}			
+#mapThumb_medical {
+	
+	background-image: url('http://dev.mschedule.com/images/maps/medical_thumb.gif');
+	width: 135px;
+	height: 99px;
+	border: 1px solid black;
+
+	position: relative;
+	left: 0px;
+	top: 0px;
+
+	z-index: 20;
+	overflow: hidden;
+}
+
+#mapSmall_medical {
+	
+	background-image: url('http://dev.mschedule.com/images/maps/medical_small.gif');
+	width: 600px;
+	height: 441px;
+
+	position: relative;
+	left: 0px;
+	top: 0px;
+}
+
+#mapLarge_medical {
+
+	background: #222;
+	background-image: url('http://dev.mschedule.com/images/maps/medical_large.gif');
+	width: 1435px;
+	height: 1054px;
+
+	position: relative;
+	left: 0px;
+	top: 0px;
+
+	z-index: 10;
+}			
+#mapThumb_central {
+	
+	background-image: url('http://dev.mschedule.com/images/maps/central_thumb.gif');
+	width: 135px;
+	height: 154px;
+	border: 1px solid black;
+
+	position: relative;
+	left: 0px;
+	top: 0px;
+
+	z-index: 20;
+	overflow: hidden;
+}
+
+#mapSmall_central {
+	
+	background-image: url('http://dev.mschedule.com/images/maps/central_small.gif');
+	width: 600px;
+	height: 686px;
+
+	position: relative;
+	left: 0px;
+	top: 0px;
+}
+
+#mapLarge_central {
+
+	background: #222;
+	background-image: url('http://dev.mschedule.com/images/maps/central_large.gif');
+	width: 1313px;
+	height: 1501px;
+
+	position: relative;
+	left: 0px;
+	top: 0px;
+
+	z-index: 10;
+}			
+#mapThumb_south {
+	
+	background-image: url('http://dev.mschedule.com/images/maps/south_thumb.gif');
+	width: 135px;
+	height: 133px;
+	border: 1px solid black;
+
+	position: relative;
+	left: 0px;
+	top: 0px;
+
+	z-index: 20;
+	overflow: hidden;
+}
+
+#mapSmall_south {
+	
+	background-image: url('http://dev.mschedule.com/images/maps/south_small.gif');
+	width: 600px;
+	height: 592px;
+
+	position: relative;
+	left: 0px;
+	top: 0px;
+}
+
+#mapLarge_south {
+
+	background: #222;
+	background-image: url('http://dev.mschedule.com/images/maps/south_large.gif');
+	width: 1295px;
+	height: 1277px;
+
+	position: relative;
+	left: 0px;
+	top: 0px;
+
+	z-index: 10;
+}	</style>
+
+
+
+
+<form action="" name="locationEditor" method="post">
+
+	<div class="outerbox" align="center">
+	choose a building:
+		<select NAME="locName">
+			<option value=""></option>
+							
+				
+									<option value="Art & Architecture Building, North Campus">
+					***DONE***
+					[NORTH] (628,652) :: Art & Architecture Building, North Campus
+				
+												
+							
+				
+									<option value="Angell Hall">
+					***DONE***
+					[CENTRAL] (487,782) :: Angell Hall
+				
+												
+							
+				
+									<option value="Walter E. Lay Automotive Lab, North Campus">
+					***DONE***
+					[NORTH] (891,444) :: Walter E. Lay Automotive Lab, North Campus
+				
+												
+							
+				
+									<option value="Alice Lloyd Hall">
+					***DONE***
+					[MEDICAL] (868,609) :: Alice Lloyd Hall
+				
+												
+							
+				
+									<option value="Alumni Memorial Hall (Art Museum)">
+					***DONE***
+					[CENTRAL] (494,1010) :: Alumni Memorial Hall (Art Museum)
+				
+												
+							
+				
+									<option value="Anderson East Quadrangle">
+					***DONE***
+					[CENTRAL] (1066,1407) :: Anderson East Quadrangle
+				
+												
+							
+				
+									<option value="Greene East Quadrangle">
+					***DONE***
+					[CENTRAL] (1070,1421) :: Greene East Quadrangle
+				
+												
+							
+				
+									<option value="Strauss East Quadrangle">
+					***DONE***
+					[CENTRAL] (1069,1416) :: Strauss East Quadrangle
+				
+												
+							
+				
+									<option value="Tyler East Quadrangle">
+					***DONE***
+					[CENTRAL] (1072,1417) :: Tyler East Quadrangle
+				
+												
+							
+				
+									<option value="Public Policy Annex, 1015 E. Huron">
+					***DONE***
+					[NONE] (0,0) :: Public Policy Annex, 1015 E. Huron
+				
+												
+							
+				
+									<option value="Argus Building II, Television Center, 408 S. Fourth Street">
+					***DONE***
+					[NONE] (0,0) :: Argus Building II, Television Center, 408 S. Fourth Street
+				
+												
+							
+				
+									<option value="Argus Building III, 416 S. Fourth Street">
+					***DONE***
+					[NONE] (0,0) :: Argus Building III, 416 S. Fourth Street
+				
+												
+							
+				
+									<option value="Advanced Technology Lab">
+					***DONE***
+					[NORTH] (920,758) :: Advanced Technology Lab
+				
+												
+							
+				
+									<option value="Blanch Anderson Moore Hall, School of Music, North Campus">
+					***DONE***
+					[NORTH] (332,606) :: Blanch Anderson Moore Hall, School of Music, North Campus
+				
+												
+							
+				
+									<option value="Margaret Bell Pool, Central Campus Recreation Building">
+					***DONE***
+					[MEDICAL] (747,947) :: Margaret Bell Pool, Central Campus Recreation Building
+				
+												
+							
+				
+									<option value="Biological Station, Pellston, Michigan">
+					***DONE***
+					[NONE] (0,0) :: Biological Station, Pellston, Michigan
+				
+												
+							
+				
+									<option value="Burton Memorial Tower">
+					***DONE***
+					[CENTRAL] (647,357) :: Burton Memorial Tower
+				
+												
+							
+				
+									<option value="Matthaei Botanical Gardens, Dixboro Road">
+					***DONE***
+					[NONE] (0,0) :: Matthaei Botanical Gardens, Dixboro Road
+				
+												
+							
+				
+									<option value="Bursley Hall">
+					***DONE***
+					[NORTH] (339,224) :: Bursley Hall
+				
+												
+							
+				
+									<option value="Business Administration">
+					***DONE***
+					[CENTRAL] (767,1389) :: Business Administration
+				
+												
+							
+				
+									<option value="Camp Davis, Jackson Hole, Wyoming">
+					***DONE***
+					[NONE] (0,0) :: Camp Davis, Jackson Hole, Wyoming
+				
+												
+							
+				
+									<option value="Clarence Cook Little Building">
+					***DONE***
+					[CENTRAL] (1046,676) :: Clarence Cook Little Building
+				
+												
+							
+				
+									<option value="Central Campus Recreation Building">
+					***DONE***
+					[MEDICAL] (751,987) :: Central Campus Recreation Building
+				
+												
+							
+				
+									<option value="Chemistry Building">
+					***DONE***
+					[CENTRAL] (893,584) :: Chemistry Building
+				
+												
+							
+				
+									<option value="Chrysler Center, North Campus">
+					***DONE***
+					[NORTH] (671,550) :: Chrysler Center, North Campus
+				
+												
+							
+				
+									<option value="Commerce Park – Dearborn">
+					***DONE***
+					[NONE] (0,0) :: Commerce Park – Dearborn
+				
+												
+							
+				
+									<option value="Cooley Building, North Campus">
+					***DONE***
+					[NORTH] (904,576) :: Cooley Building, North Campus
+				
+												
+							
+				
+									<option value="Couzens Hall">
+					***DONE***
+					[MEDICAL] (778,528) :: Couzens Hall
+				
+												
+							
+				
+									<option value="Crisler Arena">
+					***DONE***
+					[SOUTH] (473,1176) :: Crisler Arena
+				
+												
+							
+				
+									<option value="Dana Building (School of Natural Resources & Environment)">
+					***DONE***
+					[CENTRAL] (893,705) :: Dana Building (School of Natural Resources & Environment)
+				
+												
+							
+				
+									<option value="Dance Building, 1310 N University Court">
+					***DONE***
+					[NONE] (0,0) :: Dance Building, 1310 N University Court
+				
+												
+							
+				
+									<option value="William Davidson Hall">
+					***DONE***
+					[CENTRAL] (770,1392) :: William Davidson Hall
+				
+												
+							
+				
+									<option value="Duderstadt Center, North Campus">
+					***DONE***
+					[NORTH] (751,526) :: Duderstadt Center, North Campus
+				
+												
+							
+				
+									<option value="David M. Dennison Building">
+					***DONE***
+					[CENTRAL] (1073,811) :: David M. Dennison Building
+				
+												
+							
+				
+									<option value="Dental Building">
+					***DONE***
+					[CENTRAL] (972,370) :: Dental Building
+				
+												
+							
+				
+									<option value="Dow Engineering Building, North Campus">
+					***DONE***
+					[NORTH] (763,315) :: Dow Engineering Building, North Campus
+				
+												
+							
+				
+									<option value="Executive Education">
+					***DONE***
+					[CENTRAL] (943,1427) :: Executive Education
+				
+												
+							
+				
+									<option value="Electrical Engineering and Computer Science Building">
+					***DONE***
+					[NORTH] (868,394) :: Electrical Engineering and Computer Science Building
+				
+												
+							
+				
+									<option value="East Hall">
+					***DONE***
+					[CENTRAL] (1044,953) :: East Hall
+				
+												
+							
+				
+									<option value="Engineering Program Building">
+					***DONE***
+					[NORTH] (1134,284) :: Engineering Program Building
+				
+												
+							
+				
+									<option value="East Quadrangle">
+					***DONE***
+					[CENTRAL] (1067,1384) :: East Quadrangle
+				
+												
+							
+				
+									<option value="Engineering Research Building 1">
+					***DONE***
+					[NORTH] (793,704) :: Engineering Research Building 1
+				
+												
+							
+				
+									<option value="Engineering Research Building 2">
+					***DONE***
+					[NORTH] (775,673) :: Engineering Research Building 2
+				
+												
+							
+				
+									<option value="Environmental & Water Resources Engineering Building">
+					***DONE***
+					[NORTH] (932,349) :: Environmental & Water Resources Engineering Building
+				
+												
+							
+				
+									<option value="Fresh Air Camp, Pinckney">
+					***DONE***
+					[NONE] (0,0) :: Fresh Air Camp, Pinckney
+				
+												
+							
+				
+									<option value="Frieze Building">
+					***DONE***
+					[CENTRAL] (465,124) :: Frieze Building
+				
+												
+							
+				
+									<option value="Ford Library, North Campus">
+					***DONE***
+					[NORTH] (1016,790) :: Ford Library, North Campus
+				
+												
+							
+				
+									<option value="Francois-Xavier Bagnoud Building, North Campus">
+					***DONE***
+					[NORTH] (1039,264) :: Francois-Xavier Bagnoud Building, North Campus
+				
+												
+							
+				
+									<option value="G. G. Brown Laboratory, North Campus">
+					***DONE***
+					[NORTH] (881,307) :: G. G. Brown Laboratory, North Campus
+				
+												
+							
+				
+									<option value="Harlan Hatcher Graduate Library, North">
+					***DONE***
+					[CENTRAL] (707,858) :: Harlan Hatcher Graduate Library, North
+				
+												
+							
+				
+									<option value="Hale Auditorium, School of Business Administration">
+					***DONE***
+					[CENTRAL] (762,1391) :: Hale Auditorium, School of Business Administration
+				
+												
+							
+				
+									<option value="Haven Hall">
+					***DONE***
+					[CENTRAL] (571,852) :: Haven Hall
+				
+												
+							
+				
+									<option value="Hutchins Hall">
+					***DONE***
+					[CENTRAL] (465,1308) :: Hutchins Hall
+				
+												
+							
+				
+									<option value="Intramural Building">
+					***DONE***
+					[SOUTH] (974,457) :: Intramural Building
+				
+												
+							
+				
+									<option value="Industrial and Operations Engineering Building, North Campus">
+					***DONE***
+					[NORTH] (898,524) :: Industrial and Operations Engineering Building, North Campus
+				
+												
+							
+				
+									<option value="Institute for Social Research">
+					***DONE***
+					[CENTRAL] (67,781) :: Institute for Social Research
+				
+												
+							
+				
+									<option value="Kresge Library">
+					***DONE***
+					[CENTRAL] (846,1418) :: Kresge Library
+				
+												
+							
+				
+									<option value="Kellogg Eye Center">
+					***DONE***
+					[NONE] (0,0) :: Kellogg Eye Center
+				
+												
+							
+				
+									<option value="Kelsey Museum of Archaeology">
+					***DONE***
+					[CENTRAL] (352,790) :: Kelsey Museum of Archaeology
+				
+												
+							
+				
+									<option value="Kresge Hearing Research Institute">
+					***DONE***
+					[MEDICAL] (787,429) :: Kresge Hearing Research Institute
+				
+												
+							
+				
+									<option value="Lane Hall">
+					***DONE***
+					[CENTRAL] (364,278) :: Lane Hall
+				
+												
+							
+				
+									<option value="Michigan League">
+					***DONE***
+					[CENTRAL] (790,419) :: Michigan League
+				
+												
+							
+				
+									<option value="Lurie Engineering Center">
+					***DONE***
+					[NORTH] (892,474) :: Lurie Engineering Center
+				
+												
+							
+				
+									<option value="Law Library">
+					***DONE***
+					[CENTRAL] (557,1251) :: Law Library
+				
+												
+							
+				
+									<option value="Lorch Hall">
+					***DONE***
+					[CENTRAL] (779,1261) :: Lorch Hall
+				
+												
+							
+				
+									<option value="Literature, Science, and the Arts Building">
+					***DONE***
+					[CENTRAL] (337,881) :: Literature, Science, and the Arts Building
+				
+												
+							
+				
+									<option value="Life Sciences Institute">
+					***DONE***
+					[CENTRAL] (1199,335) :: Life Sciences Institute
+				
+												
+							
+				
+									<option value="Mary Markley Hall">
+					***DONE***
+					[MEDICAL] (1127,651) :: Mary Markley Hall
+				
+												
+							
+				
+									<option value="Max Kade House, 627 Oxford Street">
+					***DONE***
+					[NONE] (0,0) :: Max Kade House, 627 Oxford Street
+				
+												
+							
+				
+									<option value="Mason Hall">
+					***DONE***
+					[CENTRAL] (543,715) :: Mason Hall
+				
+												
+							
+				
+									<option value="Mental Health Research Institute">
+					***DONE***
+					[MEDICAL] (614,389) :: Mental Health Research Institute
+				
+												
+							
+				
+									<option value="Michigan Room, School of Business Administration">
+					***DONE***
+					[CENTRAL] (764,1396) :: Michigan Room, School of Business Administration
+				
+												
+							
+				
+									<option value="Modern Languages Building">
+					***DONE***
+					[CENTRAL] (600,289) :: Modern Languages Building
+				
+												
+							
+				
+									<option value="Monroe County Health Department">
+					***DONE***
+					[NONE] (0,0) :: Monroe County Health Department
+				
+												
+							
+				
+									<option value="Mosher Jordan Hall">
+					***DONE***
+					[MEDICAL] (880,774) :: Mosher Jordan Hall
+				
+												
+							
+				
+									<option value="Medical Science, Building I">
+					***DONE***
+					[MEDICAL] (753,171) :: Medical Science, Building I
+				
+												
+							
+				
+									<option value="Medical Science, Building II">
+					***DONE***
+					[MEDICAL] (613,230) :: Medical Science, Building II
+				
+												
+							
+				
+									<option value="Medical Science Research, Building III">
+					***DONE***
+					[MEDICAL] (538,217) :: Medical Science Research, Building III
+				
+												
+							
+				
+									<option value="Naval Architecture and Marine Engineering Building, North Campus">
+					***DONE***
+					[NORTH] (1271,316) :: Naval Architecture and Marine Engineering Building, North Campus
+				
+												
+							
+				
+									<option value="North Campus Recreation Building">
+					***DONE***
+					[NORTH] (396,50) :: North Campus Recreation Building
+				
+												
+							
+				
+									<option value="Neuroscience Building">
+					***DONE***
+					[MEDICAL] (496,549) :: Neuroscience Building
+				
+												
+							
+				
+									<option value="North Hall">
+					***DONE***
+					[CENTRAL] (1113,419) :: North Hall
+				
+												
+							
+				
+									<option value="North Ingalls Building">
+					***DONE***
+					[MEDICAL] (222,255) :: North Ingalls Building
+				
+												
+							
+				
+									<option value="Northville State Hospital">
+					***DONE***
+					[NONE] (0,0) :: Northville State Hospital
+				
+												
+							
+				
+									<option value="Edward Henry Kraus Natural Science Building">
+					***DONE***
+					[CENTRAL] (611,568) :: Edward Henry Kraus Natural Science Building
+				
+												
+							
+				
+									<option value="North University Building">
+					***DONE***
+					[CENTRAL] (1205,339) :: North University Building
+				
+												
+							
+				
+									<option value="Paton Accounting Center">
+					***DONE***
+					[CENTRAL] (773,1389) :: Paton Accounting Center
+				
+												
+							
+				
+									<option value="Phoenix Memorial Laboratory, North Campus">
+					***DONE***
+					[NORTH] (825,508) :: Phoenix Memorial Laboratory, North Campus
+				
+												
+							
+				
+									<option value="Pierpont Commons (formerly North Campus Commons)">
+					***DONE***
+					[NORTH] (589,540) :: Pierpont Commons (formerly North Campus Commons)
+				
+												
+							
+				
+									<option value="Power Center for the Performing Arts">
+					***DONE***
+					[CENTRAL] (1014,140) :: Power Center for the Performing Arts
+				
+												
+							
+				
+									<option value="Horace H. Rackham, School of Graduate Studies">
+					***DONE***
+					[CENTRAL] (719,133) :: Horace H. Rackham, School of Graduate Studies
+				
+												
+							
+				
+									<option value="Randall Laboratory">
+					***DONE***
+					[CENTRAL] (898,803) :: Randall Laboratory
+				
+												
+							
+				
+									<option value="Residential College Auditorium, East Quadrangle">
+					***DONE***
+					[CENTRAL] (1054,1329) :: Residential College Auditorium, East Quadrangle
+				
+												
+							
+				
+									<option value="William D. Revelli Hall">
+					***DONE***
+					[SOUTH] (694,487) :: William D. Revelli Hall
+				
+												
+							
+				
+									<option value="A. G. Ruthven Museums Building (Natural History Museum)">
+					***DONE***
+					[CENTRAL] (1148,544) :: A. G. Ruthven Museums Building (Natural History Museum)
+				
+												
+							
+				
+									<option value="Glenn E. Schembechler Hall">
+					***DONE***
+					[SOUTH] (1121,952) :: Glenn E. Schembechler Hall
+				
+												
+							
+				
+									<option value="School of Education Building">
+					***DONE***
+					[CENTRAL] (913,1260) :: School of Education Building
+				
+												
+							
+				
+									<option value="Shapiro Undergraduate Library">
+					***DONE***
+					[CENTRAL] (826,977) :: Shapiro Undergraduate Library
+				
+												
+							
+				
+									<option value="Earl V. Moore Building, School of Music, North Campus">
+					***DONE***
+					[NORTH] (334,598) :: Earl V. Moore Building, School of Music, North Campus
+				
+												
+							
+				
+									<option value="School of Nursing (North Ingalls Building)">
+					***DONE***
+					[MEDICAL] (220,259) :: School of Nursing (North Ingalls Building)
+				
+												
+							
+				
+									<option value="Henry Vaughan Building, School of Public Health I">
+					***DONE***
+					[MEDICAL] (947,617) :: Henry Vaughan Building, School of Public Health I
+				
+												
+							
+				
+									<option value="Thomas Francis, Jr Building, School of Public Health II">
+					***DONE***
+					[MEDICAL] (1020,749) :: Thomas Francis, Jr Building, School of Public Health II
+				
+												
+							
+				
+									<option value="Space Research Building, North Campus">
+					***DONE***
+					[NORTH] (1085,180) :: Space Research Building, North Campus
+				
+												
+							
+				
+									<option value="School of Social Work Building">
+					***DONE***
+					[CENTRAL] (904,1120) :: School of Social Work Building
+				
+												
+							
+				
+									<option value="St. Joseph Mercy Hospital">
+					***DONE***
+					[NONE] (0,0) :: St. Joseph Mercy Hospital
+				
+												
+							
+				
+									<option value="Stockwell Hall">
+					***DONE***
+					[MEDICAL] (859,948) :: Stockwell Hall
+				
+												
+							
+				
+									<option value="Sterns Building, North Campus">
+					***DONE***
+					[NONE] (0,0) :: Sterns Building, North Campus
+				
+												
+							
+				
+									<option value="Track & Tennis Building">
+					***DONE***
+					[SOUTH] (806,763) :: Track & Tennis Building
+				
+												
+							
+				
+									<option value="Tappan Hall">
+					***DONE***
+					[CENTRAL] (572,989) :: Tappan Hall
+				
+												
+							
+				
+									<option value="Learning Resource Center, Taubman Medical Library">
+					***DONE***
+					[MEDICAL] (554,299) :: Learning Resource Center, Taubman Medical Library
+				
+												
+							
+				
+									<option value="Tisch Hall">
+					***DONE***
+					[CENTRAL] (526,874) :: Tisch Hall
+				
+												
+							
+				
+									<option value="University Hospital">
+					***DONE***
+					[MEDICAL] (1051,148) :: University Hospital
+				
+												
+							
+				
+									<option value="Michigan Union">
+					***DONE***
+					[CENTRAL] (306,1035) :: Michigan Union
+				
+												
+							
+				
+									<option value="University Towers, 1225 S. University">
+					***DONE***
+					[CENTRAL] (1268,1042) :: University Towers, 1225 S. University
+				
+												
+							
+				
+									<option value="Veterans Administration Hospital">
+					***DONE***
+					[NORTH] (716,971) :: Veterans Administration Hospital
+				
+												
+							
+				
+									<option value="Washtenaw County Health Department">
+					***DONE***
+					[NONE] (0,0) :: Washtenaw County Health Department
+				
+												
+							
+				
+									<option value="West Hall">
+					***DONE***
+					[CENTRAL] (928,923) :: West Hall
+				
+												
+							
+				
+									<option value="Wolverine Room, School of Business Administration">
+					***DONE***
+					[CENTRAL] (761,1392) :: Wolverine Room, School of Business Administration
+				
+												
+							
+				
+									<option value="Computer Science & Engineering Building, North Campus">
+					***DONE***
+					[NORTH] (697,330) :: Computer Science & Engineering Building, North Campus
+				
+												
+							
+				
+									<option value="Palmer Commons">
+					***DONE***
+					[CENTRAL] (1239,166) :: Palmer Commons
+				
+												
+							
+				
+									<option value="Undergraduate Science Building">
+					***DONE***
+					[CENTRAL] (1093,282) :: Undergraduate Science Building
+				
+												
+							
+				
+									<option value="Lurie Biomedical Engineering (formerly ATL)">
+					***DONE***
+					[NORTH] (916,784) :: Lurie Biomedical Engineering (formerly ATL)
+				
+												
+					</select>
+
+		<br><br>
+	</div>
+	
+		<table>
+				<tr>
+			<td class="normaltext" style="border: 0px solid black;" valign="top">
+				<br>
+				<b>North Campus</b>
+
+				<br>
+				(1300 x 990)
+
+				<br><br>
+				
+				<div id="mapThumb_north" onclick="move_large(event,'mapLarge_north',this,mapLargeScale_north,mapZoomContainerSize,'mapThumbPrevBox_north',true)" onmousemove="move_large(event,'mapLarge_north',this,mapLargeScale_north,mapZoomContainerSize,'mapThumbPrevBox_north')" onmousedown="move_large_allow()" onmouseup="move_large_disallow()">
+					<div id="mapThumbPrevBox_north" class="mapPreviewBox"></div>
+				</div>
+			</td>
+			<td>
+
+				<div class="mapZoomContainer">
+					<div id="mapLarge_north">
+						<input name="north" type="image" src="http://dev.mschedule.com/images/maps/north_large.gif">
+					</div>
+				</div>
+			</td>
+		</tr>
+				<tr>
+			<td class="normaltext" style="border: 0px solid black;" valign="top">
+				<br>
+				<b>The Hill and Medical Campus</b>
+
+				<br>
+				(1435 x 1054)
+
+				<br><br>
+				
+				<div id="mapThumb_medical" onclick="move_large(event,'mapLarge_medical',this,mapLargeScale_medical,mapZoomContainerSize,'mapThumbPrevBox_medical',true)" onmousemove="move_large(event,'mapLarge_medical',this,mapLargeScale_medical,mapZoomContainerSize,'mapThumbPrevBox_medical')" onmousedown="move_large_allow()" onmouseup="move_large_disallow()">
+					<div id="mapThumbPrevBox_medical" class="mapPreviewBox"></div>
+				</div>
+			</td>
+			<td>
+
+				<div class="mapZoomContainer">
+					<div id="mapLarge_medical">
+						<input name="medical" type="image" src="http://dev.mschedule.com/images/maps/medical_large.gif">
+					</div>
+				</div>
+			</td>
+		</tr>
+				<tr>
+			<td class="normaltext" style="border: 0px solid black;" valign="top">
+				<br>
+				<b>Central Campus</b>
+
+				<br>
+				(1313 x 1501)
+
+				<br><br>
+				
+				<div id="mapThumb_central" onclick="move_large(event,'mapLarge_central',this,mapLargeScale_central,mapZoomContainerSize,'mapThumbPrevBox_central',true)" onmousemove="move_large(event,'mapLarge_central',this,mapLargeScale_central,mapZoomContainerSize,'mapThumbPrevBox_central')" onmousedown="move_large_allow()" onmouseup="move_large_disallow()">
+					<div id="mapThumbPrevBox_central" class="mapPreviewBox"></div>
+				</div>
+			</td>
+			<td>
+
+				<div class="mapZoomContainer">
+					<div id="mapLarge_central">
+						<input name="central" type="image" src="http://dev.mschedule.com/images/maps/central_large.gif">
+					</div>
+				</div>
+			</td>
+		</tr>
+				<tr>
+			<td class="normaltext" style="border: 0px solid black;" valign="top">
+				<br>
+				<b>South Campus</b>
+
+				<br>
+				(1295 x 1277)
+
+				<br><br>
+				
+				<div id="mapThumb_south" onclick="move_large(event,'mapLarge_south',this,mapLargeScale_south,mapZoomContainerSize,'mapThumbPrevBox_south',true)" onmousemove="move_large(event,'mapLarge_south',this,mapLargeScale_south,mapZoomContainerSize,'mapThumbPrevBox_south')" onmousedown="move_large_allow()" onmouseup="move_large_disallow()">
+					<div id="mapThumbPrevBox_south" class="mapPreviewBox"></div>
+				</div>
+			</td>
+			<td>
+
+				<div class="mapZoomContainer">
+					<div id="mapLarge_south">
+						<input name="south" type="image" src="http://dev.mschedule.com/images/maps/south_large.gif">
+					</div>
+				</div>
+			</td>
+		</tr>
+			</table>
+	
+	<br><br>
+	
+	<div class="outerbox" align="center">
+		<input type="submit" name="noMapFound" value="click here if no maps have this location">
+	</div>
+	
+	<input type="hidden" value="updateLocation" name="msAction">
+</form>

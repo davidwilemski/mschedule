@@ -1,0 +1,2247 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Frameset//EN"
+   "http://www.w3.org/TR/html4/frameset.dtd">
+<html>
+<head>
+<title>iCalcreator</title>
+<meta name="author"      content="kigkonsult - Kjell-Inge Gustafsson" />
+<meta name="copyright"   content="2006 kigkonsult" />
+<META name="keywords"    content="ical, calendar, calender, xcal, xml, icalender, rfc2445, vcalender, php, create" />
+<meta name="description" content="iCalcreator" />
+<style type="text/css">
+* {
+  BACKGROUND-COLOR: white;
+  COLOR           : black;
+  FONT-FAMILY     : "Lucida Grande","Lucida Sans Unicode", "Bitstream Vera Sans", Lucida, Arial, Geneva, Helvetica, sans-serif;
+  FONT-SIZE       : small;
+}
+body {
+  MARGIN          : 10px;
+  WIDTH           : 600px;
+}
+h1 {
+  BACKGROUND-COLOR: silver;
+  BORDER          : thin solid black;
+  FONT-SIZE       : x-large;
+  FONT-WEIGHT     : bold;
+  DISPLAY         : block;
+}
+h2 {
+  FONT-SIZE       : large;
+}
+h3 {
+  FONT-SIZE       : medium;
+}
+h4 {
+  FONT-SIZE       : small;
+  FONT-WEIGHT     : bold;
+}
+p .p {
+  FONT-FAMILY     : monospace;
+  FONT-SIZE       : large;
+}
+table tr td {
+  aBORDER          : 0;
+  MARGIN          : 0;
+  PADDING         : 0;
+  VERTICAL-ALIGN  : top;
+}
+.center {
+  TEXT-ALIGN      : center;
+}
+.header {
+  BACKGROUND-COLOR: silver;
+  BORDER          : thin solid black;
+  FONT-SIZE       : xx-large;
+  WIDTH           : 600px;
+}
+.right {
+  TEXT-ALIGN      : right;
+}
+</style>
+</head>
+<body>
+<a name="top"></a>
+<table><tr><td class="header">iCalcreator</tr></table>
+iCalcreator class v0.9.15<br />
+originally (c) Kjell-Inge Gustafsson<br />
+<a href="http://www.kigkonsult.se/iCalcreator/index.php" title="www.kigkonsult.se/iCalcreator" target="_blank">www.kigkonsult.se/iCalcreator</a><br />
+ical@kigkonsult.se<br />
+
+<h2>Description:</h2>
+iCalcreator is a PHP implementation of RFC2445/RFC2446 to create iCal/xCal formatted files.
+<br />
+
+<a name="INTRO"></a><h1>1. INTRO</h1>
+
+iCalcreator is a PHP class creating iCal formatted files, iCal/xCal,
+for non-calendar systems like CMS, project management
+systems and other applications able to produce calendar information like
+agendas, tasks, reports, totos, journaling data and for input
+to calendar systems and applications.
+<br /><br />
+iCalcreator is built of a single class file with a simple
+interface and are calendar component property oriented.
+<br /><br />
+No controls between calendar components/properties are made.
+<br /><br />
+Knowledge of calendar protocol <a href="http://www.kigkonsult.se/dl.php?f=rfc2445" title="RFC2445" target="_blank">rfc2445 - Internet Calendaring and Scheduling Core Object Specification (iCalendar)</a> AND <a href="http://www.kigkonsult.se/dl.php?f=rfc2446" title="RFC2446" target="_blank">rfc2446 - iCalendar Transport-Independent Interoperability Protocol (iTIP) Scheduling Events, BusyTime, To-dos and Journal Entries</a> is necessary! All functions calls are made as simple as possible BUT (, !!!,) read these rfc's properly!
+<br /><br />
+<a name="INDEX"></a>
+RFC2445 - Internet Calendaring and Scheduling Core Object Specification (iCalendar) in <a href="http://www.kigkonsult.se/dl.php?f=rfc2445" title="RFC2445 in text format" target="_blank"><b>text</b></a>
+and <a href="http://www.kigkonsult.se/iCalcreator/iCalDictionary/index.html"  target="_blank"><b>HTML</b></a> format.<br />
+RFC2446 - iCalendar Transport-Independent Interoperability Protocol (iTIP) Scheduling Events, BusyTime, To-dos and Journal Entries in <a href="http://www.kigkonsult.se/dl.php?f=rfc2446" title="RFC2446 in text format" target="_blank"><b>text</b></a> format.
+<br /><br />
+xCal (iCal xml) format is supported but still experimental.
+<br /><br />
+Examples how to employ iCalcreator in software development:<br />
+<a title="Create iCal event file on-demand from form" href="http://www.kigkonsult.se/iCalcreator/eventCreator/index.php" target="_blank">Create iCal event file on-the-fly</a>
+<br />
+<a title="Create iCal file on-demand from form" href="http://www.kigkonsult.se/iCalcreator/HTMLiCal/index.php" target="_blank">Create complex iCal file on-the-fly</a>
+<br />
+<br />
+There are free iCal/xCal icons in the images directory, to use as buttons on a webpage.
+</br />
+
+<h2>1.1 INDEX</h2>
+
+<a href="#INTRO">1. INTRO</a><br />
+<a href="#INDEX">1.1 INDEX</a><br />
+<a href="#Calendar_Component_list">2. Calendar Component list</a><br />
+<a href="#VCALENDAR">2.1 VCALENDAR</a><br />
+<a href="#VEVENT">2.2 VEVENT</a><br />
+<a href="#VTODO">2.3 VTODO</a><br />
+<a href="#VJOURNAL">2.4 VJOURNAL</a><br />
+<a href="#VFREEBUSY">2.5 VFREEBUSY</a><br />
+<a href="#VALARM">2.6  VALARM</a><br />
+<a href="#VTIMEZONE">2.7  VTIMEZONE</a><br />
+<a href="#Function_list">3. Function list</a><br />
+<a href="#Calendar_object_functions">3.1 Calendar object functions</a><br />
+<a href="#Calendar_object_constructors">3.1.1 Calendar object constructors</a><br />
+<a href="#vevent">3.1.1.1 vevent</a><br />
+<a href="#vtodo">3.1.1.2 vtodo</a><br />
+<a href="#vjournal">3.1.1.3 vjournal</a><br />
+<a href="#vfreebusy">3.1.1.4 vfreebusy</a><br />
+<a href="#valarm">3.1.1.5 valarm</a><br />
+<a href="#vtimezone">3.1.1.6 vtimezone</a><br />
+<a href="#Calendar_property_functions">3.1.2 Calendar property functions</a><br />
+<a href="#CALSCALE">3.1.2.1 CALSCALE</a><br />
+<a href="#METHOD">3.1.2.2 METHOD</a><br />
+<a href="#VERSION">3.1.2.3 VERSION</a><br />
+<a href="#X-PROPERTY">3.1.2.4 X-PROPERTY</a><br />
+<a href="#Other_Calendar_functions">3.1.3 Other Calendar functions</a><br />
+<a href="#addComponent">3.1.3.1 addComponent</a><br />
+<a href="#appendCalendar">3.1.3.2 appendCalendar</a><br />
+<a href="#createCalendar">3.1.3.3 createCalendar</a><br />
+<a href="#getFilename">3.1.3.4 getFilename</a><br />
+<a href="#getFormat">3.1.3.5 getFormat</a><br />
+<a href="#getLanguage">3.1.3.6 getLanguage</a><br />
+<a href="#returnCalendar">3.1.3.7 returnCalendar</a><br />
+<a href="#saveCalendar">3.1.3.8 saveCalendar</a><br />
+<a href="#setFilename">3.1.3.9 setFilename</a><br />
+<a href="#setFormat">3.1.3.10 setFormat</a><br />
+<a href="#setLanguage">3.1.3.11 setLanguage</a><br />
+<a href="#setNewlineChar">3.1.3.12 setNewlineChar</a><br />
+<a href="#setUnique_id">3.1.3.13 setUnique_id</a><br />
+<a href="#useCachedCalendar">3.1.3.14 useCachedCalendar</a><br />
+<a href="#validDate">3.1.3.15 validDate</a><br />
+<a href="#Calendar_component_object_property_function_list">3.2 Calendar component object property function list</a><br />
+<a href="#ACTION">3.2.1 ACTION</a><br />
+<a href="#ATTACH">3.2.2 ATTACH</a><br />
+<a href="#ATTENDEE">3.2.3 ATTENDEE</a><br />
+<a href="#CATEGORIES">3.2.4 CATEGORIES</a><br />
+<a href="#CLASS">3.2.4 CLASS</a><br />
+<a href="#COMMENT">3.2.5 COMMENT</a><br />
+<a href="#COMPLETED">3.2.6 COMPLETED</a><br />
+<a href="#CONTACT">3.2.7 CONTACT</a><br />
+<a href="#CREATED">3.2.8 CREATED</a><br />
+<a href="#DESCRIPTION">3.2.9 DESCRIPTION</a><br />
+<a href="#DTEND">3.2.10 DTEND</a><br />
+<a href="#DTSTAMP">3.2.11 DTSTAMP</a><br />
+<a href="#DTSTART">3.2.12 DTSTART</a><br />
+<a href="#DUE">3.2.13 DUE</a><br />
+<a href="#DURATION">3.2.14 DURATION</a><br />
+<a href="#EXDATE">3.2.15 EXDATE</a><br />
+<a href="#EXRULE">3.2.16 EXRULE</a><br />
+<a href="#FREEBUSY_PROP">3.2.17 FREEBUSY</a><br />
+<a href="#GEO">3.2.18 GEO</a><br />
+<a href="#LAST-MODIFIED">3.2.19 LAST-MODIFIED</a><br />
+<a href="#LOCATION">3.2.20 LOCATION</a><br />
+<a href="#ORGANIZER">3.2.21 ORGANIZER</a><br />
+<a href="#PERCENTCOMPLETE">3.2.22 PERCENTCOMPLETE</a><br />
+<a href="#PRIORITY">3.2.23 PRIORITY</a><br />
+<a href="#RDATE">3.2.24 RDATE</a><br />
+<a href="#RECURRENCE-ID">3.2.25 RECURRENCE-ID</a><br />
+<a href="#RELATED-TO">3.2.26 RELATED-TO</a><br />
+<a href="#REPEAT">3.2.27 REPEAT</a><br />
+<a href="#REQUEST-STATUS">3.2.28 REQUEST-STATUS</a><br />
+<a href="#RESOURCES">3.2.29 RESOURCES</a><br />
+<a href="#RRULE">3.2.30 RRULE</a><br />
+<a href="#SEQUENCE">3.2.31 SEQUENCE</a><br />
+<a href="#STATUS">3.2.32 STATUS</a><br />
+<a href="#SUMMARY">3.2.33 SUMMARY</a><br />
+<a href="#TRANSP">3.2.34 TRANSP</a><br />
+<a href="#TRIGGER">3.2.35 TRIGGER</a><br />
+<a href="#TZID">3.2.36 TZID</a><br />
+<a href="#TZNAME">3.2.37 TZNAME</a><br />
+<a href="#TZOFFSETFROM">3.2.38 TZOFFSETFROM</a><br />
+<a href="#TZOFFSETTO">3.2.39 TZOFFSETTO</a><br />
+<a href="#TZURL">3.2.40 TZURL</a><br />
+<a href="#UID">3.2.41 UID</a><br />
+<a href="#URL">3.2.42 URL</a><br />
+<a href="#X-PROPERTY_PROP">3.2.43 X-PROPERTY</a><br />
+<a href="#Calendar_component_object_misc_function_list">3.3 Calendar component object misc. function</a><br />
+<a href="#addSubComponent">3.3.1 addSubComponent</a><br />
+<a href="#getLanguage_PROP">3.3.2 getLanguage</a><br />
+<a href="#setLanguage_PROP">3.3.3 setLanguage</a><br />
+<a href="#Copyright_and_Licence">4. COPYRIGHT AND LICENSE</a><br />
+
+<br /><a href="#INDEX">[index]</a>
+
+<a name="Calendar_Component_list"></a><h1>2. Calendar Component list</h1>
+Quote from <a href="http://www.kigkonsult.se/iCalcreator/iCalDictionary/index.html" title="RFC2445 in HTML format">rfc2445</a>!
+(Described in iCal output format, content corresponds to xCal format.)<br />
+
+<a name="VCALENDAR"></a><h2>2.1 VCALENDAR</h2>
+<table width="100%">
+<tr><td class="center">icalobject = 1*("BEGIN" ":" "VCALENDAR" CRLF</tr>
+<tr><td class="center">icalbody</tr>
+<tr><td class="center">"END" ":" "VCALENDAR" CRLF)</tr>
+<tr><td>&nbsp;</tr>
+<tr><td>icalbody = calprops component</tr>
+<tr><td>&nbsp;</tr>
+<tr><td>calprops = 2*(</tr>
+<tr><td>&nbsp;</tr>
+<tr><td>'prodid' and 'version' are both REQUIRED, but MUST NOT occur more than once</tr>
+<tr><td class="center">prodid /
+<a href="#VERSION">version /</tr>
+<tr><td>&nbsp;</tr>
+<tr><td>'calscale' and 'method' are optional, but MUST NOT occur more than once</tr>
+<tr><td class="center">
+<a href="#CALSCALE">calscale</a> /</tr>
+<tr><td class="center">
+<a href="#METHOD">method</a> /</tr>
+<tr><td>&nbsp;</tr>
+<tr><td class="center">
+<a href="#X-PROPERTY">x-prop</a></tr>
+<tr><td>&nbsp;</tr>
+<tr><td>)</tr>
+<tr><td>&nbsp;</tr>
+<tr><td class="center">component  = 1*(eventc / todoc / journalc / freebusyc / timezonec / iana-comp / x-comp)</tr>
+<tr><td>&nbsp;</tr>
+<tr><td class="center">iana-comp  = "BEGIN" ":" iana-token CRLF</tr>
+<tr><td class="center">1*contentline</tr>
+<tr><td class="center">"END" ":" iana-token CRLF</tr>
+<tr><td>&nbsp;</tr>
+<tr><td>&nbsp;</tr>
+<tr><td class="center">x-comp     = "BEGIN" ":" x-name CRLF</tr>
+<tr><td class="center">1*contentline</tr>
+<tr><td class="center">"END" ":" x-name CRLF</tr>
+</table>
+<br /><a href="#INDEX">[index]</a>
+
+<a name="VEVENT"></a><h2>2.2 VEVENT</h2>
+<table width="100%">
+<tr><td class="center">"BEGIN" ":" "VEVENT" CRLF</tr>
+<tr><td class="center">eventprop *alarmc</tr>
+<tr><td class="center">"END" ":" "VEVENT" CRLF</tr>
+<tr><td>&nbsp;</tr>
+<tr><td>eventprop = *(</tr>
+<tr><td>&nbsp;</tr>
+<tr><td>the following are optional,but MUST NOT occur more than once</tr>
+<tr><td class="center">
+<a href="#CLASS">class</a> /
+<a href="#CREATED">created</a> /
+<a href="#DESCRIPTION">description</a> /
+<a href="#DTSTART">dtstart</a> / </tr>
+<tr><td class="center">
+<a href="#GEO">geo</a> /
+<a href="#LAST-MODIFIED">last-mod</a> /
+<a href="#LOCATION">location</a> /
+<a href="#ORGANIZER">organizer</a> /
+<a href="#PRIORITY">priority</a> / </tr>
+<tr><td class="center">
+<a href="#DTSTAMP">dtstamp</a> /
+<a href="#SEQUENCE">seq</a> /
+<a href="#STATUS">status</a> /
+<a href="#SUMMARY">summary</a> / </tr>
+<tr><td class="center">
+<a href="#TRANSP">transp</a> /
+<a href="#UID">uid</a> /
+<a href="#URL">url</a> /
+<a href="#RECURRENCE-ID">recurid</a> /</tr>
+<tr><td>&nbsp;</tr>
+<tr><td>either '<a href="#DTEND">dtend</a>' or '<a href="#DURATION">duration</a>' may appear in a 'eventprop', </tr>
+<tr><td>but '<a href="#DTEND">dtend</a>' and '<a href="#DURATION">duration</a>' MUST NOT occur in the same 'eventprop'</tr>
+<tr><td class="center">
+<a href="#DTEND">dtend</a> /
+<a href="#DURATION">duration</a> /
+<tr><td>&nbsp;</tr>
+<tr><td>the following are optional, and MAY occur more than once</tr>
+<tr><td class="center">
+<a href="#ATTACH">attach</a> /
+<a href="#ATTENDEE">attendee</a> /
+<a href="#CATEGORIES">categories</a> /
+<a href="#COMMENT">comment</a> / </tr>
+<tr><td class="center">
+<a href="#CONTACT">contact</a> /
+<a href="#EXDATE">exdate</a> /
+<a href="#EXRULE">exrule</a> /
+<a href="#REQUEST-STATUS">rstatus</a> / </tr>
+<tr><td class="center">
+<a href="#RELATED-TO">related</a> /
+<a href="#RESOURCES">resources</a> /
+<a href="#RDATE">rdate</a> /
+<a href="#RRULE">rrule</a> /
+<a href="#X-PROPERTY_PROP">x-prop</a></tr>
+<tr><td>)</tr>
+</table>
+<br /><a href="#INDEX">[index]</a>
+
+<a name="VTODO"></a><h2>2.3 VTODO</h2>
+<table width="100%">
+<tr><td class="center">"BEGIN" ":" "VTODO" CRLF</tr>
+<tr><td class="center">todoprop *alarmc</tr>
+<tr><td class="center">"END" ":" "VTODO" CRLF</tr>
+<tr><td>&nbsp;</tr>
+<tr><td>todoprop   = *(</tr>
+<tr><td>&nbsp;</tr>
+<tr><td>the following are optional, but MUST NOT occur more than once</tr>
+<tr><td class="center">
+<a href="#CLASS">class</a> /
+<a href="#COMPLETED">completed</a> /
+<a href="#CREATED">created</a> /
+<a href="#DESCRIPTION">description</a> /
+<a href="#DTSTAMP">dtstamp</a> /
+<a href="#DTSTART">dtstart</a> / </tr>
+<tr><td class="center">
+<a href="#GEO">geo</a> /
+<a href="#LAST-MODIFIED">last-mod</a> /
+<a href="#LOCATION">location</a> /
+<a href="#ORGANIZER">organizer</a> /
+<a href="#PERCENTCOMPLETE">percent</a> /
+<a href="#PRIORITY">priority</a> / </tr>
+<tr><td class="center">
+<a href="#RECURRENCE-ID">recurid</a> /
+<a href="#SEQUENCE">seq</a> /
+<a href="#STATUS">status</a> /
+<a href="#SUMMARY">summary</a> /
+<a href="#UID">uid</a> /
+<a href="#URL">url</a> /</tr>
+<tr><td>&nbsp;</tr>
+<tr><td>either '<a href="#DUE">due</a>' or '<a href="#DURATION">duration</a>' may appear in a 'todoprop',</tr>
+<tr><td> but '<a href="#DUE">due</a>' and '<a href="#DURATION">duration</a>' MUST NOT occur in the same 'todoprop'</tr>
+<tr><td class="center">
+<a href="#DUE">due</a> /
+<a href="#DURATION">duration</a> /</tr>
+<tr><td>&nbsp;</tr>
+<tr><td>the following are optional,and MAY occur more than once</tr>
+<tr><td class="center">
+<a href="#ATTACH">attach</a> /
+<a href="#ATTENDEE">attendee</a> /
+<a href="#CATEGORIES">categories</a> /
+<a href="#COMMENT">comment</a> / </tr>
+<tr><td class="center">
+<a href="#CONTACT">contact</a> /
+<a href="#EXDATE">exdate</a> /
+<a href="#EXRULE">exrule</a> /
+<a href="#REQUEST-STATUS">rstatus</a> / </tr>
+<tr><td class="center">
+<a href="#RELATED-TO">related</a> /
+<a href="#RESOURCES">resources</a> /
+<a href="#RDATE">rdate</a> /
+<a href="#RRULE">rrule</a> /
+<a href="#X-PROPERTY_PROP">x-prop</a></tr>
+<tr><td>)</tr>
+</table>
+<br /><a href="#INDEX">[index]</a>
+
+<a name="VJOURNAL"></a><h2>2.4 VJOURNAL</h2>
+<table width="100%">
+<tr><td class="center">journalc   = "BEGIN" ":" "VJOURNAL" CRLF</tr>
+<tr><td class="center">jourprop</tr>
+<tr><td class="center">"END" ":" "VJOURNAL" CRLF</tr>
+<tr><td>&nbsp;</tr>
+<tr><td>jourprop   = *(</tr>
+<tr><td>&nbsp;</tr>
+<tr><td>the following are optional, but MUST NOT occur more than once</tr>
+<tr><td class="center">
+<a href="#CLASS">class</a> /
+<a href="#CREATED">created</a> /
+<a href="#DESCRIPTION">description</a> /
+<a href="#DTSTART">dtstart</a> / </tr>
+<tr><td class="center">
+<a href="#DTSTAMP">dtstamp</a> /
+<a href="#LAST-MODIFIED">last-mod</a> /
+<a href="#ORGANIZER">organizer</a> /
+<a href="#RECURRENCE-ID">recurid</a> / </tr>
+<tr><td class="center">
+<a href="#SEQUENCE">seq</a> /
+<a href="#STATUS">status</a> /
+<a href="#SUMMARY">summary</a> /
+<a href="#UID">uid</a> /
+<a href="#URL">url</a> /</tr>
+<tr><td>&nbsp;</tr>
+<tr><td>the following are optional,and MAY occur more than once</tr>
+<tr><td class="center">
+<a href="#ATTACH">attach</a> /
+<a href="#ATTENDEE">attendee</a> /
+<a href="#CATEGORIES">categories</a> /
+<a href="#COMMENT">comment</a> /</tr>
+<tr><td class="center">
+<a href="#CONTACT">contact</a> /
+<a href="#EXDATE">exdate</a> /
+<a href="#EXRULE">exrule</a> /
+<a href="#RELATED-TO">related</a> / </tr>
+<tr><td class="center">
+<a href="#RDATE">rdate</a> /
+<a href="#RRULE">rrule</a> /
+<a href="#REQUEST-STATUS">rstatus</a> /
+<a href="#X-PROPERTY_PROP">x-prop</a></tr>
+<tr><td>)</tr>
+</table>
+</p>
+<br /><a href="#INDEX">[index]</a>
+
+<a name="VFREEBUSY"></a><h2>2.5 VFREEBUSY</h2>
+<table width="100%">
+<tr><td class="center">"BEGIN" ":" "VFREEBUSY" CRLF</tr>
+<tr><td class="center">fbprop
+<tr><td class="center">"END" ":" "VFREEBUSY" CRLF</tr>
+<tr><td>&nbsp;</tr>
+<tr><td>fbprop     = *(</tr>
+<tr><td>&nbsp;</tr>
+<tr><td>the following are optional, but MUST NOT occur more than once</tr>
+<tr><td class="center">
+<a href="#CONTACT">contact</a> /
+<a href="#DTSTART">dtstart</a> /
+<a href="#DTEND">dtend</a> /
+<a href="#DURATION">duration</a> / </tr>
+<tr><td class="center">
+<a href="#DTSTAMP">dtstamp</a> /
+<a href="#ORGANIZER">organizer</a> /
+<a href="#UID">uid</a> /
+<a href="#URL">url</a> /</tr>
+<tr><td>&nbsp;</tr>
+<tr><td>the following are optional,and MAY occur more than once</tr>
+<tr><td class="center">
+<a href="#ATTENDEE">attendee</a> /
+<a href="#COMMENT">comment</a> /
+<a href="#FREEBUSY_PROP">freebusy</a> /
+<a href="#REQUEST-STATUS">rstatus</a> /
+<a href="#X-PROPERTY_PROP">x-prop</a>
+<tr><td>)</tr>
+</table>
+<br /><a href="#INDEX">[index]</a>
+
+<a name="VALARM"></a><h2>2.6 VALARM</h2>
+<table width="100%">
+<tr><td class="center">"BEGIN" ":" "VALARM" CRLF</tr>
+<tr><td class="center">(audioprop / dispprop / emailprop / procprop)</tr>
+<tr><td class="center">"END" ":" "VALARM" CRLF</tr>
+<tr><td>&nbsp;</tr>
+<tr><td>audioprop  = 2*(</tr>
+<tr><td>&nbsp;</tr>
+<tr><td>'<a href="#ACTION">action</a>' and '<a href="#TRIGGER">trigger</a>' are both REQUIRED, but MUST NOT occur more than once</tr>
+<tr><td class="center">
+<a href="#ACTION">action</a> /
+<a href="#TRIGGER">trigger</a> /</tr>
+<tr><td>&nbsp;</tr>
+<tr><td>'<a href="#DURATION">duration</a>' and '<a href="#REPEAT">repeat</a>' are both optional,and MUST NOT occur more than once each,</tr>
+<tr><td>but if one occurs, so MUST the other</tr>
+<tr><td class="center">
+<a href="#DURATION">duration</a> /
+<a href="#REPEAT">repeat</a> /</tr>
+<tr><td>&nbsp;</tr>
+<tr><td>the following is optional, but MUST NOT occur more than once</tr>
+<tr><td class="center">
+<a href="#ATTACH">attach</a> /</tr>
+<tr><td>&nbsp;</tr>
+<tr><td>the following is optional, and MAY occur more than once</tr>
+<tr><td class="center"><a href="#X-PROPERTY_PROP">x-prop</a></tr>
+<tr><td>)</tr>
+<tr><td>&nbsp;</tr>
+<tr><td>&nbsp;</tr>
+<tr><td>dispprop   = 3*(</tr>
+<tr><td>&nbsp;</tr>
+<tr><td>&nbsp;</tr>
+<tr><td>the following are all REQUIRED, but MUST NOT occur more than once</tr>
+<tr><td class="center">
+<a href="#ACTION">action</a> /
+<a href="#DESCRIPTION">description</a> /
+<a href="#TRIGGER">trigger</a> /</tr>
+<tr><td>&nbsp;</tr>
+<tr><td>'<a href="#DURATION">duration</a>' and '<a href="#REPEAT">repeat</a>' are both optional,and MUST NOT occur more than once each,</tr>
+<tr><td>but if one occurs, so MUST the other</tr>
+<tr><td class="center">
+<a href="#DURATION">duration</a> /
+<a href="#REPEAT">repeat</a> /</tr>
+<tr><td>&nbsp;</tr>
+<tr><td>the following is optional, and MAY occur more than once</tr>
+<tr><td class="center">
+<a href="#X-PROPERTY_PROP">x-prop</a></tr>
+<tr><td>)</tr>
+<tr><td>&nbsp;</tr>
+<tr><td>&nbsp;</tr>
+<tr><td>emailprop  = 5*(</tr>
+<tr><td>&nbsp;</tr>
+<tr><td>the following are all REQUIRED, but MUST NOT occur more than once</tr>
+<tr><td class="center">
+<a href="#ACTION">action</a> /
+<a href="#DESCRIPTION">description</a> /
+<a href="#TRIGGER">trigger</a> /
+<a href="#SUMMARY">summary</a></tr>
+<tr><td>&nbsp;</tr>
+<tr><td>the following is REQUIRED, and MAY occur more than once</tr>
+<tr><td class="center">
+<a href="#ATTENDEE">attendee</a> /</tr>
+<tr><td>&nbsp;</tr>
+<tr><td>'<a href="#DURATION">duration</a>' and '<a href="#REPEAT">repeat</a>' are both optional, and MUST NOT occur more than once each,</tr>
+<tr><td>but if one occurs, so MUST the other</tr>
+<tr><td class="center">
+<a href="#DURATION">duration</a> /
+<a href="#REPEAT">repeat</a> /</tr>
+<tr><td>&nbsp;</tr>
+<tr><td>the following are optional, and MAY occur more than once</tr>
+<tr><td class="center">
+<a href="#ATTACH">attach</a> /
+<a href="#X-PROPERTY_PROP">x-prop</a></tr>
+<tr><td>)</tr>
+<tr><td>&nbsp;</tr>
+<tr><td>&nbsp;</tr>
+<tr><td>procprop   = 3*(</tr>
+<tr><td>the following are all REQUIRED, but MUST NOT occur more than once</tr>
+<tr><td class="center">
+<a href="#ACTION">action</a> /
+<a href="#ATTACH">attach</a> /
+<a href="#TRIGGER">trigger</a> /</tr>
+<tr><td>&nbsp;</tr>
+<tr><td>'<a href="#DURATION">duration</a>' and '<a href="#REPEAT">repeat</a>' are both optional, and MUST NOT occur more than once each,</tr>
+<tr><td>but if one occurs, so MUST the other</tr>
+<tr><td class="center">
+<a href="#DURATION">duration</a> /
+<a href="#REPEAT">repeat</a> /</tr>
+<tr><td>&nbsp;</tr>
+<tr><td>'<a href="#DESCRIPTION">description</a>' is optional, and MUST NOT occur more than once</tr>
+<tr><td class="center">
+<a href="#DESCRIPTION">description</a> /</tr>
+<tr><td>&nbsp;</tr>
+<tr><td>the following is optional, and MAY occur more than once</tr>
+<tr><td class="center">
+<a href="#X-PROPERTY_PROP">x-prop</a></tr>
+<tr><td>)</tr>
+</table>
+<br /><a href="#INDEX">[index]</a>
+
+<a name="VTIMEZONE"></a><h2>2.7 VTIMEZONE</h2>
+<table width="100%">
+<tr><td class="center">"BEGIN" ":" "VTIMEZONE" CRLF</tr>
+<tr><td>2*(</tr>
+<tr><td>&nbsp;</tr>
+<tr><td>'<a href="#TZID">tzid</a>' is required, but MUST NOT occur more than once</tr>
+<tr><td class="center">
+<a href="#TZID">tzid</a> /</tr>
+<tr><td>&nbsp;</tr>
+<tr><td>'<a href="#LAST-MODIFIED">last-mod</a>' and '<a href="#TZURL">tzurl</a>' are optional, but MUST NOT occur more than once</tr>
+<tr><td class="center">
+<a href="#LAST-MODIFIED">last-mod</a> /
+<a href="#TZURL">tzurl</a> /</tr>
+<tr><td>&nbsp;</tr>
+<tr><td>one of 'standardc' or 'daylightc' MUST occur and each MAY occur more than once.</tr>
+<tr><td class="center">standardc / daylightc /</tr>
+<tr><td>&nbsp;</tr>
+<tr><td>the following is optional, and MAY occur more than once</tr>
+<tr><td class="center">
+<a href="#X-PROPERTY_PROP">x-prop</a></tr>
+<tr><td>)</tr>
+<tr><td class="center">"END" ":" "VTIMEZONE" CRLF</tr>
+<tr><td>&nbsp;</tr>
+<tr><td class="center">standardc  = "BEGIN" ":" "STANDARD" CRLF</tr>
+<tr><td class="center">tzprop</tr>
+<tr><td class="center">"END" ":" "STANDARD" CRLF</tr>
+<tr><td>&nbsp;</tr>
+<tr><td class="center">daylightc  = "BEGIN" ":" "DAYLIGHT" CRLF</tr>
+<tr><td class="center">tzprop</tr>
+<tr><td class="center">"END" ":" "DAYLIGHT" CRLF</tr>
+<tr><td>&nbsp;</tr>
+<tr><td>tzprop     = 3*(
+<tr><td>&nbsp;</tr>
+<tr><td>the following are each REQUIRED, but MUST NOT occur more than once</tr>
+<tr><td class="center">
+<a href="#DTSTART">dtstart</a> /
+<a href="#TZOFFSETTO">tzoffsetto</a> /
+<a href="#TZOFFSETFROM">tzoffsetfrom</a> /</tr>
+<tr><td>&nbsp;</tr>
+<tr><td>the following are optional, and MAY occur more than once</tr>
+<tr><td class="center">
+<a href="#COMMENT">comment</a> /
+<a href="#RDATE">rdate</a> /
+<a href="#RRULE">rrule</a> /
+<a href="#TZNAME">tzname</a> /
+<a href="#X-PROPERTY_PROP">x-prop</a></tr>
+<tr><td>)</tr>
+</table>
+<br /><a href="#INDEX">[index]</a>
+
+<a name="Function_list"></a><h1>3. Function list</h1>
+
+<a name="Calendar_object_functions"></a><h2>3.1 Calendar object functions</h2>
+
+<a name="Calendar_object_constructors"></a><h3>3.1.1 Calendar object constructors</h3>
+Initiate new CALENDAR.<br /><br />
+<u>format</u>
+<p>
+vcalendar()
+</p>
+<u>example</u>
+<p>
+$calendar = new vcalendar();                   // initiate new CALENDAR
+</p>
+<br /><a href="#INDEX">[index]</a>
+
+<a name="vevent"></a><h4>3.1.1.1 vevent</h4>
+Initiate calendar component EVENT.<br /><br />
+<u>format</u>
+<p>
+vevent()
+</p>
+<u>example</u>
+<p>
+$vevent = new vevent();                        // initiate EVENT
+</p>
+<br /><a href="#INDEX">[index]</a>
+
+<a name="vtodo"></a><h4>3.1.1.2 vtodo</h4>
+Initiate calendar component TODO.<br /><br />
+<u>format</u>
+<p>
+vtodo()
+</p>
+<u>example</u>
+<p>
+$vtodo = new vtodo();                          // initiate TODO
+</p>
+<br /><a href="#INDEX">[index]</a>
+
+<a name="vjournal"></a><h4>3.1.1.3 vjournal</h4>
+Initiate calendar component JOURNAL.<br /><br />
+<u>format</u>
+<p>
+vjournal()
+</p>
+<u>example</u>
+<p>
+$vjournal = new vjournal();                    // initiate JOURNAL
+</p>
+<br /><a href="#INDEX">[index]</a>
+
+<a name="vfreebusy"></a><h4>3.1.1.4 vfreebusy</h4>
+Initiate calendar component FREEBUSY<br /><br />
+<u>format</u>
+<p>
+vfreebusy()
+</p>
+<u>example</u>
+<p>
+$vfreebusy = new vfreebusy();                   // initiate FREEBUSY
+</p>
+<br /><a href="#INDEX">[index]</a>
+
+<a name="valarm"></a><h4>3.1.1.5 valarm</h4>
+Initiate calendar component ALARM<br /><br />
+<u>format</u>
+<p>
+valarm()
+</p>
+<u>example</u>
+<p>
+$valarm = new valarm();                        // initiate ALARM
+</p>
+<br /><a href="#INDEX">[index]</a>
+
+<a name="vtimezone"></a><h4>3.1.1.6 vtimezone</h4>
+Initiate calendar component TIMEZONE.<br /><br />
+<u>format</u>
+<p>
+vtimezone()
+</p>
+<u>example</u>
+<p>
+$vtimezone = new vtimezone();                  // initiate TIMEZONE
+</p>
+<br /><a href="#INDEX">[index]</a>
+
+
+<a name="Calendar_property_functions"></a><h3>3.1.2 Calendar property functions</h3>
+
+<a name="CALSCALE"></a><h4>3.1.2.1 CALSCALE</h4>
+This property defines the calendar scale used for the calendar information specified in the iCalendar object.<br /><br />
+<u>format</u>
+<p>
+setCalscale( string value )
+</p>
+<u>example</u>
+<p>
+$calendar = new vcalendar();                   // initiate new CALENDAR<br />
+$calendar->setCalscale( 'GREGORIAN' )
+</p>
+<br /><a href="#INDEX">[index]</a>
+
+
+<a name="METHOD"></a><h4>3.1.2.2 METHOD</h4>
+This property defines the iCalendar object method associated with the calendar object.<br /><br />
+<u>format</u>
+<p>
+setMethod( string value )
+</p>
+<u>example</u>
+<p>
+$calendar = new vcalendar();                   // initiate new CALENDAR<br />
+$calendar->setMethod( 'REQUEST' )
+</p>
+<br /><a href="#INDEX">[index]</a>
+
+
+<a name="VERSION"></a><h4>3.1.2.3 VERSION</h4>
+This property specifies the identifier corresponding to the highest version number or the minimum and maximum range of the iCalendar specification that is required in order to interpret the iCalendar object.<br />
+Only version 2.0 valid, version is <b>AUTO</b> generated at calendar creation.<br /><br />
+<u>format</u>
+<p>
+setVersion( string version )
+</p>
+<u>example</u>
+<p>
+$calendar = new vcalendar();                   // initiate new CALENDAR<br />
+$calendar->setVersion( '2.0' )
+</p>
+<br /><a href="#INDEX">[index]</a>
+
+
+<a name="X-PROPERTY"></a><h4>3.1.2.4 X-PROPERTY</h4>
+Any calendar property name with a "X-" prefix and text value.<br />
+No ouput is created for 'xCal' format<br /><br />
+<u>format</u>
+<p>
+setXprop( string propertyName, string propertyData [, array params ] )
+</p>
+<table>
+<tr><td>propertyName<td>=<td>Any property name with a "X-" prefix</tr>
+<tr><td>params<td>=<td>['LANGUAGE' =&gt; '&lt;lang&gt;'] [, xparam]</tr>
+<tr><td>xparam<td>=<td>*[ xparamkey =&gt; xparamvalue ]</tr>
+</table><br />
+<u>example</u>
+<p>
+<table>
+<tr><td>$calendar = new vcalendar();<td>&nbsp;// initiate new CALENDAR
+<tr><td>$v->setXprop( 'X-WR-CALNAME', 'Calendar Sample' );<td>&nbsp;// set some X-properties, name.. .
+<tr><td colspan="2">$v->setXprop( 'X-WR-CALDESC', 'Calendar Description' );
+<tr><td colspan="2">$v->setXprop( 'X-WR-TIMEZONE', 'Europe/Stockholm' );
+</table>
+</p>
+<br /><a href="#INDEX">[index]</a>
+
+
+<a name="Other_Calendar_functions"></a><h3>3.1.3 Other Calendar functions</h3>
+
+<a name="addComponent"></a><h4>3.1.3.1 addComponent</h4>
+Add calendar component (vevent.. . ) to calendar<br /><br />
+<u>format</u>
+<p>
+addComponent ( component )<br />
+</p>
+</p>
+<u>example</u>
+<p>
+<table>
+<tr><td>$calendar = new vcalendar();<td>&nbsp;// initiate new CALENDAR
+<tr><td colspan="2">.. .
+<tr><td>$vevent = new vevent();<td>&nbsp;// initiate EVENT
+<tr><td>$vevent->setDtstart( 2006, 12, 24, 19, 30, 00 );<td>&nbsp;// add some event properties
+<tr><td colspan="2">$vevent->set.. .
+<tr><td colspan="2">.. .
+<tr><td>$calendar->addComponent ( $vevent );<td>&nbsp;// add event to calendar
+<tr><td colspan="2">.. .
+</table>
+</p>
+<a href="#INDEX">[index]</a>
+
+
+<a name="appendCalendar"></a><h4>3.1.3.2 appendCalendar</h4>
+Append formatted output for calendar to existing calendar file.
+Only 'iCal' format supported, FALSE is returned for 'xCal' format!<br />
+Returns file info array.<br /><br />
+<u>format</u>
+<p>
+appendCalendar (  string directory/FALSE [, string filename [, string delimiter/FALSE ]] )<br />
+Calendar file (&lt;directory&gt;&lt;delimiter&gt;&lt;filename&gt;) MUST exist or FALSE is returned
+</p>
+<u>example</u>
+<p>
+$dirFile = $calendar->appendCalendar( 'icalfiledir', 'oldIcalFile.ics' ); <br />
+ // dirFile[0] : directory, dirFile[1] : filename, dirFile[2] : filesize
+</p>
+<br /><a href="#INDEX">[index]</a>
+
+
+<a name="createCalendar"></a><h4>3.1.3.3 createCalendar</h4>
+Generate and return calendar in a string, testing.. .?<br /><br />
+<u>format</u>
+<p>
+createCalendar()
+</p>
+<u>example</u>
+<p>
+$str = $calendar->createCalendar();
+</p>
+<br /><a href="#INDEX">[index]</a>
+
+
+<a name="getFilename"></a><h4>3.1.3.4 getFilename</h4>
+Get set or generated directory, filename, filesize.<br />
+Returns file info array.<br /><br />
+<u>format</u>
+<p>
+getFilename ()
+</p>
+<u>example</u>
+<p>
+$dirFile = $calendar->getFilename(); <br />
+  // dirFile[0] : directory, dirFile[1] : filename, dirFile[2] : filesize
+</p>
+<br /><a href="#INDEX">[index]</a>
+
+
+<a name="getFormat"></a><h4>3.1.3.5 getFormat</h4>
+If format is set to 'xcal' , 'xcal' is returned.<br /><br />
+<u>format</u>
+<p>
+getFormat ()
+</p>
+<u>example</u>
+<p>
+$format = $calendar->getFormat(); <br />
+</p>
+<br /><a href="#INDEX">[index]</a>
+
+
+<a name="getLanguage"></a><h4>3.1.3.6 getLanguage</h4>
+Get language for calendar (if language is set)<br /><br />
+<u>format</u>
+<p>
+getLanguage( )
+</p>
+<u>example</u>
+<p>
+$lang = $calendar->getLanguage( );
+</p>
+<br /><a href="#INDEX">[index]</a>
+
+
+<a name="returnCalendar"></a><h4>3.1.3.7 returnCalendar</h4>
+Redirect output to user browser, uses present dir if not set, filenamn is auto generated if missing/not set
+(<span class="p">$filename = date( 'YmdHis' ).'.ics </span>).
+Directory/filename must be writeable, delimiter default '/'.<br /><br />
+<br />
+<u>format</u>
+<p>
+returnCalendar ( string directory/FALSE [, string filename/FALSE [,  string delimiter/FALSE ]] )
+</p>
+<u>example</u>
+<p>
+$calendar->returnCalendar ( 'cache/ical', 'calendar.ics' )
+</p>
+<br /><a href="#INDEX">[index]</a>
+
+
+<a name="saveCalendar"></a><h4>3.1.3.8 saveCalendar</h4>
+Save ical calendar in a file, uses present directory if directory not set, filenamn is auto generated if missing/not set
+(<span class="p">$filename = date( 'YmdHis' ).'.ics </span>).
+Directory/filename must be writeable, delimiter default '/'.<br />
+Returns file info array.<br /><br />
+<u>format</u>
+<p>
+saveCalendar ( string directory/FALSE [, string filename/FALSE [,  string delimiter/FALSE ]] )
+</p>
+<u>example</u>
+<p>
+$dirFile = $calendar->saveCalendar ( 'cache/ical', 'calendar.ics' );<br />
+  // dirFile[0] : directory, dirFile[1] : filename, dirFile[2] : filesize
+</p>
+<br /><a href="#INDEX">[index]</a>
+
+
+<a name="setFilename"></a><h4>3.1.3.9 setFilename</h4>
+Set directory, filename and delimiter for ical file.<br />
+Return FALSE if file not writeable, delimiter default '/'.<br /><br />
+<u>format</u>
+<p>
+setFilename( string directory/FALSE [, string filename/FALSE [,  string delimiter/FALSE ]] )
+</p>
+<u>example</u>
+<p>
+$calendar->setFilename( 'cache/ical', 'calendar.ics', '/' )
+</p>
+<br /><a href="#INDEX">[index]</a>
+
+
+<a name="setFormat"></a><h4>3.1.3.10 setFormat</h4>
+Set format for calendar, 'xcal' (any case) for xCal format, any other (default) 'ical' format <br /><br />
+<u>format</u>
+<p>
+setFormat( )
+</p>
+<u>example</u>
+<p>
+$calendar->setFormat( 'xcal' );
+</p>
+<br /><a href="#INDEX">[index]</a>
+
+<a name="setLanguage"></a><h4>3.1.3.11 setLanguage</h4>
+Set language for calendar and component properties as defined in [RFC 1766].<br />
+Can be override by "setLanguage" at component or component property level.<br /><br />
+<u>format</u>
+<p>
+setLanguage( string value )
+</p>
+<u>example</u>
+<p>
+$calendar->setLanguage( 'se' );
+</p>
+<br /><a href="#INDEX">[index]</a>
+
+
+<a name="setNewlineChar"></a><h4>3.1.3.12 setNewlineChar</h4>
+Set new line character(-s), default "\n"<br /><br />
+<u>format</u>
+<p>
+setNewlineChar( $value )
+</p>
+<u>example</u>
+<p>
+$calendar->setNewlineChar( "\r" );
+</p>
+<br /><a href="#INDEX">[index]</a>
+
+
+<a name="setUnique_id"></a><h4>3.1.3.13 setUnique_id</h4>
+ *  The identifier is RECOMMENDED to be the identical syntax to the<br />
+ * [RFC 822] addr-spec. A good method to assure uniqueness is to put the<br />
+ * domain name or a domain literal IP address of the host on which.. .<br /><br />
+Only to be used if getUid function is used (later) on component level<br />
+else <b>AUTO</b> generated ( gethostbyname( $_SERVER['SERVER_NAME'] ))<br /><br />
+<u>format</u>
+<p>
+setUnique_id( string unique_id )
+</p>
+<u>example</u>
+<p>
+$calendar->setUnique_id( 'domain.net' )
+</p>
+<br /><a href="#INDEX">[index]</a>
+
+
+<a name="useCachedCalendar"></a><h4>3.1.3.14 useCachedCalendar</h4>
+If recent version of file exists (timeout default 3600 sec), a HTTP redirect header is sent.<br /><br />
+<u>format</u>
+<p>
+useCachedCalendar( string directory, string filename [, string delimiter/FALSE [, int timeout ]] )
+</p>
+<u>example</u>
+<p>
+$calendar->useCachedCalendar( 'cache', 'calendar.ics' );
+</p>
+<br /><a href="#INDEX">[index]</a>
+
+<a name="validDate"></a><h4>3.1.3.15 validDate</h4>
+Check and convert input parameter date (different formats), return date in iCalcreator (internal) date format. <br /><br />
+<u>format</u>
+<p>
+validDate( date [, bool utc/FALSE ] )
+</p>
+<table>
+<tr><td>date<td>=<td>int year, int month, int day [, int hour, int min, int sec, mixed tz ]]</tr>
+<tr><td>date<td>=<td>array( int year, int month, int day [, int hour, int min, int sec, mixed tz ]] )</tr>
+<tr><td>date<td>=<td>array ( 'year' =&gt; int year, 'month' =&gt; int month, 'day' =&gt; int day [, 'hour' =&gt; int hour, 'min' =&gt; int min, 'sec' =&gt; int sec, 'tz' =&gt; mixed tz ] )</tr>
+<tr><td>date<td>=<td>array ( 'timestamp' => int timestamp [, 'tz' =&gt; mixed tz ] )</tr>
+<tr><td>date<td>=<td>string datestring // date in a string, acceptable by strtotime-command, ex.&nbsp;'14 august 2006 16.00.00'</tr>
+<tr><td>tz<td>=<td>timezone / offset</tr>
+<tr><td>offset<td>=<td>(+/-)HHmm[ss]</tr>
+<tr><td>utc<td>=<td>TRUE and tz = UTC offset then input local date + UTC offset returns UTC format date</tr>
+</table><br />
+<u>example</u>
+<p>
+$c = new vcalendar ();<br />
+$today = date("M d Y H:i:s"); <br />
+$UTCoffset = date( 'Z'); // offset in seconds<br />
+if( '-' == substr( $UTCoffset, 0, 1 )) {<br />
+&nbsp;&nbsp;$UTCoffset = substr( $UTCoffset, 1 );<br />
+&nbsp;&nbsp;$sign = '-';<br />
+}<br />
+else {<br />
+&nbsp;&nbsp;$sign = '+';<br />
+}<br />
+$UTCoffsetHour = $UTCoffset / 3600;<br />
+$UTCoffsetMod = $UTCoffset % 3600;<br />
+$UTCoffsetMin = $UTCoffsetMod / 60;<br />
+$UTCoffsetSec = $UTCoffsetMod % 60;<br />
+$UTCoffset = sprintf( $sign."%02d%02d%02d", $UTCoffsetHour, $UTCoffsetMin, $UTCoffsetSec );<br />
+$today .= ' '.$UTCoffset; // UTC offset in accepted format, (+/-)HHMM[SS]<br />
+$date = $c->validDate( $today );<br />
+if( FALSE !== $date ) {<br />
+&nbsp;&nbsp;$e = new vevent();<br />
+&nbsp;&nbsp;$e->setDtstart( $date );<br />
+&nbsp;&nbsp;$e->createDtstart();<br />
+}<br />
+else {<br />
+&nbsp;&nbsp;echo "unvalid date $today";<br />
+}
+</p>
+<br /><a href="#INDEX">[index]</a>
+
+
+<a name="Calendar_component_object_property_function_list"></a><h2>3.2 Calendar component object property function list</h2>
+All calendar component property functions for setting data.<br />
+For property format in detail, see<br />
+RFC2445 - Internet Calendaring and Scheduling Core Object Specification (iCalendar) in <a href="http://www.kigkonsult.se/dl.php?f=rfc2445" title="RFC2445 in text format" target="_blank"><b>text</b></a>
+and <a href="http://www.kigkonsult.se/iCalcreator/iCalDictionary/index.html" title="RFC2445 in HTML format" target="_blank"><b>HTML</b></a> format.<br />
+<br />
+<a name="DATE_WITH_UTC_TIME"></a>&quot;DATE WITH UTC TIME<br />
+The date with UTC time, or absolute time, is identified by a LATIN CAPITAL LETTER Z suffix character (US-ASCII decimal 90), the UTC designator, appended to the time value. For example, the following represents January 19, 1998, at 0700 UTC:
+<p>
+DTSTART:19980119T070000Z
+</p>
+The TZID property parameter MUST <b>NOT</b> be applied to DATE-TIME properties whose time values are specified in UTC.&quot;&nbsp;(quote from rfc2445)
+
+<a name="ACTION"></a><h3>3.2.1 ACTION</h3>
+This property defines the action to be invoked when an alarm is triggered.<br /><br />
+<u>format</u>
+<p>
+setAction( string value [, array *xparam ]
+</p>
+<table>
+<tr><td>value<td>=<td>one of "AUDIO" / "DISPLAY" / "EMAIL" / "PROCEDURE"</tr>
+<tr><td>xparam<td>=<td>*[ xparamkey =&gt; xparamvalue ]</tr>
+</table><br />
+<u>example</u>
+<p>
+$valarm->setAction( 'DISPLAY' );
+</p>
+<br /><a href="#INDEX">[index]</a>
+
+
+<a name="ATTACH"></a><h3>3.2.2 ATTACH</h3>
+The property provides the capability to associate a document object with a calendar component.<br /><br />
+<u>format</u>
+<p>
+setAttach( string value [, array params] )
+</p>
+<table>
+<tr><td>params<td>=<td>[&nbsp;'ENCODING'&nbsp;=&gt;&nbsp;'BASE64',&nbsp;'VALUE'&nbsp;=&gt;&nbsp;'BINARY'&nbsp;]<tr>
+<tr><td><td><td>[,&nbsp;'FMTTYPE'&nbsp;=&gt;&nbsp;'&lt;content type&gt;'&nbsp;]</tr>
+<tr><td><td><td>[,&nbsp;xparam]</tr>
+<tr><td>xparam<td>=<td>*[&nbsp;xparamkey&nbsp;=&gt;&nbsp;xparamvalue&nbsp;]</tr>
+</table><br />
+<u>example</u>
+<p>
+<table>
+<tr><td>$vevent->setAttach<td>(<td>'ftp://domain.com/pub/docs/agenda.doc'</tr>
+<tr><td><td>,<td>array( 'FMTTYPE' =&gt; 'application/binary' ));</tr>
+</table>
+</p>
+<br /><a href="#INDEX">[index]</a>
+
+
+<a name="ATTENDEE"></a><h3>3.2.3 ATTENDEE</h3>
+The property defines an "Attendee" within a calendar component.<br /><br />
+<u>format</u>
+<p>
+setAttendee( string useraddress [, array params ] )
+</p>
+<table border=0>
+<tr><td>params<td>=<td colspan="5">[CUTYPE] [,&nbsp;MEMBER] [,&nbsp;ROLE] [,&nbsp;PARTSTAT] [,&nbsp;RVSP] [,&nbsp;DELEGATED-TO] [,&nbsp;DELEGATED-FROM] [,&nbsp;SENT-BY] [,&nbsp;CN] [,&nbsp;DIR] [,&nbsp;LANGUAGE] [,&nbsp;xparams]</tr>
+<tr><td>CUTYPE<td>=<td>"CUTYPE"<td>&nbsp;=&gt;&nbsp;<td>&nbsp;&nbsp;"INDIVIDUAL"<td>;<td>An individual, <b>Default</b></tr>
+<tr><td><td><td><td><td>/&nbsp;"GROUP"<td>;<td>A group of individuals</tr>
+<tr><td><td><td><td><td>/&nbsp;"RESOURCE"<td>;<td>A physical resource</tr>
+<tr><td><td><td><td><td>/&nbsp;"ROOM"<td>;<td>A room resource</tr>
+<tr><td><td><td><td><td>/&nbsp;"UNKNOWN"<td>;<td>Otherwise not known</tr>
+<tr><td><td><td><td><td>/&nbsp;x-name<td>;<td>Experimental type</tr>
+<tr><td><td><td><td><td>/&nbsp;iana-token<td>;<td>Other IANA registered type</tr>
+<tr><td>MEMBER<td>=<td>"MEMBER"<td>&nbsp;=&gt;&nbsp;<td colspan="3">&nbsp;&nbsp;array( *[ 'single member of the group or list membership' ] )</tr>
+<tr><td>ROLE<td>=<td>"ROLE"<td>&nbsp;=&gt;&nbsp;<td>&nbsp;&nbsp;"CHAIR"<td>;<td>Indicates chair of the calendar entity</tr>
+<tr><td><td><td><td><td>/&nbsp;"REQ-PARTICIPANT"<td>;<td>A participant whose participation is required, <b>Default</b></tr>
+<tr><td><td><td><td><td>/&nbsp;"OPT-PARTICIPANT"<td>;<td>A participant whose participation is optional</tr>
+<tr><td><td><td><td><td>/&nbsp;"NON-PARTICIPANT"<td>;<td>A participant who is copied for information purposes only</tr>
+<tr><td><td><td><td><td>/&nbsp;x-name<td>;<td>Experimental role</tr>
+<tr><td><td><td><td><td>/&nbsp;iana-token<td>;<td>Other IANA role</tr>
+<tr><td>PARTSTAT<td>=<td>"PARTSTAT"<td>&nbsp;=&gt;&nbsp;<td>&nbsp;&nbsp;"NEEDS-ACTION"<td>;<td>Event needs action, <b>Default</b></tr>
+<tr><td><td><td><td><td>/&nbsp;"ACCEPTED"<td>;<td>Event accepted</tr>
+<tr><td><td><td><td><td>/&nbsp;"DECLINED"<td>;<td>Event declined</tr>
+<tr><td><td><td><td><td>/&nbsp;"TENTATIVE"<td>;<td>Event tentatively accepted</tr>
+<tr><td><td><td><td><td>/&nbsp;"DELEGATED"<td>;<td>Event delegated</tr>
+<tr><td><td><td><td><td>/&nbsp;"NEEDS-ACTION"<td>;<td>To-do needs action, <b>Default</b></tr>
+<tr><td><td><td><td><td>/&nbsp;"ACCEPTED"<td>;<td>To-do accepted</tr>
+<tr><td><td><td><td><td>/&nbsp;"DECLINED"<td>;<td>To-do declined</tr>
+<tr><td><td><td><td><td>/&nbsp;"TENTATIVE"<td>;<td>To-do tentatively accepted</tr>
+<tr><td><td><td><td><td>/&nbsp;"DELEGATED"<td>;<td>To-do delegated</tr>
+<tr><td><td><td><td><td>/&nbsp;"COMPLETED"<td>;<td>To-do completed. COMPLETED property has date/time completed.</tr>
+<tr><td><td><td><td><td>/&nbsp;"IN-PROCESS"<td>;<td>To-do in process of being completed</tr>
+<tr><td><td><td><td><td>/&nbsp;"NEEDS-ACTION"<td>;<td>Journal needs action, <b>Default</b></tr>
+<tr><td><td><td><td><td>/&nbsp;"ACCEPTED"<td>;<td>Journal accepted</tr>
+<tr><td><td><td><td><td>/&nbsp;"DECLINED"<td>;<td>Journal declined</tr>
+<tr><td><td><td><td><td>/&nbsp;x-name<td>;<td>Experimental status</tr>
+<tr><td><td><td><td><td>/&nbsp;iana-token<td>;<td>Other IANA registered status</tr>
+<tr><td>RSVP<td>=<td>"RSVP"<td>&nbsp;=&gt;&nbsp;<td colspan="3">&nbsp;&nbsp;"TRUE" / "FALSE" <b>Default</b>;reply expectation</tr>
+<tr><td>DELEGATED-TO<td>=<td>"DELEGATED-TO"<td>&nbsp;=&gt;&nbsp;<td colspan="3">&nbsp;&nbsp;array( *[ 'single calendar user to whom the calendar user specified by the property has delegated participation' ] )</tr>
+<tr><td>DELEGATED-FROM<td>=<td>"DELEGATED-FROM"<td>&nbsp;=&gt;&nbsp;<td colspan="3">&nbsp;&nbsp;array( *[ 'single calendar user that have delegated their participation to the calendar user specified by the property' ] )</tr>
+<tr><td>SENT-BY<td>=<td>"SENT-BY"<td>&nbsp;=&gt;&nbsp;<td colspan="3">&nbsp;&nbsp;'single calendar user that is acting on behalf of the calendar user specified by the property'</tr>
+<tr><td>CN<td>=<td>"CN"<td>&nbsp;=&gt;&nbsp;<td colspan="3">&nbsp;&nbsp;'common name to be associated with the calendar user specified by the property'</tr>
+<tr><td>DIR<td>=<td>"DIR"<td>&nbsp;=&gt;&nbsp;<td colspan="3">&nbsp;&nbsp;'reference to a directory entry associated with the calendar user specified by the property'</tr>
+<tr><td>LANGUAGE<td>=<td>"LANGUAGE"<td>&nbsp;=&gt;&nbsp;<td colspan="3">&nbsp;&nbsp;'language for text values in CN parameter'</tr>
+<tr><td>xparam<td>=<td>*[ xparamkey<td>&nbsp;=&gt;&nbsp;<td colspan="3">&nbsp;&nbsp;xparamvalue ]</tr>
+</table>
+See rules in detail in RFC2445 - Internet Calendaring and Scheduling Core Object Specification (iCalendar) in <a href="http://www.kigkonsult.se/dl.php?f=rfc2445" title="RFC2445 in text format" target="_blank"><b>text</b></a> and <a href="http://www.kigkonsult.se/iCalcreator/iCalDictionary/index.html" title="RFC2445 in HTML format" target="_blank"><b>HTML</b></a> format.
+<br /><br />
+<u>example</u><p>
+<table>
+<tr><td>$vevent->setAttendee<td>(<td colspan ="5">'attendee@ical.net'</tr>
+<tr><td><td>,<td>array<td>(<td>'cutype'<td>=&gt;<td>'INDIVIDUAL'</tr>
+<tr><td><td><td><td>,<td>'member'<td>=&gt;<td>array( 'member1@ical.net', 'member2@ical.net', 'member3@ical.net' )</tr>
+<tr><td><td><td><td>,<td>'role'<td>=&gt;<td>'CHAIR'</tr>
+<tr><td><td><td><td>,<td>'PARTSTAT'<td>=&gt;<td>'ACCEPTED' </tr>
+<tr><td><td><td><td>,<td>'RSVP'<td>=&gt;<td>'TRUE'</tr>
+<tr><td><td><td><td>,<td>'DELEgated-to'<td>=&gt;<td>array( 'part1@ical.net', 'part2@ical.net', 'part3@ical.net' )</tr>
+<tr><td><td><td><td>,<td>'delegateD-FROM'<td>=&gt;<td>array( 'part4@ical.net', 'part5@ical.net', 'part6@ical.net' ) </tr>
+<tr><td><td><td><td>,<td>'SENT-BY'<td>=&gt;<td>'part7@ical.net'</tr>
+<tr><td><td><td><td>,<td>'CN'<td>=&gt;<td>'John Doe'</tr>
+<tr><td><td><td><td>,<td>'DIR'<td>=&gt;<td>'http://www.ical.net/doc/info.doc'</tr>
+<tr><td><td><td><td>,<td>'LANGUAGE'<td>=&gt;<td>'us-EN'</tr>
+<tr><td><td><td><td>,<td>'hejsan'<td>=&gt;<td>'hoppsan'   // xparam, key and value</tr>
+<tr><td><td><td><td>,<td><td><td>'tjosan'    // xparam, value only));</tr>
+</table>
+</p>
+<br />
+<br /><a href="#INDEX">[index]</a>
+
+<a name="CATEGORIES"></a><h3>3.2.4 CATEGORIES</h3>
+This property defines the categories for a calendar component.<br /><br />
+<u>format</u>
+<p>
+setCategories( string category [, array params ] )
+</p>
+<table>
+<tr><td>params<td>=<td>['LANGUAGE' =&gt; '&lt;lang&gt;']</tr>
+<tr><td><td><td>[, xparam]</tr>
+<tr><td>xparam<td>=<td>*[ xparamkey =&gt; xparamvalue ]</tr>
+</table><br />
+<u>example</u>
+<p>
+$vevent->setCategories( 'project_x' );
+</p>
+<br /><a href="#INDEX">[index]</a>
+
+
+<a name="CLASS"></a><h3>3.2.4 CLASS</h3>
+This property defines the access classification for a calendar component.<br /><br />
+<u>format</u>
+<p>
+setClass( string classvalue [, array xparam ] )
+</p>
+<table>
+<tr><td>classvalue<td>=<td>"PUBLIC" / "PRIVATE" / "CONFIDENTIAL" / iana-token / x-name</tr>
+<tr><td>xparam<td>=<td>*[ xparamkey =&gt; xparamvalue ]</tr>
+</table><br />
+<u>example</u>
+<p>
+$vevent->setClass( 'CONFIDENTIAL' );
+</p>
+<br /><a href="#INDEX">[index]</a>
+
+<a name="COMMENT"></a><h3>3.2.5 COMMENT</h3>
+This property specifies non-processing information intended to provide a comment to the calendar user.<br /><br />
+<u>format</u>
+<p>
+setComment( string comment [, array params ] )
+</p>
+<table>
+<tr><td>params<td>=<td>['LANGUAGE' =&gt; '&lt;lang&gt;']</tr>
+<tr><td><td><td>[, 'ALTREP' =&gt; '&lt;alt.text&gt;']</tr>
+<tr><td><td><td>[, xparam]</tr>
+<tr><td>xparam<td>=<td>*[ xparamkey =&gt; xparamvalue ]</tr>
+</table><br />
+<u>example</u>
+<p>
+$c->setComment( 'this is a comment' );
+</p>
+<br /><a href="#INDEX">[index]</a>
+
+
+<a name="COMPLETED"></a><h3>3.2.6 COMPLETED</h3>
+This property defines the date and time that a to-do was actually completed.<br /><br />
+<u>format</u>
+<p>
+setCompleted( date [, array xparam ] )
+</p>
+<table>
+<tr><td>date<td>=<td>int year, int month, int day [, int hour, int min, int sec]</tr>
+<tr><td>date<td>=<td>array( int year, int month, int day [, int hour, int min, int sec] )</tr>
+<tr><td>date<td>=<td>array ( 'year' =&gt; int year, 'month' =&gt; int month, 'day' =&gt; int day [, 'hour' =&gt; int hour, 'min' =&gt; int min, 'sec' =&gt; int sec] )</tr>
+<tr><td>date<td>=<td>array ( 'timestamp' => int timestamp )</tr>
+<tr><td>date<td>=<td>string datestring // date in a string, acceptable by strtotime-command, ex. &nbsp;'14 august 2006 16.00.00'</tr>
+<tr><td>date<td>:<td><b>Always</b> <a href="#DATE_WITH_UTC_TIME">UTC</a> format!</tr>
+<tr><td>xparam<td>=<td>*[ xparamkey =&gt; xparamvalue ]</tr>
+</table><br />
+<u>example 1</u>
+<p>
+$vtodo->setCompleted( 2006, 8, 10 ); // 10 august 2006 UTC
+</p><br />
+<u>example 2</u>
+<p>
+$vcalendar = new vcalendar();<br />
+$vtodo = new vtodo();<br />
+.. . <br />
+$date = array( 'year' =&gt; 2006, 'month' =&gt; 10, 'day' =&gt; 10, 'tz' =&gt; '+0200' );<br />
+$date = $vcalendar->validDate( $date, TRUE ); // local date + UTC offset returns <a href="DATE_WITH_UTC_TIME">UTC</a> format date<br />
+$vtodo->setCompleted( $date );<br />
+.. . <br />
+</p>
+<br /><a href="#INDEX">[index]</a>
+
+
+<a name="CONTACT"></a><h3>3.2.7 CONTACT</h3>
+The property is used to represent contact information or alternately a reference to contact information associated with the calendar component.<br /><br />
+<u>format</u>
+<p>
+setContact( string contact [, array params] )
+</p>
+<table>
+<tr><td>params<td>=<td>['LANGUAGE' =&gt; '&lt;lang&gt;']</tr>
+<tr><td><td><td>[, 'ALTREP' =&gt; '&lt;alt.text&gt;']</tr>
+<tr><td><td><td>[, xparam]</tr>
+<tr><td>xparam<td>=<td>*[ xparamkey =&gt; xparamvalue ]</tr>
+</table><br />
+<u>example</u>
+<p>
+$c->setContact( 'tel 012-34 56 789' )
+</p>
+<br /><a href="#INDEX">[index]</a>
+
+
+<a name="CREATED"></a><h3>3.2.8 CREATED</h3>
+This property specifies the date and time that the calendar information was created by the calendar user agent in the calendar store.<br /><br />
+<u>format</u>
+<p>
+setCreated( date [, array xparam ] )
+</p>
+<table>
+<tr><td>date<td>=<td>int year, int month, int day [, int hour, int min, int sec ]]</tr>
+<tr><td>date<td>=<td>array( int year, int month, int day [, int hour, int min, int sec] )</tr>
+<tr><td>date<td>=<td>array ( 'year' =&gt; int year, 'month' =&gt; int month, 'day' =&gt; int day [, 'hour' =&gt; int hour, 'min' =&gt; int min, 'sec' =&gt; int sec )</tr>
+<tr><td>date<td>=<td>array ( 'timestamp' => int timestamp )</tr>
+<tr><td>date<td>=<td>string datestring,  // date in a string, acceptable by strtotime-command, ex.&nbsp;'14 august 2006 16.00.00'</tr>
+<tr><td>date<td>:<td><b>Always</b> <a href="#DATE_WITH_UTC_TIME">UTC</a> format!</tr>
+<tr><td>xparam<td>=<td>*[ xparamkey =&gt; xparamvalue ]</tr>
+</table><br />
+<u>example 1</u>
+<p>
+$vevent->setCreated( 2006, 8, 11, 14, 30, 35 );<br /> // 11 august 2006 14.30.35 UTC
+</p><br />
+<u>example 2</u>
+<p>
+$vcalendar = new vcalendar();<br />
+$vtodo = new vtodo();<br />
+.. . <br />
+$date = array( 'year' =&gt; 2006, 'month' =&gt; 10, 'day' =&gt; 10, 'tz' =&gt; '+0200' );<br />
+$date = $vcalendar->validDate( $date, TRUE ); // local date + UTC offset returns <a href="DATE_WITH_UTC_TIME">UTC</a> format date<br />
+$vtodo->setCreated( $date );<br />
+.. . <br />
+</p>
+<br /><a href="#INDEX">[index]</a>
+
+
+<a name="DESCRIPTION"></a><h3>3.2.9 DESCRIPTION</h3>
+This property provides a more complete description of the calendar component, than that provided by the "SUMMARY" property.<br /><br />
+<u>format</u>
+<p>
+setDescription( string description [, array params ] )
+</p>
+<table>
+<tr><td>params<td>=<td>['LANGUAGE' =&gt; '&lt;lang&gt;']</tr>
+<tr><td><td><td>[, 'ALTREP' =&gt; '&lt;alt.text&gt;']</tr>
+<tr><td><td><td>[, xparam]</tr>
+<tr><td>xparam<td>=<td>*[ xparamkey =&gt; xparamvalue ]</tr>
+</table><br />
+<u>example</u>
+<p>
+$vevent->setDescription( 'This is a description' );
+</p>
+<br /><a href="#INDEX">[index]</a>
+
+
+<a name="DTEND"></a><h3>3.2.10 DTEND</h3>
+This property specifies the date and time that a calendar component ends.<br /><br />
+<u>format</u>
+<p>
+setDtend( date [, array xparam ] )
+</p>
+<table>
+<tr><td>date<td>=<td>int year, int month, int day [, int hour, int min, int sec, mixed tz ]]</tr>
+<tr><td>date<td>=<td>array( int year, int month, int day [, int hour, int min, int sec, mixed tz ]] )</tr>
+<tr><td>date<td>=<td>array ( 'year' =&gt; int year, 'month' =&gt; int month, 'day' =&gt; int day [, 'hour' =&gt; int hour, 'min' =&gt; int min, 'sec' =&gt; int sec, 'tz' =&gt; mixed tz ] )</tr>
+<tr><td>date<td>=<td>array ( 'timestamp' => int timestamp [, 'tz' =&gt; mixed tz ] )</tr>
+<tr><td>date<td>=<td>string datestring // date in a string, acceptable by strtotime-command, ex.&nbsp;'14 august 2006 16.00.00'</tr>
+<tr><td>date<td>:<td>Within the "VFREEBUSY" calendar component, the time <b>MUST</b> be specified in the <a href="#DATE_WITH_UTC_TIME">UTC</a> time format.</tr>
+<tr><td>tz<td>=<td>timezone / UTC offset</tr>
+<tr><td>offset<td>=<td>(+/-)HHmm[ss], local date + UTC offset returns <a href="DATE_WITH_UTC_TIME">UTC</a> format date</tr>
+<tr><td>xparam<td>=<td>*[ xparamkey =&gt; xparamvalue ]</tr>
+</table><br />
+<u>example 1</u>
+<p>
+$vevent->setDtend( 2006, 8, 11, 16, 30, 0 ); <br />
+// 11 august 2006 16.30.00 local date
+</p>
+<u>example 2</u>
+<p>
+$vfreebusy->setDtend( 2006, 8, 11, 16, 30, 0, '-040000' ); <br />
+// 11 august 2006 16.30.00 -040000 : local date + UTC offset returns UTC format date
+</p>
+<br /><a href="#INDEX">[index]</a>
+
+
+<a name="DTSTAMP"></a><h3>3.2.11 DTSTAMP</h3>
+The property indicates the date/time that the instance of the iCalendar object was created.<br />
+<b>AUTO</b> GENERATED at component creation.<br /><br />
+<u>format</u>
+<p>
+setDtstamp( date [, array xparam ] )
+</p>
+<table>
+<tr><td>date<td>=<td>int year, int month, int day [, int hour, int min, int sec]</tr>
+<tr><td>date<td>=<td>array( int year, int month, int day [, int hour, int min, int sec] )</tr>
+<tr><td>date<td>=<td>array ( 'year' =&gt; int year, 'month' =&gt; int month, 'day' =&gt; int day [, 'hour' =&gt; int hour, 'min' =&gt; int min, 'sec' =&gt; int sec] )</tr>
+<tr><td>date<td>=<td>array ( 'timestamp' => int timestamp )</tr>
+<tr><td>date<td>=<td>string datestring // date in a string, acceptable by strtotime-command, ex.&nbsp;'14 august 2006 16.00.00'</tr>
+<tr><td>date<td>:<td>The date in DTSTAMP <b>MUST</b> be specified in the <a href="#DATE_WITH_UTC_TIME">UTC</a> time format.</tr>
+<tr><td>xparam<td>=<td>*[ xparamkey =&gt; xparamvalue ]</tr>
+</table><br />
+<u>example 1</u>
+<p>
+$vevent->setDstamp( 2006, 8, 11, 7, 30, 1 ); // 11 august 2006 07.30.01 UTC
+</p>
+<u>example 2</u>
+<p>
+$vcalendar = new vcalendar();<br />
+$vtodo = new vtodo();<br />
+.. . <br />
+$date = array( 'year' =&gt; 2006, 'month' =&gt; 10, 'day' =&gt; 10, 'tz' =&gt; '+0200' );<br />
+$date = $vcalendar->validDate( $date, TRUE ); // local date + UTC offset returns <a href="DATE_WITH_UTC_TIME">UTC</a> format date<br />
+$vtodo->setDtstamp( $date );<br />
+.. . <br />
+</p>
+<br /><a href="#INDEX">[index]</a>
+
+<a name="DTSTART"></a><h3>3.2.12 DTSTART</h3>
+This property specifies when the calendar component begins.<br /><br />
+<u>format</u>
+<p>
+setDtstart( date [, array xparam ] )
+</p>
+<table>
+<tr><td>date<td>=<td>int year, int month, int day [, int hour, int min, int sec, mixed tz ]]</tr>
+<tr><td>date<td>=<td>array( int year, int month, int day [, int hour, int min, int sec, mixed tz ]] )</tr>
+<tr><td>date<td>=<td>array ( 'year' =&gt; int year, 'month' =&gt; int month, 'day' =&gt; int day [, 'hour' =&gt; int hour, 'min' =&gt; int min, 'sec' =&gt; int sec, 'tz' =&gt; mixed tz ] )</tr>
+<tr><td>date<td>=<td>array ( 'timestamp' => int timestamp [, 'tz' =&gt; mixed tz ] )</tr>
+<tr><td>date<td>=<td>string datestring // date in a string, acceptable by strtotime-command, ex.&nbsp;'14 august 2006 16.00.00'</tr>
+<tr><td>date<td>:<td>Within the "VFREEBUSY" calendar component, the time <b>MUST</b> be specified in the <a href="#DATE_WITH_UTC_TIME">UTC</a> time format.</tr>
+<tr><td>tz<td>=<td>timezone / offset</tr>
+<tr><td>offset<td>=<td>(+/-)HHmm[ss], local date + UTC offset returns <a href="DATE_WITH_UTC_TIME">UTC</a> format date</tr>
+<tr><td>xparam<td>=<td>*[ xparamkey =&gt; xparamvalue ]</tr>
+</table><br />
+<u>example 1</u>
+<p>
+$vevent->setDstart( 2006, 8, 11, 7, 30, 1 ); // 11 august 2006 07.30.01 local date
+</p>
+<u>example 2</u>
+<p>
+$vfreebusy->setDtstart( 2006, 8, 11, 16, 30, 0, '-040000' ); <br />
+// 11 august 2006 16.30.00 -040000 : local date + UTC offset returns <a href="DATE_WITH_UTC_TIME">UTC</a> format date
+</p>
+<br /><a href="#INDEX">[index]</a>
+
+
+<a name="DUE"></a><h3>3.2.13 DUE</h3>
+This property defines the date and time that a to-do is expected to be completed.<br /><br />
+<u>format</u>
+<p>
+setDue( date [, array xparam ] )
+</p>
+<table>
+<tr><td>date<td>=<td>int year, int month, int day [, int hour, int min, int sec, mixed tz ]]</tr>
+<tr><td>date<td>=<td>array( int year, int month, int day [, int hour, int min, int sec, mixed tz ]] )</tr>
+<tr><td>date<td>=<td>array ( 'year' =&gt; int year, 'month' =&gt; int month, 'day' =&gt; int day [, 'hour' =&gt; int hour, 'min' =&gt; int min, 'sec' =&gt; int sec, 'tz' =&gt; mixed tz ] )</tr>
+<tr><td>date<td>=<td>array ( 'timestamp' => int timestamp [, 'tz' =&gt; mixed tz ] )</tr>
+<tr><td>date<td>=<td>string datestring // date in a string, acceptable by strtotime-command, ex.&nbsp;'14 august 2006 16.00.00'</tr>
+<tr><td>tz<td>=<td>timezone / offset</tr>
+<tr><td>offset<td>=<td>(+/-)HHmm[ss], local date + UTC offset returns <a href="DATE_WITH_UTC_TIME">UTC</a> format date</tr>
+<tr><td>xparam<td>=<td>*[ xparamkey =&gt; xparamvalue ]</tr>
+</table><br />
+<u>example 1</u>
+<p>
+$vtodo->setDue( 2006, 8, 11, 18, 0, 0 ); // 11 august 2005 18.00.00 local date
+</p>
+<u>example 2</u>
+<p>
+$vtodo->setDue( 2006, 8, 11, 16, 30, 0, '-040000' ); <br />
+// 11 august 2006 16.30.00 -040000 : local date + UTC offset returns <a href="DATE_WITH_UTC_TIME">UTC</a> format date
+</p>
+<br /><a href="#INDEX">[index]</a>
+
+
+<a name="DURATION"></a><h3>3.2.14 DURATION</h3>
+The property specifies a positive duration of time.<br /><br />
+<u>format</u>
+<p>
+setDuration( duration [, array xparam ] )
+</p>
+<table>
+<tr><td>duration><td>=<td>int week/false [, int day/false [, int hour, int min, int sec]]</tr>
+<tr><td>duration<td>=<td>array( int week/false [, int day/false [, int hour, int min, int sec]] )</tr>
+<tr><td>duration<td>=<td>array ( 'week' =&gt; int week/false [, 'day' =&gt; int day/false [, 'hour' =&gt; int hour/false, 'min' =&gt; int min/false, 'sec' =&gt; int sec/false ]] );</tr>
+<tr><td>xparam<td>=<td>*[ xparamkey =&gt; xparamvalue ]</tr>
+</table><br />
+<u>example</u>
+<p>
+$vtodo->setDuration( FALSE, 1 ); // one day
+</p>
+<br /><a href="#INDEX">[index]</a>
+
+
+<a name="EXDATE"></a><h3>3.2.15 EXDATE</h3>
+This property defines the list of date/time exceptions for a recurring calendar component.<br /><br />
+<u>format</u>
+<p>
+setExdate( dates [, params ] )
+</p>
+<table>
+<tr><td>dates<td>=<td>array ( date *[, date ] )</tr>
+<tr><td>date<td>=<td>array( int year, int month, int day [, int hour, int min, int sec, mixed tz ]] )</tr>
+<tr><td>date<td>=<td>array ( 'year' =&gt; int year, 'month' =&gt; int month, 'day' =&gt; int day [, 'hour' =&gt; int hour, 'min' =&gt; int min, 'sec' =&gt; int sec, 'tz =&gt; mixed tz ] )</tr>
+<tr><td>date<td>=<td>array ( 'timestamp' => int timestamp [, 'tz' =&gt; mixed tz ] )</tr>
+<tr><td>date<td>=<td>string datestring // date in a string, acceptable by strtotime-command, ex.&nbsp;'14 august 2006 16.00.00'</tr>
+<tr><td>tz<td>=<td>timezone / offset</tr>
+<tr><td>offset<td>=<td>(+/-)HHmm[ss], local date + UTC offset returns <a href="DATE_WITH_UTC_TIME">UTC</a> format date</tr>
+<tr><td>params<td>=<td>array([ tzidparam ] [, xparam] )</tr>
+<tr><td>tzidparam<td>=<td>'TZID' =&gt; text</tr>
+<tr><td>xparam<td>=<td>*[ xparamkey =&gt; xparamvalue ]</tr>
+</table>
+<u>example</u>
+<p>
+$vevent->setExdate( 2006, 8, 14, 16, 0, 0 ); // 14 august 2006 16.00.00 local date
+</p>
+<br /><a href="#INDEX">[index]</a>
+
+
+<a name="EXRULE"></a><h3>3.2.16 EXRULE</h3>
+This property defines a rule or repeating pattern for an exception to a recurrence set.<br /><br />
+<u>format</u>
+<p>
+setExrule( array excludes [, array xparam ] )
+</p>
+format ONLY !!!, see rules below and in detail in RFC2445 - Internet Calendaring and Scheduling Core Object Specification (iCalendar) in <a href="http://www.kigkonsult.se/iCalcreator/docs/rfc2445.txt" title="RFC2445 in text format" target="_blank"><b>text</b></a>
+and <a href="http://www.kigkonsult.se/iCalcreator/iCalDictionary/index.html" title="RFC2445 in HTML format" target="_blank"><b>HTML</b></a> format.<br />
+<br />
+<table>
+<tr><td>xparam<td>=<td>*[ xparamkey =&gt; xparamvalue ]</tr>
+</table>
+<p>
+<table border=0>
+<tr><td>$vevent->setExrule(array<td>(<td>'FREQ'<td>=&gt;<td>"MONTHLY"<td></tr>
+<tr><td><td>,<td>'UNTIL'<td>=&gt;<td>'20060831'<td>// date / date-time in <a href="#DATE_WITH_UTC_TIME">UTC</a> format; string/array, see <a href="#CREATED">CREATED</a> format</tr>
+<tr><td><td>,<td>'INTERVAL'<td>=&gt;<td>2<td></tr>
+<tr><td><td>,<td>'WKST'<td>=&gt;<td>'SU'<td></tr>
+<tr><td><td>,<td>'BYSECOND'<td>=&gt;<td>2<td></tr>
+<tr><td><td>,<td>'BYMINUTE'<td>=&gt;<td>array( 2, -4, 6 )<td>// single value/array of values</tr>
+<tr><td><td>,<td>'BYHOUR'<td>=&gt;<td>array( 2, 4, -6 )<td>// single value/array of values</tr>
+<tr><td><td>,<td>'BYMONTHDAY'<td>=&gt;<td>-2<td>// single value/array of values</tr>
+<tr><td><td>,<td>'BYYEARDAY'<td>=&gt;<td>2<td>// single value/array of values</tr>
+<tr><td><td>,<td>'BYWEEKNO'<td>=&gt;<td>array( 2, -4, 6 )<td>// single value/array of values</tr>
+<tr><td><td>,<td>'BYMONTH'<td>=&gt;<td>2<td>// single value/array of values</tr>
+<tr><td><td>,<td>'BYSETPOS'<td>=&gt;<td>array( 2, -4, 6 )<td>// single value/array of values</tr>
+<tr><td><td>,<td>'BYday'<td>=&gt;<td>array<table><tr><td>(array(-2,<td>'DAY'=&gt;'WE')</tr>
+                                                 <tr><td>,array( 3,<td>'DAY'=&gt;'TH')</tr>
+                                                 <tr><td>,array( 5,<td>'DAY'=&gt;'FR')</tr>
+                                                 <tr><td>,array(   <td>'DAY'=&gt;'MO'))</tr></table>
+    <td>// array of value arrays<br />
+    // (or single value array)</tr>
+<tr><td><td>,<td>'X-NAME'<td>=&gt;<td>'x-value' )<td></tr>
+<tr><td><td>,<td nowrap="nowrap">array( 'xparamkey'<td>=&gt;<td>'xparamValue'<td></tr>
+<tr><td>$vtodo->setExrule( array<td>(<td>'FREQ'<td>=&gt;<td>"WEEKLY"<td></tr>
+<tr><td><td>,<td>'COUNT'<td>=&gt;<td>2<td></tr>
+<tr><td><td>,<td>'INTERVAL'<td>=&gt;<td>2<td></tr>
+<tr><td><td>,<td>'WKST'<td>=&gt;<td>'SU'<td></tr>
+<tr><td><td>,<td>'BYSECOND'<td>=&gt;<td>array( -2, 4, 6 )<td>// single value/array of values</tr>
+<tr><td><td>,<td>'BYMINUTE'<td>=&gt;<td>-2<td>// single value/array of values</tr>
+<tr><td><td>,<td>'BYHOUR'<td>=&gt;<td>2<td>// single value/array of values</tr>
+<tr><td><td>,<td>'BYMONTHDAY'<td>=&gt;<td>array( 2, -4, 6 )<td>// single value/array of values</tr>
+<tr><td><td>,<td>'BYYEARDAY'<td>=&gt;<td>array( -2, 4, 6 )<td>// single value/array of values</tr>
+<tr><td><td>,<td>'BYWEEKNO'<td>=&gt;<td>-2<td>// single value/array of values</tr>
+<tr><td><td>,<td>'BYMONTH'<td>=&gt;<td>array( 2, 4, -6 )<td>// single value/array of values</tr>
+<tr><td><td>,<td>'BYSETPOS'<td>=&gt;<td>-2<td>// single value/array of values</tr>
+<tr><td><td>,<td>'BYday'<td>=&gt;<td>array(5,'DAY'=&gt;'WE')<td>// single value array</tr>
+<tr><td><td><td><td><td><td>// (or array of value arrays)</tr>
+<tr><td><td>,<td>'X-NAME'<td>=&gt;<td>'x-value'<td> ));</tr>
+</table>
+<br />
+<table border=0>
+<tr><td>recur<td>=<td colspan="5">"FREQ"=freq *(</tr>
+<tr><td><td><td>;<td colspan="4">either UNTIL or COUNT may appear in a 'recur',</tr>
+<tr><td><td><td>;<td colspan="4">but UNTIL and COUNT MUST NOT occur in the same 'recur'</tr>
+<tr><td><td><td>(<td>";" "UNTIL"<td>"="<td>enddate )<td>/</tr>
+<tr><td><td><td>(<td>";" "COUNT"<td>"="<td>1*DIGIT )<td>/</tr>
+<tr>
+<tr><td><td><td>;<td colspan="4">the rest of these keywords are optional,</tr>
+<tr><td><td><td>;<td colspan="4">but MUST NOT occur more than once</tr>
+
+<tr><td><td><td>(<td>";" "INTERVAL"<td>"="<td>1*DIGIT )<td>/</tr>
+<tr><td><td><td>(<td>";" "BYSECOND"<td>"="<td>byseclist )<td>/</tr>
+<tr><td><td><td>(<td>";" "BYMINUTE"<td>"="<td>byminlist )<td>/</tr>
+<tr><td><td><td>(<td>";" "BYHOUR"<td>"="<td>byhrlist )<td>/</tr>
+<tr><td><td><td>(<td>";" "BYDAY"<td>"="<td>bywdaylist )<td>/</tr>
+<tr><td><td><td>(<td>";" "BYMONTHDAY"<td>"="<td>bymodaylist )<td>/</tr>
+<tr><td><td><td>(<td>";" "BYYEARDAY"<td>"="<td>byyrdaylist )<td>/</tr>
+<tr><td><td><td>(<td>";" "BYWEEKNO"<td>"="<td>bywknolist )<td>/</tr>
+<tr><td><td><td>(<td>";" "BYMONTH"<td>"="<td>bymolist )<td>/</tr>
+<tr><td><td><td>(<td>";" "BYSETPOS"<td>"="<td>bysplist )<td>/</tr>
+<tr><td><td><td>(<td>";" "WKST"<td>"="<td>weekday )<td>/</tr>
+<tr><td><td><td>(<td>";" x-name<td>"="<td>text )<td></tr>
+<tr><td><td><td>)<td><td><td><td></tr>
+</table>
+<br />
+<table border=0>
+<tr><td>freq<td>=<td colspan="2">"SECONDLY" / "MINUTELY" / "HOURLY" / "DAILY" / "WEEKLY" / "MONTHLY" / "YEARLY"</tr>
+<tr><td>enddate<td>=<td colspan="2">date</tr>
+<tr><td>enddate<td>=<td>/ date-time<td>;An <a href="#DATE_WITH_UTC_TIME">UTC</a> value</tr>
+<tr><td>byseclist<td>=<td colspan="2">seconds / ( seconds *("," seconds) )</tr>
+<tr><td>seconds<td>=<td>1DIGIT / 2DIGIT<td>;0 to 59</tr>
+<tr><td>byminlist<td>=<td colspan="2">minutes / ( minutes *("," minutes) )</tr>
+<tr><td>minutes<td>=<td>1DIGIT / 2DIGIT<td>;0 to 59</tr>
+<tr><td>byhrlist<td>=<td colspan="2">hour / ( hour *("," hour) )</tr>
+<tr><td>hour<td>=<td>1DIGIT / 2DIGIT<td>;0 to 23</tr>
+<tr><td>bywdaylist<td>=<td colspan="2">weekdaynum / ( weekdaynum *("," weekdaynum) )</tr>
+<tr><td>weekdaynum<td>=<td colspan="2">[([plus] ordwk / minus ordwk)] weekday</tr>
+<tr><td>plus<td>=<td colspan="2">"+"</tr>
+<tr><td>minus<td>=<td colspan="2">"-"</tr>
+<tr><td>ordwk<td>=<td>1DIGIT / 2DIGIT<td>;1 to 53</tr>
+<tr><td>weekday<td>=<td colspan="2">"SU" / "MO" / "TU" / "WE" / "TH" / "FR" / "SA"</tr>
+<tr><td colspan="4">&nbsp;&nbsp;&nbsp;;Corresponding to SUNDAY, MONDAY, TUESDAY, WEDNESDAY, THURSDAY,</tr>
+<tr><td colspan="4">&nbsp;&nbsp;&nbsp;;FRIDAY, SATURDAY and SUNDAY days of the week.</tr>
+<tr><td>bymodaylist<td>=<td colspan="2">monthdaynum / ( monthdaynum *("," monthdaynum) )</tr>
+<tr><td>monthdaynum<td>=<td colspan="2">([plus] ordmoday) / (minus ordmoday)</tr>
+<tr><td>ordmoday<td>=<td>1DIGIT / 2DIGIT<td>;1 to 31</tr>
+<tr><td>byyrdaylist<td>=<td colspan="2">yeardaynum / ( yeardaynum *("," yeardaynum) )</tr>
+<tr><td>yeardaynum<td>=<td colspan="2">([plus] ordyrday) / (minus ordyrday)</tr>
+<tr><td>ordyrday<td>=<td>1DIGIT / 2DIGIT / 3DIGIT<td>;1 to 366</tr>
+<tr><td>bywknolist<td>=<td colspan="2">weeknum / ( weeknum *("," weeknum) )</tr>
+<tr><td>weeknum<td>=<td colspan="2">([plus] ordwk) / (minus ordwk)</tr>
+<tr><td>bymolist<td>=<td colspan="2">monthnum / ( monthnum *("," monthnum) )</tr>
+<tr><td>monthnum<td>=<td>1DIGIT / 2DIGIT<td>;1 to 12</tr>
+<tr><td>bysplist<td>=<td colspan="2">setposday / ( setposday *("," setposday) )</tr>
+<tr><td>setposday<td>=<td colspan="2">yeardaynum</tr></tr>
+</table>
+</p>
+<br /><a href="#INDEX">[index]</a>
+
+
+<a name="FREEBUSY_PROP"></a><h3>3.2.17 FREEBUSY</h3>
+The property defines one or more free or busy time intervals.<br /><br />
+<u>format</u>
+<p>
+setFreebusy( string freebusytype, array dateperiods [, array xparam ] )
+</p>
+<table>
+<tr><td>freebusytype><td>=><td>one of "FREE" / "BUSY" <b>Default</b> / "BUSY-UNAVAILABLE" / "BUSY-TENTATIVE" / x-name</tr>
+<tr><td>dateperiods<td>=<td>array( array( startdate, enddate/duration )&nbsp;
+                        *[, array( startdate, enddate/duration ) ] )</tr>
+<tr><td>startdate<br />enddate<td>=<td>array( int year, int month, int day, int int hour, int min, int day [, string offset ] )</tr>
+<tr><td>startdate<br />enddate<td>=<td>array ( 'year' =&gt; int year, 'month' =&gt; int month, 'day' =&gt; int day, 'hour' =&gt; int hour, 'min' =&gt; int min, 'sec' =&gt; int sec [, 'tz' =&gt; string offset ] )</tr>
+<tr><td>startdate<br />enddate<td>=<td>array ( 'timestamp' => int timestamp [, 'tz' =&gt; string offset ] )</tr>
+<tr><td>startdate<br />enddate<td>=<td>string datestring // date in a string, acceptable by strtotime-command, ex.&nbsp;'14 august 2006 16.00.00'</tr>
+<tr><td>startdate<br />enddate<td>:<td>date and time values <b>MUST</b> be in an <a href="#DATE_WITH_UTC_TIME">UTC</a> time format or local date + UTC offset.</tr>
+<tr><td>offset<td>=<td>(+/-)HHmm[ss], local date + UTC offset returns UTC format date</tr>
+<tr><td>duration<td>=<td>array( int week/false [, int day/false, int hour, int min, int sec] )</tr>
+<tr><td>duration<td>=<td>array ( 'week' =&gt; int week/false [, 'day' =&gt; int day/false [, 'hour' =&gt; int hour, 'min' =&gt; int min, 'sec' =&gt; int sec ]] );</tr>
+<tr><td>xparam<td>=<td>*[ xparamkey =&gt; xparamvalue ]</tr>
+</table><br />
+<u>example</u>, see rules in detail in RFC2445 - Internet Calendaring and Scheduling Core Object Specification (iCalendar) in <a href="http://www.kigkonsult.se/iCalcreator/docs/rfc2445.txt" title="RFC2445 in text format" target="_blank"><b>text</b></a>
+and <a href="http://www.kigkonsult.se/iCalcreator/iCalDictionary/index.html" title="RFC2445 in HTML format" target="_blank"><b>HTML</b></a> format.<br />
+<p>
+$fdate1 = array ( 2001, 1, 1, 1, 1, 1 );<br />
+alt.<br />
+$fdate1 = array ( 'year' =&gt; 2001, 'month' =&gt; 1, 'day' =&gt; 1, 'hour' =&gt; 1, 'min' =&gt; 1, 'sec' =&gt; 1 ); <br />
+$fdate2 = array ( 2002, 2, 2, 2, 2, 2 ); <br />
+$fdate3 = array ( 2003, 3, 3, 3, 3, 3 ); <br />
+$fdate4 = '4 April 2005 4:4:4'; <br />
+$fdate7 = array ( 'year' =&gt; 2007, 'month' =&gt; 7, 'day' =&gt; 7 );<br />
+$fdur6  = array ( 'week' =&gt; 0, 'day' =&gt; 5, 'hour' =&gt; 5, 'min' =&gt; 5, 'sec' =&gt; 5 ); <br />
+$fdur7  = array ( 0, 0, 6 );             // duration for 6 hours <br />
+$fdur8  = array ( 'week' =&gt; 5, 'day' =&gt; 5, 'hour' =&gt; 5, 'min' =&gt; 5, 'sec' =&gt; 5 ); <br />
+<table border=0>
+<tr><td>$freebusy->setFreebusy<td>(<td>'FREE'<td><td></tr>
+<tr><td><td>,<td>array<td>(<td>array( $fdate1, $fdate2 )</tr>
+<tr><td><td><td><td>,<td>array( $fdate3, $fdur6 )</tr>
+<tr><td><td><td><td>,<td>array( $fdate4, $fdate5 )));</tr>
+<tr><td>$freebusy->setFreebusy<td>(<td>'Busy'<td><td></tr>
+<tr><td><td>,<td>array<td>(<td>array( array( $fdate1, $fdate2 )</tr>
+<tr><td><td><td><td>,<td>array( $fdate3, $fdur8 )</tr>
+<tr><td><td><td><td>,<td>array( $fdate4, $fdur7 )</tr>
+<tr><td><td><td><td>,<td>array( $fdate1, $fdate3 )));</tr>
+</table>
+</p>
+<br /><a href="#INDEX">[index]</a>
+
+
+<a name="GEO"></a><h3>3.2.18 GEO</h3>
+This property specifies information related to the global position for the activity specified by a calendar component.<br /><br />
+<u>format</u>
+<p>
+setGeo( float latitude, float longitude [, array xparam ] )
+</p>
+<table>
+<tr><td>xparam<td>=<td>*[ xparamkey =&gt; xparamvalue ]</tr>
+</table><br />
+<u>example</u>
+<p>
+$vevent->setGeo( 11.23456, -23.45678 );
+</p>
+<br /><a href="#INDEX">[index]</a>
+
+
+<a name="LAST-MODIFIED"></a><h3>3.2.19 LAST-MODIFIED</h3>
+The property specifies the date and time that the information associated with the calendar component was last revised in the calendar store.<br />
+The property value <b>MUST</b> be specified in the <a href="#DATE_WITH_UTC_TIME">UTC</a> time format.<br /><br />
+<u>format</u>
+<p>
+setLastModified( moddate [, array xparam ]  )<br />
+<table border=0>
+<tr><td>moddate<td>=<td>int year, int month, int day [, int hour, int min, int sec ]</tr>
+<tr><td>moddate<td>=<td>array( int year, int month, int day [, int hour, int min, int sec ] )</tr>
+<tr><td>moddate<td>=<td>array ( 'year' =&gt; int year, 'month' =&gt; int month, 'day' =&gt; int day [, 'hour' =&gt; int hour, 'min' =&gt; int min, 'sec' =&gt; int sec ] )</tr>
+<tr><td>moddate<td>=<td>array ( 'timestamp' => int timestamp )</tr>
+<tr><td>moddate<td>=<td>string datestring // date in a string, acceptable by strtotime-command, ex.&nbsp;'14 august 2006 16.00.00'</tr>
+<tr><td>xparam<td>=<td>*[ xparamkey =&gt; xparamvalue ]</tr>
+</table><br />
+<u>example 1</u>
+<p>
+$vevent->setLastModified( 2006, 8, 14, 12, 1, 2 );<br />
+ // 14 august 2006 12.01.02 UTC
+</p>
+<u>example 2</u>
+<p>
+$vcalendar = new vcalendar();<br />
+$vtodo = new vtodo();<br />
+.. . <br />
+$date = array( 'year' =&gt; 2006, 'month' =&gt; 10, 'day' =&gt; 10, 'tz' =&gt; '+0200' );<br />
+$date = $vcalendar->validDate( $date, TRUE ); // local date + UTC offset returns <a href="DATE_WITH_UTC_TIME">UTC</a> format date<br />
+$vtodo->setLastModified( $date );<br />
+.. . <br />
+</p>
+<br /><a href="#INDEX">[index]</a>
+
+
+<a name="LOCATION"></a><h3>3.2.20 LOCATION</h3>
+The property defines the intended venue for the activity defined by a calendar component.<br /><br />
+<u>format</u>
+<p>
+setLocation( string location [, array params ] )
+</p>
+<table>
+<tr><td>params<td>=<td>['LANGUAGE' =&gt; '&lt;lang&gt;']</tr>
+<tr><td><td><td>[, 'ALTREP' =&gt; '&lt;alt.text&gt;']</tr>
+<tr><td><td><td>[, xparam]</tr>
+<tr><td>xparam<td>=<td>*[ xparamkey =&gt; xparamvalue ]</tr>
+</table><br />
+<u>example</u>
+<p>
+$vevent->setLocation( 'Buckingham Palace' );
+</p>
+<br /><a href="#INDEX">[index]</a>
+
+
+<a name="ORGANIZER"></a><h3>3.2.21 ORGANIZER</h3>
+The property defines the organizer for a calendar component.<br /><br />
+<u>format</u>
+<p>
+setOrganizer( string organizer [, array params ] )
+</p>
+<table>
+<tr><td>params<td>=<td>['LANGUAGE' =&gt; '&lt;lang&gt;']</tr>
+<tr><td><td><td>[, 'CN' =&gt; 'common name to be associated with the calendar user specified by the property']</tr>
+<tr><td><td><td>[, 'DIR' =&gt; 'reference to a directory entry associated with the calendar user specified by the property']</tr>
+<tr><td><td><td>[, 'SENT-BY' =&gt; 'single calendar user that is acting on behalf of the calendar user specified by the property']</tr>
+<tr><td><td><td>[, xparam]</tr>
+<tr><td>xparam<td>=<td>*[ xparamkey =&gt; xparamvalue ]</tr>
+</table><br />
+<u>example</u>
+<p>
+<table border=0>
+<tr><td>$vevent-&gt;setOrganizer<td>(<td colspan="4">'ical@kigkonsult.se'</tr>
+<tr><td><td>,<td>array(<td>'CN'<td>=&gt;<td>'John Doe'</tr>
+<tr><td><td><td align="right">,<td>'DIR'<td>=&gt;<td> 'ldap://host.com:6666/o=3DDC%20Associates,c=3DUS??(cn=3DJohn%20Smith)'</tr>
+<tr><td><td><td align="right">,<td>'SENT-BY'<td>=&gt;<td>'info@kigkonsult.se'</tr>
+<tr><td><td><td align="right">,<td>'xparamKey'<td>=&gt;<td>'xparamValue'</tr>
+<tr><td><td><td align="right">,<td><td><td>'yParam' ));</tr>
+</table>
+</p>
+<br /><a href="#INDEX">[index]</a>
+
+
+<a name="PERCENTCOMPLETE"></a><h3>3.2.22 PERCENTCOMPLETE</h3>
+This property is used by an assignee or delegatee of a to-do to convey the percent completion of a to-do to the Organizer.<br /><br />
+<u>format</u>
+<p>
+setPercentComplete( int percent [, array xparam ] )
+</p>
+<table>
+<tr><td>xparam<td>=<td>*[ xparamkey =&gt; xparamvalue ]</tr>
+</table><br />
+<u>example</u>
+<p>
+$vtodo->setPercentComplete( 90 );
+</p>
+<br /><a href="#INDEX">[index]</a>
+
+
+<a name="PRIORITY"></a><h3>3.2.23 PRIORITY</h3>
+The property defines the relative priority for a calendar component.<br /><br />
+<u>format</u>
+<p>
+setPriority( int priority [, array xparam ] )
+</p>
+<table>
+<tr><td>xparam<td>=<td>*[ xparamkey =&gt; xparamvalue ]</tr>
+</table><br />
+<u>example</u>
+<p>
+$vevent->setPriority( 3 );
+</p>
+<br /><a href="#INDEX">[index]</a>
+
+
+<a name="RDATE"></a><h3>3.2.24 RDATE</h3>
+This property defines the list of date/times for a recurrence set.<br /><br />
+<u>format</u>
+<p>
+setRdate( array dates [, array xparam ] )
+</p>
+<table>
+<tr><td>dates<td>=<td>date2 *[, date2 ]</tr>
+<tr><td>date2<td>=<td>date</tr>
+<tr><td>date2<td>=<td>array( startdate, enddate/duration ) ]</tr>
+<tr><td>date<td>=<td>array( int year, int month, int day [, int int hour, int min, int day, mixed tz ] )</tr>
+<tr><td>date<td>=<td>array ( 'year' =&gt; int year, 'month' =&gt; int month, 'day' =&gt; int day [, 'hour' =&gt; int hour, 'min' =&gt; int min, 'sec' =&gt; int sec, 'tz =&gt; mixed tz ] )</tr>
+<tr><td>date<td>=<td>array ( 'timestamp' => int timestamp [, 'tz' =&gt; mixed tz ] )</tr>
+<tr><td>date<td>=<td>string datestring<br />// date in a string, acceptable by strtotime-command, ex.&nbsp;'14 august 2006 16.00.00'</tr>
+<tr><td>startdate<td>=<td>date</tr>
+<tr><td>enddate<td>=<td>date</tr>
+<tr><td>tz<td>=<td>timezone / offset</tr>
+<tr><td>offset<td>=<td>(+/-)HHmm[ss], local date + UTC offset returns <a href="DATE_WITH_UTC_TIME">UTC</a> format date</tr>
+<tr><td>duration<td>=<td>array( int week/false [, int day/false, int hour, int min, int sec] )</tr>
+<tr><td>duration<td>=<td>array ( 'week' =&gt; int week/false [, 'day' =&gt; int day/false [, 'hour' =&gt; int hour, 'min' =&gt; int min, 'sec' =&gt; int sec ]] );</tr>
+<tr><td>xparam<td>=<td>*[ xparamkey =&gt; xparamvalue ]</tr>
+</table><br />
+<br /><u>example</u>, see rules in detail in RFC2445 - Internet Calendaring and Scheduling Core Object Specification (iCalendar) in <a href="http://www.kigkonsult.se/iCalcreator/docs/rfc2445.txt" title="RFC2445 in text format" target="_blank"><b>text</b></a>
+and <a href="http://www.kigkonsult.se/iCalcreator/iCalDictionary/index.html" title="RFC2445 in HTML format" target="_blank"><b>HTML</b></a> format.<br />
+<p>
+// $rdate1 = array ( 2001, 1, 1, 1, 1, 1 ); <br />
+// alt.<br />
+$rdate1 = array ( 'year' => 2001, 'month' => 1, 'day' => 1, 'hour' => 1, 'min' => 1, 'sec' => 1, 'tz' => 'GMT' );<br />
+$rdate2 = array ( 2002, 2, 2, 2, 2, 2, 'GMT' );<br />
+$rdate3 = '3 March 2003 03.03.03';<br />
+$rdate4 = array ( 2004, 4, 4, 4, 4, 4, 'GMT' );<br />
+$rdate5 = array ( 2005, 10, 5, 5, 5, 5 );<br />
+$rdur6 = array ( 'week' => 0, 'day' => 0, 'hour' => 5, 'min' => 5, 'sec' => 5 );<br />
+$rdur7 = array ( 0, 0, 6 );<br />
+ // duration for 6 hours<br />
+$rdate8 = array ( 'year' => 2007, 'month' => 7, 'day' => 7 );<br />
+
+<table>
+<tr><td colspan="2">$vevent = new vevent();
+<tr><td colspan="2">$vevent->setRdate ( array( $rdate1 ));
+<tr><td><td>// one recurrence date, date in 3-params format
+<tr><td>$vevent->setRdate ( array(<td> $rdate1, $rdate2 ));
+<tr><td><td nowrap="nowrap">// two dates, date 7-params format
+<tr><td>$vevent->setRdate ( array(<td>&nbsp;&nbsp;array( $rdate1, $rdate5 )
+<tr><td><td nowrap="nowrap">// Both fromdate and tomdate must have 7 params !!!
+<tr><td><td>, array( $rdate2, $rdur6 )
+<tr><td><td nowrap="nowrap">// duration
+<tr><td><td>, array( $rdate3, $rdur7 )
+<tr><td><td nowrap="nowrap">// period, pairs of fromdate &lt;-&gt; tom -date/-duration
+<tr><td><td>, array( $rdate4, $rdate5 )
+<tr><td colspan="2">));
+</table>
+</p>
+<br /><a href="#INDEX">[index]</a>
+
+
+<a name="RECURRENCE-ID"></a><h3>3.2.25 RECURRENCE-ID</h3>
+This property is used in conjunction with the "UID" and "SEQUENCE" property to identify a specific instance of a recurring "VEVENT", "VTODO" or "VJOURNAL" calendar component. The property value is the effective value of the "DTSTART" property of the recurrence instance.<br /><br />
+<u>format</u>
+<p>
+setRecurrenceid( date [, array params ] )
+</p>
+<table>
+<tr><td>date><td>=<td>array( int year, int month, int day [, int hour, int min, int sec, mixed tz ]] )</tr>
+<tr><td>date<td>=<td>array ( 'year' =&gt; int year, 'month' =&gt; int month, 'day' =&gt; int day [, 'hour' =&gt; int hour, 'min' =&gt; int min, 'sec' =&gt; int sec, 'tz' =&gt; mixed tz ] )</tr>
+<tr><td>date<td>=<td>array ( 'timestamp' => int timestamp [, 'tz' =&gt; mixed tz ] )</tr>
+<tr><td>date<td>=<td>string datestring // date in a string, acceptable by strtotime-command, ex. ̈́'14 august 2006 16.00.00'</tr>
+<tr><td>tz<td>=<td>timezone / offset</tr>
+<tr><td>offset<td>=<td>(+/-)HHmm[ss], local date + UTC offset returns <a href="DATE_WITH_UTC_TIME">UTC</a> format date</tr>
+<tr><td>params<td>=<td>[range => ( "THISANDPRIOR" / "THISANDFUTURE" )] [, xparam]</tr>
+<tr><td>xparam<td>=<td>*[ xparamkey =&gt; xparamvalue ]</tr>
+</table><br />
+<u>example</u>
+<p>
+$vtodo->setRecurrenceid( '3 March 2003 03.03.03' );
+</p>
+<br /><a href="#INDEX">[index]</a>
+
+
+<a name="RELATED-TO"></a><h3>3.2.26 RELATED-TO</h3>
+The property is used to represent a relationship or reference between one calendar component and another.<br /><br />
+<u>format</u>
+<p>
+setRelatedTo( string relid [, array params ] )
+</p>
+<table>
+<tr><td>params<td>=<td>array ( [ reltype ] [, xparam] )</tr>
+<tr><td>reltype<td>=<td>'RELTYPE' =&gt; ('PARENT' (Default) / 'CHILD' / 'SIBLING' / iana-token / x-name)</tr>
+<tr><td>xparam<td>=<td>*[ xparamkey =&gt; xparamvalue ]</tr>
+</table><br />
+<u>example</u>
+<p>
+$vtodo->setRelatedTo( '19960401-080045-4000F192713@host.com' );
+</p>
+<br /><a href="#INDEX">[index]</a>
+
+
+<a name="REPEAT"></a><h3>3.2.27 REPEAT</h3>
+This property defines the number of time the alarm should be repeated, after the initial trigger.<br /><br />
+<u>format</u>
+<p>
+setRepeat( int repeatTimes [, array xparam ] )
+</p>
+<table>
+<tr><td>xparam<td>=><td>*[ xparamkey =&gt; xparamvalue ]</tr>
+</table><br />
+<u>example</u>
+<p>
+$valarm->setRepeat( 2 );
+</p>
+<br /><a href="#INDEX">[index]</a>
+
+
+<a name="REQUEST-STATUS"></a><h3>3.2.28 REQUEST-STATUS</h3>
+This property defines the status code returned for a scheduling request.<br /><br />
+<u>format</u>
+<p>
+setRequestStatus( float statcode, string errtext [, string extra data/FALSE [, array params ]] )
+</p>
+<table>
+<tr><td>params<td>=<td>['LANGUAGE' =&gt; '&lt;lang&gt;'] [, xparam]</tr>
+<tr><td>xparam<td>=<td>*[ xparamkey =&gt; xparamvalue ]</tr>
+</table><br />
+<u>example</u>
+<p>
+$vfreebusy->setRequestStatus( 2.00, 'Invalid property value', 'DTSTART:96-Apr-31' );
+</p>
+<br /><a href="#INDEX">[index]</a>
+
+
+<a name="RESOURCES"></a><h3>3.2.29 RESOURCES</h3>
+This property defines the equipment or resources anticipated for an activity specified by a calendar entity.<br /><br />
+<u>format</u>
+<p>
+setResources( mixed resource [, array params ] )
+</p>
+<table>
+<tr><td>resource<td>=<td>string resource</tr>
+<tr><td>resource<td>=<td>array( resource1 *[, resourceN ] )</tr>
+<tr><td>params<td>=<td>['LANGUAGE' =&gt; '&lt;lang&gt;']</tr>
+<tr><td><td><td>[, 'ALTREP' =&gt; '&lt;alt.text&gt;']</tr>
+<tr><td><td><td>[, xparam]</tr>
+<tr><td>xparam<td>=<td>*[ xparamkey =&gt; xparamvalue ]</tr>
+</table><br />
+<u>example</u>
+<p>
+$vevent->setResources( 'COMPUTER PROJECTOR' );
+</p>
+<br /><a href="#INDEX">[index]</a>
+
+
+<a name="RRULE"></a><h3>3.2.30 RRULE</h3>
+This property defines a rule or repeating pattern for recurring events, to-dos, or time zone definitions.<br /><br />
+<u>format</u>
+<p>
+setRrule( array rules[, array xparam ] )
+</p>
+For rules example see <a href="#EXRULE">Exrule</a> format and in detail in RFC2445 - Internet Calendaring and Scheduling Core Object Specification (iCalendar) in <a href="http://www.kigkonsult.se/iCalcreator/docs/rfc2445.txt" title="RFC2445 in text format" target="_blank"><b>text</b></a>
+and <a href="http://www.kigkonsult.se/iCalcreator/iCalDictionary/index.html" title="RFC2445 in HTML format" target="_blank"><b>HTML</b></a> format.<br />
+<table>
+<tr><td>xparam<td>=<td>*[ xparamkey =&gt; xparamvalue ]</tr>
+</table><br />
+
+<a name="SEQUENCE"></a><h3>3.2.31 SEQUENCE</h3>
+This property defines the revision sequence number of the calendar component within a sequence of revisions.<br /><br />
+<u>format</u>
+<p>
+setSequence( int sequence[, array xparam ] )
+</p>
+<table>
+<tr><td>xparam<td>=<td>*[ xparamkey =&gt; xparamvalue ]</tr>
+</table><br />
+<u>example</u>
+<p>
+$vevent->setSequence( 2 );
+</p>
+<br /><a href="#INDEX">[index]</a>
+
+
+<a name="STATUS"></a><h3>3.2.32 STATUS</h3>
+This property defines the overall status or confirmation for the calendar component.<br /><br />
+<u>format</u>
+<p>
+setStatus( string statvalue [, array xparam ] )
+</p>
+<table>
+<tr><td>statvalue<td>=<td>&nbsp;&nbsp;&quot;TENTATIVE&quot;<td>;Indicates event is tentative</tr>
+<tr><td><td><td> / &quot;CONFIRMED&quot;<td>;Indicates event is definite</tr>
+<tr><td><td><td> / &quot;CANCELLED&quot;<td>;Indicates event was cancelled</tr>
+<tr><td><td colspan="3">;Status values for a "VEVENT"</tr>
+<tr><td>statvalue<td>=<td>&nbsp;&nbsp;&quot;NEEDS-ACTION&quot;<td>;Indicates to-do needs action</tr>
+<tr><td><td><td> / &quot;COMPLETED&quot;<td>;Indicates to-do completed</tr>
+<tr><td><td><td> / &quot;IN-PROCESS&quot;<td>;Indicates to-do in process of</tr>
+<tr><td><td><td> / &quot;CANCELLED&quot;<td>;Indicates to-do was cancelled</tr>
+<tr><td><td colspan="3">;Status values for &quot;VTODO&quot;</tr>
+<tr><td>statvalue<td>=<td>&nbsp;&nbsp;&quot;DRAFT&quot;<td>;Indicates journal is draft</tr>
+<tr><td><td><td> / &quot;FINAL&quot;<td>;Indicates journal is final</tr>
+<tr><td><td><td> / &quot;CANCELLED&quot;<td>;Indicates journal is removed</tr>
+<tr><td><td colspan="3">;Status values for "VJOURNAL"</tr>
+<tr><td>xparam<td>=<td colspan="2">*[ xparamkey =&gt; xparamvalue ]</tr>
+</table><br />
+<u>example</u>
+<p>
+$vevent->setStatus( 'COMPLETED' );
+</p>
+<br /><a href="#INDEX">[index]</a>
+
+
+<a name="SUMMARY"></a><h3>3.2.33 SUMMARY</h3>
+This property defines a short summary or subject for the calendar component. (In 'Recommended Practices', up to 255 characters.)<br /><br />
+<u>format</u>
+<p>
+setSummary( string summary [, array params ] )
+</p>
+<table>
+<tr><td>params<td>=<td>['LANGUAGE' =&gt; '&lt;lang&gt;']</tr>
+<tr><td><td><td>[, 'ALTREP' =&gt; '&lt;alt.text&gt;']</tr>
+<tr><td><td><td>[, xparam]</tr>
+<tr><td>xparam<td>=<td>*[ xparamkey =&gt; xparamvalue ]</tr>
+</table><br />
+<u>example</u>
+<p>
+$vevent->setSummary( 'This is a summary' );
+</p>
+<br /><a href="#INDEX">[index]</a>
+
+
+<a name="TRANSP"></a><h3>3.2.34 TRANSP</h3>
+This property defines whether an event is transparent or not to busy time searches.<br /><br />
+<u>format</u>
+<p>
+setTransp( string value[, array xparam ] )
+</p>
+<table>
+<tr><td>value<td>=<td>&quot;OPAQUE&quot; / &quot;TRANSPARENT&quot;</tr>
+<tr><td>xparam<td>=<td>*[ xparamkey =&gt; xparamvalue ]</tr>
+</table><br />
+<u>example</u>
+<p>
+$vevent->setTransp( 'TRANSPARENT' );
+</p>
+<br /><a href="#INDEX">[index]</a>
+
+
+<a name="TRIGGER"></a><h3>3.2.35 TRIGGER</h3>
+This property specifies when an alarm will trigger.<br />
+The default value type is DURATION. The value type can be set to a DATE-TIME value type, in which case the value MUST specify a <a href="DATE_WITH_UTC_TIME">UTC</a> formatted DATE-TIME value.<br /><br />
+<u>format</u>
+<p>
+setTrigger( duration [, bool relatedEnd=FALSE [, bool after=FALSE [, array xparam ]]  )<br />
+<br />
+setTrigger( date [, array xparam ] )<br />
+<br />
+setTrigger( int year/FALSE, int month/FALSE, int day/FALSE [, int week/FALSE [, int hour/FALSE, int min/FALSE, int sec/FALSE [, bool relatedEnd=FALSE [, bool after=FALSE [, string offset/FALSE [, array xparam ]]]]]] )
+</p>
+<table>
+<tr><td>duration<td>=<td>array ( 'week' =&gt; int week )</tr>
+<tr><td>duration<td>=<td>array ( 'day' =&gt; int day [, 'hour' =&gt; int hour, 'min' =&gt; int min, 'sec' =&gt; int sec ] )</tr>
+<tr><td>date<td>=<td>array ( 'year' =&gt; int year, 'month' =&gt; int month, 'day' =&gt; int day [, 'hour' =&gt; int hour, 'min' =&gt; int min, 'sec' =&gt; int sec, 'tz' =&gt; string offset ] )</tr>
+<tr><td>date<td>=<td>array ( 'timestamp' =&gt; int timestamp [, 'tz' =&gt; string offset ] )</tr>
+<tr><td>offset<td>=<td>(+/-)HHmm[ss], local date + UTC offset returns <a href="DATE_WITH_UTC_TIME">UTC</a> format date</tr>
+<tr><td>date<td>=<td>string datestring<br />// UTC date in a string, acceptable by strtotime-command, ex.&nbsp;'14 august 2006 16.00.00',</tr>
+<tr><td>xparam<td>=<td>*[ xparamkey =&gt; xparamvalue ]</tr>
+</table><br />
+<u>example 1</u>
+<p>
+$valarm->setTrigger( FALSE, FALSE, FALSE, FALSE, 1, 2, 3, TRUE, TRUE );<br />
+ // duration, 1 hour 2 min 3 sec, after end,
+</p>
+<u>example 2</u>
+<p>
+$valarm->setTrigger( FALSE, FALSE, FALSE, 2 );<br />
+ // duration, 1 week before start
+</p>
+<u>example 3</u>
+<p>
+$valarm->setTrigger( array( 'year' => 2007, 'month' => 6, 'day' => 5, 'hour' => 2, 'min' => 2, 'sec' => 3, 'tz' => '-0200' ) );<br />
+ // local date + UTC offset returns <a href="DATE_WITH_UTC_TIME">UTC</a> format date
+</p>
+<u>example 4</u>
+<p>
+$valarm->setTrigger( array( 'year' => 2007, 'month' => 6, 'day' => 5, 'hour' => 2, 'min' => 2, 'sec' => 3 ) );<br />
+ // UTC date
+</p>
+<br /><a href="#INDEX">[index]</a>
+
+
+<a name="TZID"></a><h3>3.2.36 TZID</h3>
+This property specifies the text value that uniquely identifies the &quot;VTIMEZONE&quot; calendar component.<br /><br />
+<u>format</u>
+<p>
+setTzid( string tzid [, array xparam ] )
+</p>
+<table>
+<tr><td>xparam<td>=<td>*[ xparamkey =&gt; xparamvalue ]</tr>
+</table><br />
+<u>example</u>
+<p>
+$vtimezone->setTzid( 'US-Eastern' );
+</p>
+<br /><a href="#INDEX">[index]</a>
+
+
+<a name="TZNAME"></a><h3>3.2.37 TZNAME</h3>
+This property specifies the customary designation for a time zone description.<br /><br />
+<u>format</u>
+<p>
+setTzname( string tzname [, array params ] )
+</p>
+<table>
+<tr><td>params<td>=<td>['LANGUAGE' =&gt; '&lt;lang&gt;'] [, xparam]</tr>
+<tr><td>xparam<td>=<td>*[ xparamkey =&gt; xparamvalue ]</tr>
+</table><br />
+<u>example</u>
+<p>
+$timezonestandard->setTzname( 'EST' );
+</p>
+<br /><a href="#INDEX">[index]</a>
+
+
+<a name="TZOFFSETFROM"></a><h3>3.2.38 TZOFFSETFROM</h3>
+This property specifies the offset which is in use prior to this time zone observance.<br /><br />
+<u>format</u>
+<p>
+setTzoffsetfrom( tzoffsetfrom [, array xparam ] )
+</p>
+<table>
+<tr><td>tzoffsetfrom<td>=<td>(+/-)HHmm[ss], UTC offset</tr>
+<tr><td>xparam<td>=<td>*[ xparamkey =&gt; xparamvalue ]</tr>
+</table><br />
+<br />example<br />
+<p>
+$vtimezonedaylight->setTzoffsetfrom( '-0500' );
+</p>
+<br /><a href="#INDEX">[index]</a>
+
+
+<a name="TZOFFSETTO"></a><h3>3.2.39 TZOFFSETTO</h3>
+This property specifies the offset which is in use in this time zone observance.<br /><br />
+<u>format</u>
+<p>
+setTzoffsetto( tzoffsetto [, array xparam ] )
+</p>
+<table>
+<tr><td>tzoffsetto<td>=<td>(+/-)HHmm[ss], UTC offset</tr>
+<tr><td>xparam<td>=<td>*[ xparamkey =&gt; xparamvalue ]</tr>
+</table><br />
+<u>example</u>
+<p>
+$vtimezonestandard->setTzoffsetto( '1345' );
+</p>
+<br /><a href="#INDEX">[index]</a>
+
+
+<a name="TZURL"></a><h3>3.2.40 TZURL</h3>
+The TZURL provides a means for a &quot;VTIMEZONE&quot; component to point to a network location that can be used to retrieve an up-to- date version of itself.<br /><br />
+<u>format</u>
+<p>
+setTzurl( string tzurl [, array xparam ] )<br />
+</p>
+<table>
+<tr><td>xparam<td>=<td>*[ xparamkey =&gt; xparamvalue ]</tr>
+</table><br />
+<u>example</u>
+<p>
+$vtimezone->setTzurl( 'http://timezones.r.us.net/tz/US-California-Los_Angeles' );
+</p>
+<br /><a href="#INDEX">[index]</a>
+
+
+<a name="UID"></a><h3>3.2.41 UID</h3>
+ *  The identifier is RECOMMENDED to be the identical syntax to the<br />
+ * [RFC 822] addr-spec. A good method to assure uniqueness is to put the<br />
+ * domain name or a domain literal IP address of the host on which.. .<br /><br />
+<br />
+Get the persistent, globally unique identifier for the calendar component.<br /><br />
+<u>format</u>
+<p>
+getUid( )
+</p>
+<u>example</u>
+<p>
+$uid = $c->getUid( );
+</p>
+<br />
+
+Set the persistent, globally unique identifier for the calendar component.<br />
+<b>AUTO</b> GENERATED at component creation<br />
+<br />
+<u>format</u>
+<p>
+setUid( string identifier [, array xparam ]  )
+</p>
+<table>
+<tr><td>xparam<td>=<td>*[ xparamkey =&gt; xparamvalue ]</tr>
+</table>
+<br />
+<u>example</u>
+<p>
+$vevent->setUid( '19960401T080045Z-4000F192713-0052@host1.com' );
+</p>
+<br /><a href="#INDEX">[index]</a>
+
+
+
+<a name="URL"></a><h3>3.2.42 URL</h3>
+This property defines a Uniform Resource Locator (URL) associated with the iCalendar object.<br /><br />
+<u>format</u>
+<p>
+setUrl( string url [, array xparam ]  )
+</p>
+<table>
+<tr><td>xparam<td>=<td>*[ xparamkey =&gt; xparamvalue ]</tr>
+</table><br />
+<u>example</u>
+<p>
+$vtodo->setUrl( 'http://www.icaldomain.net' );
+</p>
+<br /><a href="#INDEX">[index]</a>
+
+
+<a name="X-PROPERTY_PROP"></a><h3>3.2.43 X-PROPERTY</h3>
+Any calendar component property name with a &quot;X-&quot; prefix and text value.<br /><br />
+<u>format</u>
+<p>
+setXprop( string propertyName, string propertyData [, array params ] )
+</p>
+<table>
+<tr><td>propertyName<td>=<td>Any property name with a &quot;X-&quot; prefix</tr>
+<tr><td>params<td>=<td>['LANGUAGE' =&gt; '&lt;lang&gt;'] [, xparam]</tr>
+<tr><td>xparam<td>=<td>*[ xparamkey =&gt; xparamvalue ]</tr>
+</table><br />
+<u>example</u>
+<p>
+$component->setXprop( X-ABC-MMSUBJ, 'http://load.noise.org/mysubj.wav' );
+</p>
+<br /><a href="#INDEX">[index]</a>
+
+
+<a name="Calendar_component_object_misc_function_list"></a><h2>3.3 Calendar component object misc. function list</h2>
+Other calendar component property functions
+
+<a name="addSubComponent"></a><h3>3.3.1 addSubComponent</h3>
+add calendar (sub-)component to component<br /><br />
+<u>format</u>
+<p>
+addSubComponent ( component )
+</p>
+<u>example</u>
+<p>
+<table>
+<tr><td>$calendar = new vcalendar();<td>&nbsp;// initiate new CALENDAR
+<tr><td colspan="2">.. .
+<tr><td>$vevent = new vevent();<td>&nbsp;// initiate EVENT
+<tr><td>$vevent->setDtstart( 2006, 12, 24, 19, 30, 00 );<td>&nbsp;// add some event components
+<tr><td colspan="2">$vevent->set.. .
+<tr><td colspan="2">.. .
+<tr><td>$valarm = new valarm();<td>&nbsp;// initiate ALARM
+<tr><td colspan="2">$valarm->.. .// set ALARM properties
+<tr><td colspan="2">.. .
+<tr><td>$vevent->addSubComponent ( $valarm );<td>&nbsp;// add alarm subcomponent to event
+<tr><td colspan="2">.. .
+<tr><td>$calendar->addComponent ( $vevent );<td>&nbsp;// add event component to calendar
+</table>
+
+</p>
+<br /><a href="#INDEX">[index]</a>
+
+<a name="getLanguage_PROP"></a><h3>3.3.2 getLanguage</h3>
+Get language for calendar component<br /><br />
+<u>format</u>
+<p>
+getLanguage( )
+</p>
+<u>example</u>
+<p>
+$lang = $vevent->getLanguage( );
+</p>
+<br /><a href="#INDEX">[index]</a>
+
+<a name="setLanguage_PROP"></a><h3>3.3.3 setLanguage</h3>
+Set language for calendar component and properties as defined in [RFC 1766].<br />
+Can be override at component property level.<br /><br />
+<u>format</u>
+<p>
+setLanguage( string value )
+</p>
+<u>example</u>
+<p>
+$vevent->setLanguage( "se" );
+</p>
+<a href="#INDEX">[index]</a>
+
+<a name="Copyright_and_Licence"></a><h1>4. COPYRIGHT AND LICENSE</h1>
+<h2>Copyright</h2>
+iCalcreator class <br />
+originally (c) Kjell-Inge Gustafsson<br />
+www.kigkonsult.se/iCalcreator/index.php<br />
+ical@kigkonsult.se<br />
+
+<h2>License</h2>
+
+This library is free software; you can redistribute it and/or
+modify it under the terms of the GNU Lesser General Public
+License as published by the Free Software Foundation; either
+version 2.1 of the License, or (at your option) any later version.
+<br /><br />
+This library is distributed in the hope that it will be useful,
+but WITHOUT ANY WARRANTY; without even the implied warranty of
+MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+Lesser General Public License for more details.
+<br /><br />
+You should have received a copy of the GNU Lesser General Public
+License along with this library; if not, write to the Free Software
+Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307 USA
+or download it <a href="http://www.kigkonsult.se/dl.php?f=LGPL" target="_blank">here</a>.
+<br />
+<br /><a href="#INDEX">[index]</a>
+</body>
+</html>

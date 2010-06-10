@@ -1,0 +1,1 @@
+This folder is a place we can put general notes about the developement of Mschedule

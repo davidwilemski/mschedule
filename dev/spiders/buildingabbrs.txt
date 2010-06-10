@@ -1,0 +1,121 @@
+A&AB # Art & Architecture Building, North Campus
+AH # Angell Hall
+AL # Walter E. Lay Automotive Lab, North Campus
+ALH # Alice Lloyd Hall
+AMH # Alumni Memorial Hall (Art Museum)
+AND ED # Anderson East Quadrangle
+AND GR # Greene East Quadrangle
+AND STR # Strauss East Quadrangle
+AND TY # Tyler East Quadrangle
+ANNEX # Public Policy Annex, 1015 E. Huron
+ARGUS2 # Argus Building II, Television Center, 408 S. Fourth Street
+ARGUS3 # Argus Building III, 416 S. Fourth Street
+ATL # Advanced Technology Lab
+BAM HALL # Blanch Anderson Moore Hall, School of Music, North Campus
+BELL POOL # Margaret Bell Pool, Central Campus Recreation Building
+BIOL STAT # Biological Station, Pellston, Michigan
+BMT # Burton Memorial Tower
+BOT GARD # Matthaei Botanical Gardens, Dixboro Road
+BURS # Bursley Hall
+BUS # Business Administration
+CAMP DAVIS # Camp Davis, Jackson Hole, Wyoming
+CCL # Clarence Cook Little Building
+CCRB # Central Campus Recreation Building
+CHEM # Chemistry Building
+CHRYS # Chrysler Center, North Campus
+COMM PARK # Commerce Park – Dearborn
+COOL # Cooley Building, North Campus
+COUZENS # Couzens Hall
+CPH # Children's Psychiatric Hospital
+CRISLER # Crisler Arena
+DANA # Dana Building (School of Natural Resources & Environment)
+DANCE # Dance Building, 1310 N University Court
+D-BUS # William Davidson Hall
+DC # Duderstadt Center, North Campus
+DENN # David M. Dennison Building
+DENT # Dental Building
+DOW # Dow Engineering Building, North Campus
+E-BUS # Executive Education
+EECS # Electrical Engineering and Computer Science Building
+EH # East Hall
+EPB # Engineering Program Building
+EQ # East Quadrangle
+ERB1 # Engineering Research Building 1
+ERB2 # Engineering Research Building 2
+EWRE # Environmental & Water Resources Engineering Building
+FA CAMP # Fresh Air Camp, Pinckney
+FB # Frieze Building
+FORD LIB # Ford Library, North Campus
+FXB # Francois-Xavier Bagnoud Building, North Campus
+GGBL # G. G. Brown Laboratory, North Campus
+GLIBN # Harlan Hatcher Graduate Library, North
+HALE AUD BUS # Hale Auditorium, School of Business Administration
+HH # Haven Hall
+HUTCH # Hutchins Hall
+IM POOL # Intramural Building
+IOE # Industrial and Operations Engineering Building, North Campus
+ISR # Institute for Social Research
+K-BUS # Kresge Library
+KEC # Kellogg Eye Center
+KELSEY # Kelsey Museum of Archaeology
+KHRI # Kresge Hearing Research Institute
+LANE # Lane Hall
+LEAG # Michigan League
+LEC # Lurie Engineering Center
+LLIB # Law Library
+LORCH # Lorch Hall
+LSA # Literature, Science, and the Arts Building
+LSI # Life Sciences Institute
+MARKLEY # Mary Markley Hall
+MAX KADE # Max Kade House, 627 Oxford Street
+MH # Mason Hall
+MHRI # Mental Health Research Institute
+MICH RM BUS # Michigan Room, School of Business Administration
+MLB # Modern Languages Building
+MONREOCTY HD # Monroe County Health Department
+MOSHER # Mosher Jordan Hall
+MOTT # C. S. Mott Children's Hospital
+MSC1 # Medical Science, Building I
+MSC2 # Medical Science, Building II
+MSRB3 # Medical Science Research, Building III
+NAME # Naval Architecture and Marine Engineering Building, North Campus
+NCRB # North Campus Recreation Building
+NEURO SC # Neuroscience Building
+NH # North Hall
+NIB # North Ingalls Building
+NORTHVILLEPH # Northville State Hospital
+NS # Edward Henry Kraus Natural Science Building
+NUB # North University Building
+P-BUS # Paton Accounting Center
+PHOENIXLAB # Phoenix Memorial Laboratory, North Campus
+PIER # Pierpont Commons (formerly North Campus Commons)
+POWER CTR # Power Center for the Performing Arts
+RACK # Horace H. Rackham, School of Graduate Studies
+RAND # Randall Laboratory
+RC AUD EQ # Residential College Auditorium, East Quadrangle
+REVELLI # William D. Revelli Hall
+RUTHVEN # A. G. Ruthven Museums Building (Natural History Museum)
+SCHEM # Glenn E. Schembechler Hall
+SEB # School of Education Building
+SHAPIRO # Shapiro Undergraduate Library
+SM # Earl V. Moore Building, School of Music, North Campus
+SNB # School of Nursing (North Ingalls Building)
+SPH1 # Henry Vaughan Building, School of Public Health I
+SPH2 # Thomas Francis, Jr Building, School of Public Health II
+SRB # Space Research Building, North Campus
+SSWB # School of Social Work Building
+STJOSEPH HOSP # St. Joseph Mercy Hospital
+STOCKWELL # Stockwell Hall
+STRNS # Sterns Building, North Campus
+T&TB # Track & Tennis Building
+TAP # Tappan Hall
+TAUBL # Learning Resource Center, Taubman Medical Library
+TISCH # Tisch Hall
+UM HOSP # University Hospital
+UNION # Michigan Union
+UTOWER # University Towers, 1225 S. University
+VETERANSHOSP # Veterans Administration Hospital
+WASHCTY HD # Washtenaw County Health Department
+WH # West Hall
+WOLV RM BUS # Wolverine Room, School of Business Administration
+WOMEN'S HOSP # Women's Hospital

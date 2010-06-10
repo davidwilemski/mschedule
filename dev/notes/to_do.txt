@@ -1,0 +1,36 @@
+TODO:
+
+status |task
+-------|---------
+DONE 	add MSAuth::create($username,$domain,$pwd)		i.e. $MSAUTH->create("mulka","umich.edu","yarr123") should create an entry in the user database
+DONE	add error messages from all classes to $MSERROR (using language constants), and replace all print statements in classes
+		permissions system (can this user see this data?)
+DONE	add underscore to "private" variables and methods
+		MSAuth::resetPassword()
+		email confirmation for user accounts
+DONE	spider for getting course data from Wolverine Access (that's a toughy)
+		test MSCourse with database loading
+DONE	scraping Building abbreviations (pretty easy, just have to do it)
+DONE	make admin page to edit building location information
+		emergencyFail() for errors
+		check out http://www.dotproject.net/ and see if we want to use (or another project manager)
+DONE	MSCurrentUser::is_loggedIn()
+		MSDbCn::sql() needs error/debug message sent to MSError/MSDebug
+		MSUser::is_VIP, has_VIP or more descriptive named function for checking VIP lists
+DONE	change $auth to $MSAUTH
+DONE	change $db to $MSDB
+		take out references to old $db
+		improve admin page for building editing (show current location with javascript and css?)
+		make building location viewer
+		create object to get users in classes and courses
+		create methods for editing schedules
+		add import classes function
+NOW		class search
+		preferences
+		change password
+		spread the word
+		notifications
+		change prof to entire course
+NOW		scrape wolverine access with curl (with lynx)
+		improve WA scrapes (automate)
+		

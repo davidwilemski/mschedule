@@ -1,0 +1,196 @@
+a:4:{s:8:"template";a:2:{s:16:"mainlayout.shtml";b:1;s:22:"elements/menubox.shtml";b:1;}s:9:"timestamp";i:1276061099;s:7:"expires";i:1276064699;s:13:"cache_serials";a:0:{}}
+<html>
+<head>
+	<title>Mschedule - Campus Building Search</title>
+	<link rel="stylesheet" href="http://dev.mschedule.com/stylesheets/main.css">
+			<meta name="robots" content="noindex,nofollow,noarchive">
+	</head>
+<body>
+
+<div id="overDiv" style="position:absolute; visibility:hidden; z-index:1000;"></div>
+<script type="text/javascript" language="JavaScript" src="http://dev.mschedule.com/javascripts/overlib400/overlib.js"></script>
+
+
+<center>
+
+<div style="height: 10px;"><!-- spacer --></div>
+
+<div id="globalcontainer">
+
+	<div id="topbar">
+		<!--<a href="http://dev.mschedule.com">--><a href="http://mschedule.com"><img src="http://dev.mschedule.com/images/topbar.jpg"></a>
+	</div>
+
+	<!--begin login bar-->
+<!--
+	<div style="width:800px">
+
+		<div id="loginbar" align="right">
+			
+		</div>
+	
+	</div>
+-->
+	<!--end login bar-->
+	
+		<div id="secondarycontainer">
+
+			
+						
+			<table style="width: 100%;">
+				<tr>
+<!--
+					<td style="width: 150px" valign="top">
+													
+													
+<div class="outerbox">
+	<div align="center" class="menubox_title">search</div>
+	<div class="menubox">
+
+									<a href="http://dev.mschedule.com/coursecatalog.php">course catalog</a>
+												<a href="http://dev.mschedule.com/coursemaps.php">campus maps</a>
+								
+	</div>
+</div>							<br>
+											</td>
+					<td style="width:20px">&nbsp;</td>
+-->
+
+					<!--begin content area-->
+					<td valign="top">
+					
+						<center>
+							<h2>Campus Building Search</h2>
+							<br>
+						</center>
+						
+						<!--begin general text box-->
+						<div class="outerbox">
+							<div class="textbox">
+							
+								<div class="normaltext">
+								
+<script type="text/javascript" src="http://dev.mschedule.com/javascripts/msbrowserdetect.js"></script>
+<script type="text/javascript" src="http://dev.mschedule.com/javascripts/mscoords.js"></script>
+<script type="text/javascript" src="http://dev.mschedule.com/javascripts/msmapbrowse.js"></script>
+
+<script type="text/javascript">
+	var mapZoomContainerSize = new Coordinate(400,300); //gives the size (W/H) of the mapZoomContainer CSS element
+</script>
+
+
+<style type="text/css">
+	.mapZoomContainer {
+		
+		background: black;
+		border: 1px solid black;
+		width: 400px;
+		height: 300px;
+		overflow: hidden;
+	}
+
+	.mapWaypoint_thumb {
+		position: relative;
+		left: -4px;
+		top: -4px;
+		background-image: url("http://dev.mschedule.com/images/maps/star_thumb.gif");
+
+		width: 8px;
+		height: 8px;
+	}
+	
+	.mapWaypoint_small {
+		position: relative;
+		left: -7px;
+		top: -7px;
+		background-image: url("http://dev.mschedule.com/images/maps/star_small.gif");
+
+		width: 15px;
+		height: 15px;
+	}
+
+	.mapWaypoint_large {
+		position: relative;
+		left: -12px;
+		top: -12px;
+		background-image: url("http://dev.mschedule.com/images/maps/star_large.gif");
+		
+		width: 25px;
+		height: 25px;
+	}
+
+	.mapWaypointContainer {
+		position: absolute;
+		width: 1px;
+		height: 1px;
+	}
+	
+	.mapPreviewBox {
+
+		border: 0px solid #0066CC;
+		//background: #99CCFF;
+		position: relative;
+
+		//z-index: 25;
+	}
+</style>
+<script type="text/javascript">
+	</script>
+
+
+
+
+<style type="text/css">
+	</style>
+
+
+
+	
+	
+
+
+
+<center>
+<div class="outerbox" align="center">
+	<form name="campusMapSearchForm" action="coursemaps.php" method="">
+
+		<table>
+				<tr>
+									<td align="right" class="smalltext">building abbreviation(s): </td>
+					<td class="normaltext"><input type="text" name="buildAbbrev" value="" maxlength="50" size="15"></td>
+									<td align="right" class="smalltext">building name(s): </td>
+					<td class="normaltext"><input type="text" name="buildName" value="" maxlength="90" size="30"></td>
+									<td class="normaltext">
+													<input type="hidden" name="msAction" value="msSearchMapLocation">												<input type="submit" value="search">
+					</td>
+				</tr>
+		</table>
+	</form>
+</div>
+</center>
+
+
+
+
+
+<table>
+	</table>
+
+								</div>
+								
+							</div>
+						</div>
+						<!--end general text box-->
+					</td>
+					<!--end content area-->
+				</tr>
+			</table>
+			
+		</div>
+		</div>
+	
+	
+</div>
+</center>
+</body>
+</html>

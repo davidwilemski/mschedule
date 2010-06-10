@@ -1,0 +1,44 @@
+Commenting history:
+going through and labling what each file is and/or does
+	components - done
+	inc - done
+	main_dir - working on a-c
+
+Finishing Touches before school starts:
+3	Go through code and comment like crazy!
+1	"Alert the webmaster" for errors with the site
+
+Brainstorming (add to list with priority number 1-10):
+1	Show status of each uniqname when entered in group scheduling and be able to add and remove them
+		show number of classes registerd
+		show total time in class
+1	Add to VIP list from group
+1	validate uniqnames for multiview.php
+3	show people who have listed you as a VIP
+2	sort by columns
+4	color code each user or something
+5	privacy policy
+
+Bugs:
+8	need to deal with time conflicts in schedule
+4	need to get weird section data - different times for same section
+
+Features:
+6	figure out how to take the difference of times - when I need to do something with it, I will
+2	Notification emails for various actions
+3	load data from the directory for groups?
+4	Get data from Wolverine Access instead of ~regoff?
+9	write automated test cases to check code?
+	Better logging capabilities - hack attempts
+		log all error message - add more debuging info to them
+		log ips and session data with error messages
+	add more information about users for study groups
+		grade
+		location - dorm, street, area
+
+Later:
+	create-a-class (alternative classes)
+	study group creation
+	Email template functionality
+		In text file maybe?
+		mysql function to replace text with database fields?

@@ -1,0 +1,6 @@
+
+<h1>{{$messageTitle}}</h1>
+<br>
+{{$messageContent}}
+
+<br><br>

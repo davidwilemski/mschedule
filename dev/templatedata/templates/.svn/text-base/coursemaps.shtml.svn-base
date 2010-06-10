@@ -1,0 +1,126 @@
+
+{{include file="elements/maps/init.shtml" zoomW="400" zoomH="300"}}
+
+{{* ################################ BEGIN javascript ################################ *}}
+<script type="text/javascript">
+	{{foreach from=$maps item=map}}
+		{{include file="elements/maps/genjscript.shtml" map=$map}}
+	{{/foreach}}
+</script>
+{{* ################################ END javascript ################################ *}}
+
+
+
+
+{{* ################################ BEGIN css ################################ *}}
+<style type="text/css">
+	{{foreach from=$maps item=map}}
+		{{include file="elements/maps/gencss.shtml" map=$map}}
+	{{/foreach}}
+</style>
+{{* ################################ END css ################################ *}}
+
+
+{{* ################################ BEGIN paragraph ################################ *}}
+
+	{{* only show the instructions paragraph when no POST data is present *}}
+
+	{{if $showParagraph == true}}
+		{{$smarty.const._BLOCKTEXT_SEARCH_MAPS}}
+		<br><br>
+	{{/if}}
+
+{{* ################################ END paragraph ################################ *}}
+
+
+
+{{* ################################ BEGIN searchbar ################################ *}}
+<center>
+<div class="outerbox" align="center">
+	<form name="{{$form->name}}" action="{{$form->action}}" method="">
+
+		<table>
+				<tr>
+				{{foreach from=$form->fields item=field}}
+					<td align="right" class="smalltext">{{$field->label}}: </td>
+					<td class="normaltext">{{include file="elements/formfield.shtml" field=$field}}</td>
+				{{/foreach}}
+					<td class="normaltext">
+						{{foreach from=$form->hiddenFields item=field}}
+							{{include file="elements/formfieldhidden.shtml" field=$field}}
+						{{/foreach}}
+						<input type="submit" value="{{$form->submitString}}">
+					</td>
+				</tr>
+		</table>
+	</form>
+</div>
+</center>
+
+{{* ################################ END searchbar ################################ *}}
+
+
+
+{{* ################################ BEGIN mapdisplay ################################ *}}
+
+<table>
+	{{foreach from=$maps item=map}}
+	<tr>
+		<td colspan="2"><hr></td>
+	</tr>
+	<tr>
+		<td class="normaltext" style="border: 0px solid black;" valign="top">
+			<br>
+			<b style="font-size: 18px;">{{$map->title}}</b>
+
+			<br>
+			
+			<div id="mapThumb_{{$map->name}}" onclick="move_large(event,'mapLarge_{{$map->name}}',this,mapLargeScale_{{$map->name}},mapZoomContainerSize,'mapThumbPrevBox_{{$map->name}}',true)" onmousemove="move_large(event,'mapLarge_{{$map->name}}',this,mapLargeScale_{{$map->name}},mapZoomContainerSize,'mapThumbPrevBox_{{$map->name}}')" onmousedown="move_large_allow()" onmouseup="move_large_disallow()">
+				<div id="mapThumbPrevBox_{{$map->name}}" class="mapPreviewBox"></div>
+				{{include file="elements/maps/renderpoints.shtml" map=$map waypoints=$map->waypoints size="thumb"}}
+			</div>
+
+			<div class="smalltext" style="width: {{$map->thumb.x}}px;" align="center">
+				<i>{{$smarty.const._CLICK_HERE_TO_ZOOM}}</i>
+			</div>
+			<br>
+			
+			<br>
+			<span class="smalltext">
+				<b>{{$smarty.const._BUILDINGS_FOUND}}:</b>
+
+				{{* LIST ALL BUILDINGS FOUND *}}
+				{{foreach from=$map->waypoints item=waypoint}}
+					<a href="#nothing" style="text-decoration: none; font-weight: normal;" onclick="center_large_onCoords('mapLarge_{{$map->name}}',{{$waypoint->x}},{{$waypoint->y}},mapZoomContainerSize,'mapThumbPrevBox_{{$map->name}}',mapLargeScale_{{$map->name}})">
+						<div style="border: 1px solid #ccc; padding: 2px;">
+							{{$waypoint->label}}
+						</div>
+					</a>
+				{{/foreach}}
+			</span>
+		</td>
+		<td valign="top">
+
+			<div class="mapZoomContainer">
+				{{* bigmap *}}
+				<div id="mapLarge_{{$map->name}}">
+					{{* loading message shows up until bigmap GIF loads *}}
+					<div class="smalltext" style="z-index: 1; height: 0px; overflow: visible; color: white;">
+						{{$smarty.const._WORD_LOADING}}...
+					</div>
+					{{include file="elements/maps/renderpoints.shtml" map=$map waypoints=$map->waypoints size="large"}}
+				</div>
+			</div>
+		</td>
+	</tr>
+	
+
+	{{* CENTER ON THE FIRST BUILDING RESULT *}}
+	<script language="javascript">
+		center_large_onCoords('mapLarge_{{$map->name}}',{{$map->waypoints.0->x}},{{$map->waypoints.0->y}},mapZoomContainerSize,'mapThumbPrevBox_{{$map->name}}',mapLargeScale_{{$map->name}});
+	</script>
+	
+	{{/foreach}}
+</table>
+
+{{* ################################ END mapdisplay ################################ *}}
