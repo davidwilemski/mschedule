@@ -16,7 +16,7 @@ if($message != ''){
 
 	//send email
 	//mail('', $subject, $message, $header);
-	sendemail($message, $from);
+	//sendemail($message, $from);
 
 	
 	$body = "Email has been sent. Thank you.";
