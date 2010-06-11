@@ -1,6 +1,6 @@
 <?php
 // configuration stuff
-ini_set("include_path", $_SERVER['DOCUMENT_ROOT'] . '/mschedule/');
+ini_set("include_path", $_SERVER['DOCUMENT_ROOT'] . '/mschedule/update/php/');
 $courses = "http://www.ro.umich.edu/timesched/pdf/FA2010.csv";
 $term = "f10";
 $mischedule = true;
@@ -148,7 +148,7 @@ foreach($classes as $class) {
 	$prev_starttimeindex = $starttimeindex;
 	$prev_endtimeindex = $endtimeindex;
 	$prev_days = array($mon, $tue, $wed, $thu, $fri, $sat, $sun);
-	echo $classnum . "<br>";
+	echo $classnum . "\n";
 }
 
 // iterate the container and put each division into the database 

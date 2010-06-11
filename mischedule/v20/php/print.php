@@ -29,12 +29,16 @@ th
 
 <?
 
-require_once("sectionlist.php");
-require_once("dbfunctions.php");
-require_once("section.php");
-require_once("meeting.php");
-require_once("sectionLocation.php");
+@require_once("request.php");
+@require_once("sectionlist.php");
+@require_once("dbfunctions.php");
+@require_once("section.php");
+@require_once("meeting.php");
+@require_once("sectionLocation.php");
 
+$data = $_GET['data'];
+$table = $_GET['table'];
+$list = $_GET['list'];
 if ($command == "printsections")
 {
     $toDisplay = explode(";", $data);

@@ -84,7 +84,7 @@ foreach($classes as $class) {
 	$prev_starttimeindex = $starttimeindex;
 	$prev_endtimeindex = $endtimeindex;
 	$prev_seats = $seats;
-	echo $classnum . "<br>";
+	echo $classnum . "\n";
 }
 // FIN
 exit;

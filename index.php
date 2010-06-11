@@ -11,7 +11,7 @@ This is a FREE service that helps you to <b>share your class schedule</b> and
 of your schedule. Wolverine Access does not offer ANY of this.
 </p>
 <p>
-Try the <a href="http://www.mschedule.com/mischedule/">automatic schedule generator</a> to make an ideal class schedule for next term and then save it to Mschedule.
+Try the <a href="mischedule/v20/MISchedule.php?term=f10">automatic schedule generator</a> to make an ideal class schedule for next term and then save it to Mschedule.
 </p>
 <!--
 <p>
@@ -19,9 +19,6 @@ Check out our <a href="http://dev.mschedule.com/">development section</a> to che
 latest and greatest features and to help test the system.
 </p>
 -->
-<p>
-If you like Mschedule check out <a href="http://www.mobilegrades.com/">Mobile Grades</a>.
-</p>
 
 
 

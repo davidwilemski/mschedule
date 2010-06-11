@@ -233,7 +233,9 @@ function showHTMLHead($title='', $tags=''){
 if($debug_mode){
 	echo "<a href=\"admin.php\">";
 }else{
-	echo "<a href=\"/\">";
+?>
+	<a href="/mschedule">
+<?
 }
 ?>
 <img style="border: 1px solid black;" src="http://static.mschedule.com/images/topbar.jpg"></a><br>

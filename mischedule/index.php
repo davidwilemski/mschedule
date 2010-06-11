@@ -6,7 +6,7 @@ include "obfuscate.php";
 
 
 <body>
-<p><a href="/"><img src='http://static.mschedule.com/images/topbar.jpg'  border="0"></a>
+<p><a href="/mschedule/mischedule/v20/MISchedule.php?term=f10"><img src='http://static.mschedule.com/images/topbar.jpg'  border="0"></a>
 </p>
 
 <table cellspacing=5>

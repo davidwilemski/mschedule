@@ -1,6 +1,6 @@
 <?php
 // configuration stuff
-ini_set("include_path", $_SERVER['DOCUMENT_ROOT'] . '/mschedule/');
+ini_set("include_path", $_SERVER['DOCUMENT_ROOT'] . '/mschedule/update/php/');
 $courses = "http://www.ro.umich.edu/timesched/pdf/FA2010.csv";
 $term = "fall10";
 $mischedule = false;
@@ -44,7 +44,7 @@ foreach($classes as $class) {
 	if(count($time) == 2) {
 		if(preg_match('/PM/', $time[1])) {
 			$time[1] = str_replace('PM', '', $time[1]);
-			if($time[1] != '12' && $time[1] != '12:30') {
+			if($time[1] != '12' && $time[1] != '1230') {
 				$time[1] = convertPM($time[1]);
 			}
 			// Add 12 hours to start time if it s
@@ -57,7 +57,7 @@ foreach($classes as $class) {
 		}
 		$time = implode('-', $time);
 	} else {
-		$time = '0-0';
+		$time = 'ARR';
 	}
 	$tue = preg_replace('/T/', 'TU', $tue);
 	$days = $mon.$tue.$wed.$thu.$fri.$sat.$sun;
@@ -78,7 +78,7 @@ foreach($classes as $class) {
 
 			sql("DELETE FROM classes_$term WHERE classid = $classnum");
 			sql("INSERT INTO classes_$term VALUES('$classnum','$matches[2]','$num','$section','','$sectype','$days','$time','$location','$instructor') ON DUPLICATE KEY UPDATE location='$location', instructor='$instructor'");
-			echo $classnum . "<br>";
+			//echo $classnum . "\n";
 		}
 		else 
 		{
@@ -89,7 +89,7 @@ foreach($classes as $class) {
 			{
 				sql("DELETE FROM classes_$term WHERE classid = $classnum");
 				sql("INSERT INTO classes_$term VALUES('$classnum','$matches[2]','$num','$section','','$sectype','$days','$time','$location','$instructor') ON DUPLICATE KEY UPDATE location='$location', instructor='$instructor'");
-				echo $classnum . "<br>";
+				//echo $classnum . "\n";
 			}
 		}
 	}

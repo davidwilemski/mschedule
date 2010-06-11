@@ -21,7 +21,7 @@ $base = dirname($_SERVER['SCRIPT_NAME']);
 <table>
 <tr>
 <td valign=top>
-<a href="/"><img src='images/topbar-605.jpg' border="0"></a>
+<a href="/mschedule/mischedule/v20/MISchedule.php?term=f10"><img src='images/title.gif' border="0"></a>
 </td>
 </tr>
 <tr>

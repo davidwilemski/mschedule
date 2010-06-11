@@ -25,7 +25,7 @@ createlink('spreadtheword.php', 'spread the word');
 createlink('faq.php', 'Q&A');
 createlink('howto.php', 'how to');
 createlink('contact.php', 'contact');
-echo "<a href=\"http://www.livejournal.com/users/schedulesharing/\" target=\"_new\">blog</a> | \n";
+//echo "<a href=\"http://www.livejournal.com/users/schedulesharing/\" target=\"_new\">blog</a> | \n";
 createlink('about.php', 'about', '');
 
 ?>
