@@ -1,6 +1,5 @@
 <?php // common.php
 //include this file in every page on the site for commonly used functions
-
 require_once 'inc/class.MetricsTracker.php';
 
 $metrics = new MetricsTracker('');
@@ -227,7 +226,7 @@ function showHTMLHead($title='', $tags=''){
 <link rel="stylesheet" href="../stylesheets/main.css">
 <?=$tags?>
 </head>
-<body style="text-align: center;" bgcolor=#0000AA text=#000000 link=#FFFFFF alink=#000CC vlink=#FFFFFF>
+<body>
 
 <div style="text-align: left; width: 800px">
 <?

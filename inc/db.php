@@ -11,7 +11,7 @@ function dbconnect() {
 	if($dbconnected){
 		return;
 	}
-	debug("connecting to database");
+	//debug("connecting to database");
    $dbcnx = @mysql_pconnect($dbhost, $dbuser, $dbpass)
        or error("The site database appears to be down.", 'fatal'); 
 
@@ -26,7 +26,7 @@ function dbconnect() {
 function sql($sql){
 	dbConnect();
 	global $debug_mode;
-	debug("SQL: ".$sql);
+	//debug("SQL: ".$sql);
 	
 	if(!($result = @mysql_query($sql))){
 		if($debug_mode){

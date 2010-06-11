@@ -1,15 +1,16 @@
 <?
-include_once 'inc/common.php';
+//include_once 'inc/common.php';
 //only included in db.php as of August 04, 
 //might or might not be of use elsewhere
 
-debug("Server name: {$_SERVER['SERVER_NAME']}");
+//debug("Server name: {$_SERVER['SERVER_NAME']}");
 switch($_SERVER["SERVER_NAME"]){
 default:
-	debug("WARNING... USING DB VARS FOR REAL SITE");
+	//debug("WARNING... USING DB VARS FOR REAL SITE");
 	$dbhost = 'localhost';
 	$dbuser = "mschedule";
 	$dbpass = "";
+	$dbpass = "jQquD6cezNW65xeC";
 	$dbname = "mschedule";
 	break;
 }

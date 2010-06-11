@@ -1,4 +1,4 @@
-<?
+<?php
 include_once 'inc/common.php';
 include_once 'inc/db.php';
 
