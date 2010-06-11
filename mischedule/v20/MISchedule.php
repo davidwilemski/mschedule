@@ -9,21 +9,19 @@ if (!isset($term))
     exit;
 }
 $request = "http://{$_SERVER['SERVER_NAME']}/mischedule/v20/php/request.php";
-
+$base = dirname($_SERVER['SCRIPT_NAME']);
 ?>
 
 <html>
 <head>
+<base href='<?= $base ?>' />
 <title>Mschedule.com</title>
 </head>
 <body bgcolor=#FFFFFF >
 <table>
 <tr>
 <td valign=top>
-<a href="/"><img src='http://static.mschedule.com/images/topbar-605.jpg' border="0"></a>
-</td>
-<td valign=top rowspan=2>
-<iframe src="/ad-serve.php" width="120" height="600" scrolling="no" border="0" marginwidth="0" style="border:none;" frameborder="0"></iframe>
+<a href="/"><img src='images/topbar-605.jpg' border="0"></a>
 </td>
 </tr>
 <tr>
@@ -31,11 +29,9 @@ $request = "http://{$_SERVER['SERVER_NAME']}/mischedule/v20/php/request.php";
 <!--<applet codebase='http://static.mschedule.com/applet/classes/' code='MISchedule.class' width=605 height=500>-->
 <applet codebase='classes/' code='MISchedule.class' width=605 height=500>
 Your browser doesn't support java.  MISchedule requires a java-enabled browser.
-<param name=term value='<?=$term?>'>
-<param name=request value='<?=$request?>'>
+<param name='term' value='<?=$term?>'>
+<param name='request' value='<?=$request?>'>
 </applet>
-
-
 <!--
 <?php if($term == "f05"){ ?>
 <h2>Fall 2005</h2>
@@ -49,6 +45,8 @@ Your browser doesn't support java.  MISchedule requires a java-enabled browser.
 <h2>Fall 2007</h2>
 <?php }else if(($term == "w08")){?>
 <h2>Winter 2008</h2>
+<?php }else if(($term == "f10")){?>
+<h2>Fall 2010</h2>
 <?php }else{?>
 <h2>Term may be invalid</h2>
 <?php } ?>
