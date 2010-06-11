@@ -8,8 +8,8 @@ switch($_SERVER["SERVER_NAME"]){
 default:
 	debug("WARNING... USING DB VARS FOR REAL SITE");
 	$dbhost = 'localhost';
-	$dbuser = "mschedule";
-	$dbpass = "";
+	$dbuser = "mschedule_user";
+	$dbpass = "uR/biSMipF?dEesAviR0KooN";
 	$dbname = "mschedule";
 	break;
 }
