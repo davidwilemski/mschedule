@@ -1,0 +1,62 @@
+No.     Time        Source                Destination           Protocol Info
+      1 0.000000    192.168.2.22          209.151.69.187        HTTP     GET /v20/spider.php?term=1460 HTTP/1.1
+
+Frame 1 (508 bytes on wire, 508 bytes captured)
+Ethernet II, Src: 00:a0:cc:32:aa:d8, Dst: 00:50:bf:7d:ac:bc
+Internet Protocol, Src Addr: 192.168.2.22 (192.168.2.22), Dst Addr: 209.151.69.187 (209.151.69.187)
+Transmission Control Protocol, Src Port: 2778 (2778), Dst Port: 80 (80), Seq: 0, Ack: 0, Len: 454
+Hypertext Transfer Protocol
+
+No.     Time        Source                Destination           Protocol Info
+      2 0.324197    192.168.2.22          209.151.69.187        HTTP     GET /v20/php/request.php?command=divisions&term=1460 HTTP/1.1
+
+Frame 2 (287 bytes on wire, 287 bytes captured)
+Ethernet II, Src: 00:a0:cc:32:aa:d8, Dst: 00:50:bf:7d:ac:bc
+Internet Protocol, Src Addr: 192.168.2.22 (192.168.2.22), Dst Addr: 209.151.69.187 (209.151.69.187)
+Transmission Control Protocol, Src Port: 2779 (2779), Dst Port: 80 (80), Seq: 0, Ack: 0, Len: 233
+Hypertext Transfer Protocol
+
+No.     Time        Source                Destination           Protocol Info
+      3 12.648873   192.168.2.22          209.151.69.187        HTTP     GET /v20/php/request.php?command=courses&term=1460&division=AAPTIS HTTP/1.1
+
+Frame 3 (301 bytes on wire, 301 bytes captured)
+Ethernet II, Src: 00:a0:cc:32:aa:d8, Dst: 00:50:bf:7d:ac:bc
+Internet Protocol, Src Addr: 192.168.2.22 (192.168.2.22), Dst Addr: 209.151.69.187 (209.151.69.187)
+Transmission Control Protocol, Src Port: 2779 (2779), Dst Port: 80 (80), Seq: 233, Ack: 6735, Len: 247
+Hypertext Transfer Protocol
+
+No.     Time        Source                Destination           Protocol Info
+      4 12.801832   192.168.2.22          209.151.69.187        HTTP     GET /v20/php/request.php?command=sections&term=1460&division=AAPTIS&course=995 HTTP/1.1
+
+Frame 4 (313 bytes on wire, 313 bytes captured)
+Ethernet II, Src: 00:a0:cc:32:aa:d8, Dst: 00:50:bf:7d:ac:bc
+Internet Protocol, Src Addr: 192.168.2.22 (192.168.2.22), Dst Addr: 209.151.69.187 (209.151.69.187)
+Transmission Control Protocol, Src Port: 2780 (2780), Dst Port: 80 (80), Seq: 0, Ack: 0, Len: 259
+Hypertext Transfer Protocol
+
+No.     Time        Source                Destination           Protocol Info
+      5 13.817865   192.168.2.22          209.151.69.187        HTTP     GET /v20/php/request.php?command=sections&term=1460&division=AAPTIS&course=993 HTTP/1.1
+
+Frame 5 (313 bytes on wire, 313 bytes captured)
+Ethernet II, Src: 00:a0:cc:32:aa:d8, Dst: 00:50:bf:7d:ac:bc
+Internet Protocol, Src Addr: 192.168.2.22 (192.168.2.22), Dst Addr: 209.151.69.187 (209.151.69.187)
+Transmission Control Protocol, Src Port: 2780 (2780), Dst Port: 80 (80), Seq: 259, Ack: 397, Len: 259
+Hypertext Transfer Protocol
+
+No.     Time        Source                Destination           Protocol Info
+      6 15.008902   192.168.2.22          209.151.69.187        HTTP     GET /v20/php/request.php?command=sections&term=1460&division=AAPTIS&course=990 HTTP/1.1
+
+Frame 6 (313 bytes on wire, 313 bytes captured)
+Ethernet II, Src: 00:a0:cc:32:aa:d8, Dst: 00:50:bf:7d:ac:bc
+Internet Protocol, Src Addr: 192.168.2.22 (192.168.2.22), Dst Addr: 209.151.69.187 (209.151.69.187)
+Transmission Control Protocol, Src Port: 2781 (2781), Dst Port: 80 (80), Seq: 0, Ack: 0, Len: 259
+Hypertext Transfer Protocol
+
+No.     Time        Source                Destination           Protocol Info
+      7 73.225839   192.168.2.22          209.151.69.187        HTTP     GET /v20/php/request.php?command=courses&term=1460&division=AAPTIS HTTP/1.1
+
+Frame 7 (301 bytes on wire, 301 bytes captured)
+Ethernet II, Src: 00:a0:cc:32:aa:d8, Dst: 00:50:bf:7d:ac:bc
+Internet Protocol, Src Addr: 192.168.2.22 (192.168.2.22), Dst Addr: 209.151.69.187 (209.151.69.187)
+Transmission Control Protocol, Src Port: 2799 (2799), Dst Port: 80 (80), Seq: 0, Ack: 0, Len: 247
+Hypertext Transfer Protocol

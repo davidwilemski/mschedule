@@ -8,7 +8,7 @@ if (!isset($term))
     echo ("no term specified. please return to <a href='..'> the main page</a>");
     exit;
 }
-$request = "http://{$_SERVER['SERVER_NAME']}/mischedule/v20/php/request.php";
+$request = "http://{$_SERVER['SERVER_NAME']}/mschedule/mischedule/v20/php/request.php";
 $base = dirname($_SERVER['SCRIPT_NAME']);
 ?>
 
@@ -28,7 +28,6 @@ $base = dirname($_SERVER['SCRIPT_NAME']);
 <td valign=top>
 <!--<applet codebase='http://static.mschedule.com/applet/classes/' code='MISchedule.class' width=605 height=500>-->
 <applet codebase='classes/' code='MISchedule.class' width=605 height=500>
-Your browser doesn't support java.  MISchedule requires a java-enabled browser.
 <param name='term' value='<?=$term?>'>
 <param name='request' value='<?=$request?>'>
 </applet>

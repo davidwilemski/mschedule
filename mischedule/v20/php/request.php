@@ -1,17 +1,23 @@
 <?php
-require_once("wafunctions.php");
-require_once("divisionlist.php");
-require_once("courselist.php");
-require_once("sectionlist.php");
-require_once("bookslist.php");
-require_once("dbfunctions.php");
-require_once("checkopen.php");
+@require_once("wafunctions.php");
+@require_once("divisionlist.php");
+@require_once("courselist.php");
+@require_once("sectionlist.php");
+@require_once("bookslist.php");
+@require_once("dbfunctions.php");
+@require_once("checkopen.php");
+error_reporting(0);
 
-$command = $_GET['command'];
-$division = $_GET['division'];
-$course = $_GET['course'];
-$term = $_GET['term'];
-$fresh = $_GET['fresh'];
+if(array_key_exists('command', $_GET))
+	$command = $_GET['command'];
+if(array_key_exists('division', $_GET))
+	$division = $_GET['division'];
+if(array_key_exists('course', $_GET))
+	$course = $_GET['course'];
+if(array_key_exists('term', $_GET))
+	$term = $_GET['term'];
+if(array_key_exists('fresh', $_GET))
+	$fresh = $_GET['fresh'];
 
 if ( !isset($command) ) 
     die("No command");

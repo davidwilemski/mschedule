@@ -1,5 +1,5 @@
 <?
-//include_once 'inc/common.php';
+include_once 'inc/common.php';
 //only included in db.php as of August 04, 
 //might or might not be of use elsewhere
 
@@ -7,11 +7,17 @@
 switch($_SERVER["SERVER_NAME"]){
 default:
 	//debug("WARNING... USING DB VARS FOR REAL SITE");
-	$dbhost = 'localhost';
-	$dbuser = "mschedule";
-	$dbpass = "";
-	$dbpass = "jQquD6cezNW65xeC";
-	$dbname = "mschedule";
+	if($mischedule) {
+		$dbhost = 'localhost';
+		$dbuser = "tbombach";
+		$dbpass = "asdfasdf";
+		$dbname = "mschedule_mi";
+	} else {
+		$dbhost = 'localhost';
+		$dbuser = "mschedule";
+		$dbpass = "jQquD6cezNW65xeC";
+		$dbname = "mschedule";
+	}
 	break;
 }
 

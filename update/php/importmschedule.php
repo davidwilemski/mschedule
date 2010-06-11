@@ -3,30 +3,8 @@
 ini_set("include_path", $_SERVER['DOCUMENT_ROOT'] . '/mschedule/');
 $courses = "http://www.ro.umich.edu/timesched/pdf/FA2010.csv";
 $term = "fall10";
-	$dbhost = 'localhost';
-	$dbuser = "tbombach";
-	$dbpass = "asdfasdf";
-	$dbname = "mschedule";
-
+$mischedule = false;
 include_once 'inc/db.php';
-function convertPm($time) {
-	// Add 12 hours to end time
-	$length = strlen($time);
-	if($length == 1) { // i.e. 0, 1, 2 (0:00, 1:00, 2:00)
-		return $time + 12;
-	}
-	else if ($length == 2 && $time > 12) { // i.e. 30 (0:30)
-		return 12 . $time;
-	}
-	else if ($length == 2) { // i.e. 10, 11, 12 (10:00, 11:00, 12:00)
-		return 12 + $time;
-	}
-	else { // i.e. 130, 230, 1130, 1230 (1:30, 2:30, 11:30, 12:30)
-		return 1200 + $time;
-	}
-}
-echo "fetching courses...\n";
-flush();
 // Grab file
 $ch = curl_init();
 curl_setopt($ch, CURLOPT_URL, $courses);
@@ -34,14 +12,12 @@ curl_setopt($ch, CURLOPT_RETURNTRANSFER,true);
 $cvs = curl_exec($ch);
 curl_close($ch);
 $classes = preg_split('/\n/', $cvs);
-echo "done\n";
-flush();
 // Remove description line
 unset($classes[0]);
 // Loop through classes
 foreach($classes as $class) {
 	if($class == null) continue;
-	$fields = explode(',', $class);
+	$fields = preg_split('/","/', $class);
 	foreach($fields as $key => $field) {
 		$fields[$key] = str_replace("'", "", $field);
 		$fields[$key] = str_replace('"', "", $field);
@@ -122,3 +98,21 @@ foreach($classes as $class) {
 
 }
 exit('Success!');
+
+/* FUNCTIONS */
+function convertPm($time) {
+	// Add 12 hours to end time
+	$length = strlen($time);
+	if($length == 1) { // i.e. 0, 1, 2 (0:00, 1:00, 2:00)
+		return $time + 12;
+	}
+	else if ($length == 2 && $time > 12) { // i.e. 30 (0:30)
+		return 12 . $time;
+	}
+	else if ($length == 2) { // i.e. 10, 11, 12 (10:00, 11:00, 12:00)
+		return 12 + $time;
+	}
+	else { // i.e. 130, 230, 1130, 1230 (1:30, 2:30, 11:30, 12:30)
+		return 1200 + $time;
+	}
+}
