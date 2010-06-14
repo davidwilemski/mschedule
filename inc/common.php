@@ -294,7 +294,22 @@ $queryString = $_GET;
 <!-- End: AdBrite -->
 </div>
 <div style="width: 800px;"><blockquote>
-<iframe src="http://rcm.amazon.com/e/cm?t=mschedule-20&o=1&p=13&l=ur1&category=textbooks&banner=1RQK7WBPFE6ANNRN0302&f=ifr" width="468" height="60" scrolling="no" border="0" marginwidth="0" style="border:none;" frameborder="0"></iframe><?
+
+<!-- Added google adsence 6-14-2010 START -->
+<script type="text/javascript"><!--
+google_ad_client = "pub-1250650128629309";
+/* full banner 468x60, created 6/14/10 */
+google_ad_slot = "9558980438";
+google_ad_width = 468;
+google_ad_height = 60;
+//-->
+</script>
+<script type="text/javascript"
+src="http://pagead2.googlesyndication.com/pagead/show_ads.js">
+</script> 
+<!-- Added google adsence 6-14-2010 END -->
+
+<!--<iframe src="http://rcm.amazon.com/e/cm?t=mschedule-20&o=1&p=13&l=ur1&category=textbooks&banner=1RQK7WBPFE6ANNRN0302&f=ifr" width="468" height="60" scrolling="no" border="0" marginwidth="0" style="border:none;" frameborder="0"></iframe>--><?
 	echo "<h3> $title </h3>\n";
 	
 	if(isset($status_bar_text)){
@@ -335,7 +350,7 @@ function showHTMLFoot(){
 
 	?>
 </div>
-<script type="text/javascript">
+<!--<script type="text/javascript">
 var gaJsHost = (("https:" == document.location.protocol) ? "https://ssl." : "http://www.");
 document.write(unescape("%3Cscript src='" + gaJsHost + "google-analytics.com/ga.js' type='text/javascript'%3E%3C/script%3E"));
 </script>
@@ -344,7 +359,21 @@ try {
 var pageTracker = _gat._getTracker("UA-813415-1");
 pageTracker._trackPageview();
 } catch(err) {}
-</script>
+</script>-->
+
+<!-- Added google analytics for mschedule.com 6-14-2010 START -->
+<script type="text/javascript">
+  var _gaq = _gaq || [];
+  _gaq.push(['_setAccount', 'UA-9959666-3']);
+  _gaq.push(['_trackPageview']);
+  (function() {
+    var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+    ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+    var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+  })();
+</script> 
+<!-- Added google analytics for mschedule.com 6-14-2010 END -->
+
 	</body>
 	</html>
 	<?	
