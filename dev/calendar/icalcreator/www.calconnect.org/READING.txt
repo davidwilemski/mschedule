@@ -1,4 +1,0 @@
-Attempts to implement usecases from 
-http://www.calconnect.org/ioptesting.html.
-
-Feel free to send any response to ical@kigkonsult.se!

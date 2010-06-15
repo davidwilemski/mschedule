@@ -1,7 +1,0 @@
-a:4:{s:8:"template";a:1:{s:21:"register_action.shtml";b:1;}s:9:"timestamp";i:1156911966;s:7:"expires";i:1156915566;s:13:"cache_serials";a:0:{}}
-
-<h1>Registration failed</h1>
-<br>
-Your account could not be created.  This could happen if your uniqname has already been registered. If you think you received this message in error, please contact us as soon as possible.
-
-<br><br>

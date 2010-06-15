@@ -1,8 +1,0 @@
-http://www.planzo.com/ - javascript heavy online calendar! awsome! I could use this as my calendaring system.
-
-http://mocha.cs.brown.edu/mocha/faq.jsp - some CS type people making a better search system for courses at Brown including a "backpack" feature
-http://www.browndailyherald.com/media/paper472/news/2006/01/27/CampusNews/mocha.Energizes.Online.Scheduling-1515330.shtml?norewrite&sourcedomain=www.browndailyherald.com
-
-http://freshmeat.net/projects/webcalendar/ - WebCalendar, works great, but I don't think it will be easy to integrate into Mschedule
-
-http://freshmeat.net/projects/vcalsax/ - might be able to use this library to parse vcal files

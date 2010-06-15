@@ -1,6 +1,0 @@
-Need to reimplement WA scraping:
-
-  * Curl I think will be much faster. Lynx has a lot of memory and processing overhead. It has to read and render the html, where as curl just downloads the html, then we will parse it how we want to. Plus, I can't run lynx from a php script when it the page is run from the web
-  * URL should take parameters which should be validated, then spit directly into boxes on the WA interface. 
-  * URL should return an XML document representing the desired data
-  * A special option should return the exact html page(s) retrieved from WA. (as http attachment so that images aren't downloaded) This is in case the user wants to do their own scraping of the html.

@@ -1,1 +1,0 @@
-javac *.java -g -d ../classes

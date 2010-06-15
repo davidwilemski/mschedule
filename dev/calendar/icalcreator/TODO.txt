@@ -1,6 +1,0 @@
-- continue writing using.html
-
-- more TESTs and bugreports !!!
-
-- support for xCal non standard properties
-

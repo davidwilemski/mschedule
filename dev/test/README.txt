@@ -1,1 +1,0 @@
-This folder contains some testing code to test backend data structures.

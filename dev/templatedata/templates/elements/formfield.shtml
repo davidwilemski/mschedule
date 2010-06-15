@@ -1,1 +1,0 @@
-<input type="{{$field->type}}" name="{{$field->name}}" value="{{$field->value}}" maxlength="{{$field->maxlength}}" size="{{$field->size}}">
