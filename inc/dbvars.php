@@ -9,13 +9,13 @@ default:
 	//debug("WARNING... USING DB VARS FOR REAL SITE");
 	if($mischedule) {
 		$dbhost = 'localhost';
-		$dbuser = "tbombach";
-		$dbpass = "asdfasdf";
+		$dbuser = "mschedule_user";
+		$dbpass = "7ftNhFss5BUNFLcT";
 		$dbname = "mschedule_mi";
 	} else {
 		$dbhost = 'localhost';
-		$dbuser = "mschedule";
-		$dbpass = "jQquD6cezNW65xeC";
+		$dbuser = "mschedule_user";
+		$dbpass = "7ftNhFss5BUNFLcT";
 		$dbname = "mschedule";
 	}
 	break;
