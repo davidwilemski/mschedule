@@ -1,17 +1,23 @@
 <?php
 
 class Welcome extends Controller {
-
-	function Welcome()
-	{
-		parent::Controller();	
+	
+	function Welcome() {
+		
+		parent::controller();
+		
 	}
 	
-	function index()
-	{
-		$this->load->view('welcome_message');
+	function index() {		
+		
+		$data = array(
+			'view_name' => "welcome_view",
+			'ad'		=> "static/ads/google_ad_120_234.php"
+		);
+		$this->load->view('include/template', $data);
+		
 	}
+	
 }
 
-/* End of file welcome.php */
-/* Location: ./system/application/controllers/welcome.php */
+?>
