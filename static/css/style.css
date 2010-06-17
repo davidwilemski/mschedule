@@ -1,9 +1,10 @@
 body {
-	background:none repeat scroll 0 0 #636E7F;
+	background:none repeat scroll 0 0 #323740;
 	font-family:arial;
 	margin:0;
 	padding:20px 0;
 	font-family:'Droid Sans';
+	min-width:800px;
 }
 
 h1 {
@@ -13,30 +14,36 @@ h1 {
 }
 
 #body {
-	background:none repeat scroll 0 0 #7AAEFF;
-	border:1px solid white;
+	background:none repeat scroll 0 0 #B3C7E5;
+	border:0 solid white;
 	margin:0 auto;
 	width:800px;
 }
 
-#title_bar {
+#title_name {
 	display:block;
+	background-image:url("../images/mschedule_text.png");
+	height:90px;
 	width:800px;
 	margin:auto;
-	border:1px solid white;
 }
 
+#title_pane {
+	background-image:url("../images/title_bar.png");
+	height:90px;
+	background-repeat:repeat-x;
+}
 #nav_bar {
 	font-family:'Droid Sans';
 	list-style-type:none;
-	background: #7AAEFF;
+	/*background: #7AAEFF; */
 	width:800px;
-	margin:0 auto;
+	margin:0 0 0 275px;
 	padding:3px 0 2px;
-	border:1px solid white;
+	border:0 1px solid white;
 	border-top:0px;
 	border-bottom:0px;
-	text-align:center;
+	text-align:left;
 }
 
 li.nav_item {
@@ -49,40 +56,64 @@ li.nav_item {
 
 .nav_item a:link,
 .nav_item a:visited {
-	color:#000000;
+	color:#FFFFFF;
 	margin:0 5px;
 	text-decoration:none;
 }
 
 .nav_item a:hover {
-	color:#FFFFFF;
+	color:red;
 	margin:0 5px;
 }
 
 #content {
-	width:600px;
-	margin:0 20px;
+	width:650px;
+	min-width:600px;
+	margin:0 auto;
 	min-height:300px;
+	padding:1px 0;
 }
 
 #vertical_ad {
 	float:right;
+	padding:16px 5px 0;
 }
 
 #footer {
-	background:#6088C8;
+	background:#323740; /*6088C8*/
 	width:800px;
 	border:1px solid white;
-	border-top:0;
-	margin: 0 auto;
+	margin: 10px auto 0;
 	padding: 5px 0;
 }
 
 #footer_content {
 	margin: 0 20px;
+	color:white;
 }
 
 #footer_content p {
 	margin:3px;
 	font-size:10pt;
+}
+
+#navigation_pane {
+	width:100%;
+	background:#7AAEFF;
+	background-image:url("../images/title_bar.png");
+	background-repeat:repeat-x;
+	height:22px;
+}
+
+#body_pane {
+	width:100%;
+	background:#B3C7E5;
+}
+
+#bottom_bar {
+	background-color:black;
+	background-image:url("../images/bottom_bar.png");
+	background-repeat:repeat-x;
+	height:10px;
+	width:100%;
 }

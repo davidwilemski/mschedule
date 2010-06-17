@@ -1,4 +1,5 @@
 
+<div id="bottom_bar"></div>
 <div id="footer">
 	<div id="footer_content">
 		<p>For support, maintenance issues, bug reports, free coffee, and mediocre advice, email webmaster [at] mschedule [dot] com.</p>

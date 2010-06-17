@@ -12,7 +12,8 @@ class Home extends Controller {
 		
 		$data = array(
 			'view_name' => "home_view",
-			'ad'		=> "static/ads/google_ad_120_234.php"
+			'ad'		=> "static/ads/google_ad_120_234.php",
+			'navigation'=> "navigation"
 		);
 		$this->load->view('include/template', $data);
 		
