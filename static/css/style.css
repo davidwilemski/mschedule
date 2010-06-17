@@ -36,10 +36,8 @@ h1 {
 #nav_bar {
 	font-family:'Droid Sans';
 	list-style-type:none;
-	/*background: #7AAEFF; */
-	width:800px;
-	margin:0 0 0 275px;
-	padding:3px 0 2px;
+	margin:0;
+	padding:3px 22% 2px;
 	border:0 1px solid white;
 	border-top:0px;
 	border-bottom:0px;
