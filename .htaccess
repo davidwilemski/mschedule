@@ -3,7 +3,7 @@ php_flag magic_quotes_gpc Off
 
 <IfModule mod_rewrite.c>
     RewriteEngine On
-    RewriteBase /
+    RewriteBase /mschedule
 
     #Removes access to the system folder by users.
     #Additionally this will allow you to create a System.php controller,
