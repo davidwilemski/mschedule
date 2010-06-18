@@ -11,7 +11,15 @@
 |	http://example.com/
 |
 */
-$config['base_url']	= "http://www.mschedule.com/";
+if($_SERVER['SERVER_NAME'] == 'localhost')
+{
+	$config['base_url']	= "http://localhost/mschedule/";
+}
+else
+{
+	$config['base_url']	= "http://www.mschedule.com/";
+}
+
 
 /*
 |--------------------------------------------------------------------------

@@ -22,7 +22,6 @@ h1 {
 
 #title_name {
 	display:block;
-	background-image:url("../images/mschedule_text.png");
 	height:90px;
 	width:800px;
 	margin:auto;
@@ -88,6 +87,7 @@ li.nav_item {
 #footer_content {
 	margin: 0 20px;
 	color:white;
+	text-align: center;
 }
 
 #footer_content p {
