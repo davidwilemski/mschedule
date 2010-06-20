@@ -1,6 +1,6 @@
 <html>
 <head>
-<title>404 Page Not Found</title>
+<title>Database Error</title>
 <style type="text/css">
 
 body {

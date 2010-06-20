@@ -3,12 +3,12 @@
 /*
 	List of data array index values this View expects:
 	
-	-css - HTML for the css to be loaded
-	-nav_data - data for creating the navigation bar
-	-ad - which google ad to use
-	-view_name - name of the view to load
-	-navigation => the name of the nav bar view
-	-page_data - the content/title for the page
+	-css 		- HTML for the css to be loaded
+	-navigation - the name of the nav bar view
+	-nav_data 	- data for creating the navigation bar
+	-ad 		- which google ad to use
+	-view_name 	- name of the view to load
+	-page_data 	- the content/title for the page
 	
 */
 
