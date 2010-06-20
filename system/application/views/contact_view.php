@@ -11,7 +11,7 @@
 			
 			$this->load->helper('form');
 			
-			echo form_open('home/send_email');
+			echo form_open('email/send_email');
 			
 			$name_data = array(
 				'name'	=> 'name',
