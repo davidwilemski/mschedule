@@ -1,7 +1,6 @@
 <?php
 
-//Class to handle getting the nav bar
-
+//handles nav bar
 class Nav_links_model extends Model
 {
 
