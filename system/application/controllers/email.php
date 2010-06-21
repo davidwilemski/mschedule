@@ -1,5 +1,9 @@
 <?php
 
+/*
+	Note for future: you can add TRUE as a second argument to $this->input->post() to filter it
+*/
+
 class Email extends controller {
 	
 	function Email() {
@@ -9,6 +13,7 @@ class Email extends controller {
 		$this->load->helper("url");
 		$this->load->helper("html");
 		$this->load->model('static_pages_model');
+		$this->load->model('nav_links_model');
 		
 	}
 	
@@ -19,7 +24,7 @@ class Email extends controller {
 			'ad'		=> 'static/ads/google_ad_120_234.php',
 			'navigation'=> "navigation",
 			'css'		=> includeCSSFile("style"),
-			'nav_data'	=> $this->static_pages_model->getNavBarLinks()
+			'nav_data'	=> $this->nav_links_model->getNavBarLinks()
 		);
 		
 		$this->load->view('include/template', $data);
@@ -32,7 +37,7 @@ class Email extends controller {
 			'ad'		=> 'static/ads/google_ad_120_234.php',
 			'navigation'=> "navigation",
 			'css'		=> includeCSSFile("style"),
-			'nav_data'	=> $this->static_pages_model->getNavBarLinks(),
+			'nav_data'	=> $this->nav_links_model->getNavBarLinks(),
 		);
 		
 		$this->load->library('form_validation');
@@ -66,7 +71,7 @@ class Email extends controller {
 					'ad'		=> 'static/ads/google_ad_120_234.php',
 					'navigation'=> "navigation",
 					'css'		=> includeCSSFile("style"),
-					'nav_data'	=> $this->static_pages_model->getNavBarLinks(),
+					'nav_data'	=> $this->nav_links_model->getNavBarLinks(),
 					'page_data'	=> $this->static_pages_model->getPageContent('msgconfirm')
 				);
 				
@@ -79,7 +84,7 @@ class Email extends controller {
 					'ad'		=> 'static/ads/google_ad_120_234.php',
 					'navigation'=> "navigation",
 					'css'		=> includeCSSFile("style"),
-					'nav_data'	=> $this->static_pages_model->getNavBarLinks(),
+					'nav_data'	=> $this->nav_links_model->getNavBarLinks(),
 					'page_data'	=> $this->static_pages_model->getPageContent('msgerror')
 				);
 				
