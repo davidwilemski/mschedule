@@ -119,3 +119,21 @@ li.nav_item {
 	height:10px;
 	width:100%;
 }
+
+label {
+	width:5em;
+	float:left;
+	text-aligh:right;
+	margin-right:0.5em;
+	display:block;	
+	text-align:right;
+}
+
+textarea {
+	height:150px;
+	width:300px;
+}
+
+#submit_button {
+	margin-left:5.5em;
+}
