@@ -1,6 +1,6 @@
 <?php
 
-Class Nav_links_model extends Model
+class Nav_links_model extends Model
 {
 
 		function Nav_links_model()
