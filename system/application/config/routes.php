@@ -44,7 +44,7 @@ $route['default_controller'] = "home";
 $route['scaffolding_trigger'] = "";
 
 
-$route['Home/(:any)'] = "home/index/$1";
+$route['home/(:any)'] = "home/index/$1";
 
 /* End of file routes.php */
 /* Location: ./system/application/config/routes.php */

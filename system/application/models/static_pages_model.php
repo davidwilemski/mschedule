@@ -11,25 +11,6 @@
 			parent::Model();
 		}
 				
-		function getNavBarLinks()
-		{
-			$this->db->select('title, URL_name')->where('in_nav', 1)->from('static_pages');
-			
-			$query = $this->db->get();
-			if($query->num_rows() > 0)
-			{
-				$nav_titles = array();
-				foreach($query->result_array() as $row)
-				{
-					$nav_titles[] = array(
-						'title' => $row['title'],
-						'URL_name' => $row['URL_name']
-					);
-				}
-				
-				return $nav_titles;
-			}
-		}
 		
 		function getPageContent($page)
 		{
@@ -41,6 +22,7 @@
 				$page_content = $query->row_array();
 				return $page_content;
 			}
+			
 		}
 
 	}

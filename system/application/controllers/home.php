@@ -10,6 +10,7 @@ class Home extends Controller {
 		$this->load->helper("css");
 		
 		$this->load->model('static_pages_model');
+		$this->load->model('nav_links_model');
 	}
 	
 	function index($page = 'index') {		
@@ -21,7 +22,7 @@ class Home extends Controller {
 		);
 		
 		$data['css'] = includeCSSFile("style");
-		$data['nav_data'] = $this->static_pages_model->getNavBarLinks();
+		$data['nav_data'] = $this->nav_links_model->getNavBarLinks();
 		$data['page_data'] = $this->static_pages_model->getPageContent($page);	
 		
 		$this->load->view('include/template', $data);
