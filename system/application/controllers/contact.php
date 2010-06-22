@@ -4,9 +4,9 @@
 	Note for future: you can add TRUE as a second argument to $this->input->post() to filter it
 */
 
-class Email extends controller {
+class Contact extends controller {
 	
-	function Email() {
+	function Contact() {
 		
 		parent::controller();
 		$this->load->helper("css");
