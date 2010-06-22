@@ -15,7 +15,7 @@
 
 $this->load->view('include/header', $css);
 
-$this->load->view($navigation, $nav_data);
+$this->load->view('include/' . $navigation, $nav_data);
 
 echo '<div id="body_pane">';
 

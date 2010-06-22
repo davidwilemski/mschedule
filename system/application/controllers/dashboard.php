@@ -8,6 +8,14 @@ class dashboard extends Controller {
 		
 		$this->load->model('nav_links_model');
 		
+		if(!$this->user_model->Secure(array('userType'=>array('admin', 'user')))) {
+		
+			$this->session->set_flashdata('flashError', 'You must be logged in to access this page.');
+			redirect('login');
+		
+		}
+		
+		
 	}
 	
 	function index() {
@@ -21,6 +29,14 @@ class dashboard extends Controller {
 		);
 		
 		$this->load->view('include/template', $data);
+	}
+	
+	function password_reset() {
+	
+	}
+	
+	function modify_user() {
+	
 	}
 	
 }

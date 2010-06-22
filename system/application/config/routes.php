@@ -46,5 +46,7 @@ $route['scaffolding_trigger'] = "";
 
 $route['home/(:any)'] = "home/index/$1";
 
+$route['admin'] = 'admin/dashboard';
+
 /* End of file routes.php */
 /* Location: ./system/application/config/routes.php */
