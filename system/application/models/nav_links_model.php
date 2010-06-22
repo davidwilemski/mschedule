@@ -1,5 +1,6 @@
 <?php
 
+//handles nav bar
 class Nav_links_model extends Model
 {
 
@@ -10,7 +11,7 @@ class Nav_links_model extends Model
 		
 		function getNavBarLinks()
 		{
-			$this->db->select('name, url')->from('nav_links');
+			$this->db->select('name, url, link_order')->from('nav_links')->order_by('link_order', 'asc');
 			
 			$query = $this->db->get();
 			if($query->num_rows() > 0)
