@@ -126,7 +126,7 @@ class dashboard extends Controller {
 				$this->session->set_userdata('last_name', $user['last_name']);
 				$this->session->set_userdata('email', $user['email']);
 				redirect('dashboard');
-			} else if($this->session->userdata['email'] == $this->input->post('email')) {
+			} else if($this->session->userdata['email'] == $this->input->post('email')) {	
 				$this->session->set_flashdata('action', 'Personal Information updated.');
 				redirect('dashboard');
 			}
