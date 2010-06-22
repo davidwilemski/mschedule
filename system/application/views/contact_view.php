@@ -13,6 +13,8 @@
 			
 			echo form_open('email/send_email');
 			
+			echo '<fieldset>';
+			
 			$name_data = array(
 				'name'	=> 'name',
 				'id'	=> 'name',
@@ -45,15 +47,19 @@
 			
 			?>
 			
+			
 			<p><label for="name">Full Name: </label><?php echo form_input($name_data); ?></p>
 			<p><label for="email">Email: </label><?php echo form_input($email_data); ?></p>
 			<p><label for="email">Message: </label><?php echo form_textarea($message_data); ?></p>
 			
 			<p><?php echo form_submit($submit_data); ?></p>
 			
-			<?php echo form_close(); ?>
+			<?php echo validation_errors(); ?>
 			
-			<?php echo validation_errors(); ?>		
+			</fieldset>
+			
+			<?php echo form_close(); ?>
+				
 		</div>
 	</div>
 </div>
