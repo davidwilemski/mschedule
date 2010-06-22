@@ -7,6 +7,7 @@ class dashboard extends Controller {
 		parent::controller();
 		
 		$this->load->model('nav_links_model');
+		$this->load->library('form_validation');
 		
 		if(!$this->user_model->Secure(array('userType'=>array('admin', 'user')))) {
 		
@@ -33,10 +34,126 @@ class dashboard extends Controller {
 	
 	function password_reset() {
 	
+		$data = array(
+			'view_name'	=> 'dashboard_view',
+			'ad'		=> 'static/ads/google_ad_120_234.php',
+			'navigation'=> "navigation",
+			'css'		=> includeCSSFile("style"),
+			'nav_data'	=> $this->nav_links_model->getNavBarLinks()
+		);
+	
+		$this->form_validation->set_rules('password', 'Password', 'trim|required|callback__check_user_password');
+		$this->form_validation->set_rules('new_password', 'New Password', 'trim|required|callback__check_password');
+		$this->form_validation->set_rules('new_password2', 'New Password Confirmation', 'trim|required|callback__check_same');
+		
+		if($this->form_validation->run()) {
+			if($this->user_model->updateUser(array('userID' => $this->session->userdata['userID'], 'password' => md5($this->input->post('new_password'))))) {
+				$this->session->set_flashdata('action', 'Your password has been changed');
+				redirect('dashboard');
+			}
+		}
+		
+		$this->load->view('include/template', $data);
+	}
+	
+	function _check_user_password($password) {
+		
+		if($this->input->post('password')) {
+			if(!$this->user_model->getUsers(array('userID' => $this->session->userdata['userID'], 'password' => md5($password)))) {
+				$this->form_validation->set_message('_check_user_password', 'Your passwords is incorrect. Try, try again.');
+				return false;
+			}
+		}
+		return true;
+		
+	}
+	
+	function _check_same($password) {
+		
+		if($this->input->post('password')) {
+			if($this->input->post('password') == $this->input->post('new_password')) {
+				$this->form_validation->set_message('_check_same', 'Your can not change your password to the same thing. Try, try again.');
+				return false;
+			}
+		}
+		return true;
+		
+	}
+	
+	
+	function _check_password($password) {
+		
+		if($this->input->post('new_password')) {
+			if($this->input->post('new_password2')) {	
+				if($password != $this->input->post('new_password2')) {
+				
+					$this->form_validation->set_message('_check_password', 'Your passwords do not mach. Try, try again.');
+					return false;
+				
+				}
+			}		
+		}
+		
+		return true;
+		
 	}
 	
 	function modify_user() {
+
+		$data = array(
+			'view_name'	=> 'dashboard_view',
+			'ad'		=> 'static/ads/google_ad_120_234.php',
+			'navigation'=> "navigation",
+			'css'		=> includeCSSFile("style"),
+			'nav_data'	=> $this->nav_links_model->getNavBarLinks()
+		);
+		
+		$this->form_validation->set_rules('first_name', 'First Name', 'trim|required');
+		$this->form_validation->set_rules('last_name', 'Last Name', 'trim|required');
+		$this->form_validation->set_rules('email', 'Email', 'trim|required|valid_email|callback__check_email');
+		
+		if($this->form_validation->run()) {
+		
+			$user = array(
+				'userID' 		=> $this->session->userdata['userID'], 
+				'first_name' 	=> $this->input->post('first_name'),
+				'last_name'		=> $this->input->post('last_name'),
+				'email'			=> $this->input->post('email')
+			);
+			if($this->user_model->updateUser($user)) {
+				$this->session->set_flashdata('action', 'Personal Information updated.');
+				$this->session->set_userdata('first_name', $user['first_name']);
+				$this->session->set_userdata('last_name', $user['last_name']);
+				$this->session->set_userdata('email', $user['email']);
+				redirect('dashboard');
+			} else if($this->session->userdata['email'] == $this->input->post('email')) {
+				$this->session->set_flashdata('action', 'Personal Information updated.');
+				redirect('dashboard');
+			}
+		
+		}
+		
+		$this->load->view('include/template', $data);
+	}
 	
+	function _check_email($email) {
+		
+		$this->form_validation->set_message('_check_email', 'Your email is already registered. Try, try again.');
+		
+		if($this->input->post('email')) {
+			
+			$user = $this->user_model->getUsers(array('email' => $email));
+			if($user) {
+				if($user->userID == $this->session->userdata['userID'])
+					return true;
+				else 
+					return false;
+			} else 
+				return true;
+		}
+		
+		return false;
+		
 	}
 	
 }

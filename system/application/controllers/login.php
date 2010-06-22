@@ -43,12 +43,12 @@ class login extends Controller {
 		
 		if($this->input->post('password')) {
 			
-			$user = $this->user_model->getUsers(array('username' => $username, 'password' => md5($this->input->post('password'))));
+			$user = $this->user_model->getUsers(array('username' => $username, 'password' => md5($this->input->post('password')), 'status' => 'active'));
 			if($user) return true;
 						
 		}
 		
-		$this->form_validation->set_message('_check_login', 'Your username / password combination is not correct.');
+		$this->form_validation->set_message('_check_login', 'Your username / password combination is not correct. If you have not activated your account, please check your email.');
 		return false;
 		
 	}
@@ -74,7 +74,7 @@ class login extends Controller {
 			
 			if($this->user_model->addUser($user)) {
 				$this->user_model->email_validation($user);
-				redirect('home/register_confirm');
+				redirect('home/validation_sent');
 			}
 			redirect('login/register');
 		

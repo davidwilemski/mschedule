@@ -1,6 +1,6 @@
 <?=form_open('login/register')?>
-<h2>Register</h2>
 <fieldset>
+<legend>Register</legend>
 <?php
 $username_data = array(
 	'name'	=> 'username',
@@ -43,7 +43,7 @@ $last_name_data = array(
 <p><label for="password">Password: </label><?php echo form_password($password_data); ?></p>
 <p><label for="password_confirm">Password (again): </label><?php echo form_password($password_confirm_data); ?></p>
 
-<?=form_submit('', 'Register')?>
+<?=form_submit('', 'Register', array('class' => 'button'))?>
 
 <?=validation_errors()?>
 

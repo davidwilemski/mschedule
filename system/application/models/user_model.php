@@ -40,6 +40,8 @@ class user_model extends Model {
 		// makes sure the required field is there
 		if(!$this->_required(array('userID'), $options))
 			return false;
+			
+		$this->db->where('userID', $options['userID']);
 		
 		// setter
 		$fields = array(
@@ -48,15 +50,13 @@ class user_model extends Model {
 			'first_name',
 			'last_name',
 			'status',
+			'password',
 			'userType'
 		);
 		
 		foreach($fields as $field)
 			if(isset($options[$field]))
 				$this->db->set($field, $options[$field]);
-		
-		if(isset($options['password']))
-			$this->db->set('password', md5($options['password']));
 		
 		// updates the table	
 		$this->db->update('users');
@@ -67,23 +67,20 @@ class user_model extends Model {
 	
 	function getUsers($options = array()) {
 		
-		if(isset($options['userID']))
-			$this->db->where('userID', $options['userID']);
+		$fields = array(
+			'userID',
+			'email',
+			'username',
+			'password',
+			'activate_code',
+			'status',
+			'first_name',
+			'last_name'
+		);
 		
-		if(isset($options['email']))
-			$this->db->where('email', $options['email']);
-			
-		if(isset($options['username']))
-			$this->db->where('username', $options['username']);
-			
-		if(isset($options['password']))
-			$this->db->where('password', $options['password']);
-			
-		if(isset($options['password']))
-			$this->db->where('password', $options['password']);
-			
-		if(isset($options['activate_code']))
-			$this->db->where('activate_code', $options['activate_code']);
+		foreach($fields as $f)
+			if(isset($options[$f]))
+				$this->db->where($f, $options[$f]);
 			
 		if(isset($options['limit']) && isset($options['offset']))
 			$this->db->limit($options['limit'], $options['offset']);
@@ -113,6 +110,7 @@ class user_model extends Model {
 		
 		$this->session->set_userdata('email', $user->email);
 		$this->session->set_userdata('first_name', $user->first_name);
+		$this->session->set_userdata('last_name', $user->last_name);
 		$this->session->set_userdata('userType', $user->userType);
 		$this->session->set_userdata('username', $user->username);
 		$this->session->set_userdata('userID', $user->userID);
@@ -131,9 +129,9 @@ class user_model extends Model {
 		$name = $user->first_name . ' ' . $user->last_name;
 		$email = $user->email;
 		$message = 'Welcome to MSchedule.com, '. $user->first_name . '!' . "\n\n";
-		$message .= 'To activate your account at MSchedule.com, please use the link below, or go to http://mschedule.com/login/validate ';
+		$message .= 'To activate your account at MSchedule.com, please use the link below, or go to ' . base_url() . 'login/validate ';
 		$message .= 'and enter your activation code (below).' . "\n\n";
-		$message .= 'Link: http://mschedule.com/login/validate/' . md5($email) . "\n";
+		$message .= 'Link: ' . base_url() . 'login/validate/' . md5($email) . "\n";
 		$message .= 'Activation code (if link above does not work): ' . md5($email) . "\n\n";
 		$message .= 'Thank you, and enjoy MSchdule.com!';
 		

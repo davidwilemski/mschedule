@@ -1,8 +1,8 @@
 <?php 
 $this->load->helper('form');
-
-echo '<h2>Login Here!</h2>';
-
+?>
+<div class="error"><?=$this->session->flashdata('flashError')?></div>
+<?php
 echo form_open('login');
 if($this->session->flashdata('flashRedirect'))
 	echo form_hidden('redirect', $this->session->flashdata('flashRedirect'));
@@ -10,11 +10,11 @@ else
 	echo form_hidden('redirect', 'dashboard');
 
 if($this->session->flashdata('flashError')) {?>
-<div class="error"><?=$this->session->flashdata('flashError')?></div>
 <?php }
 
 ?>
-<fieldset id="loginform">
+<fieldset>
+<legend>Login</legend>
 <?php
 
 $username_data = array(
@@ -28,12 +28,19 @@ $password_data = array(
 	'id'	=> 'password'
 );
 
+$button_data = array(
+	'name'	=> 'login',
+	'id'	=> 'submit',
+	'value'	=> 'Login',
+	'class'	=> 'button'
+);
+
 ?>
 
 <p><label for="username">Username: </label><?php echo form_input($username_data); ?></p>
 <p><label for="email">Password: </label><?php echo form_password($password_data); ?></p>
 
-<?php echo form_submit('', 'Login'); ?>
+<?php echo form_submit($button_data); ?>
 
 <div class="error"><?php echo validation_errors(); ?></div>
 

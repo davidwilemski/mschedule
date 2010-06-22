@@ -1,9 +1,6 @@
 <?php 
 $this->load->helper('form');
 echo form_open('login/validate');
-?>
-<h2>Activate Account</h2>
-<?php
 $code = array(
 	'name'	=> 'code',
 	'id'	=> 'code',
@@ -15,12 +12,21 @@ $email = array(
 	'id'	=> 'email',
 	'value'	=> set_value('email')
 );
+
+$button = array(
+	'name'	=> 'sumbit',
+	'id'	=> 'submit',
+	'class'	=> 'button',
+	'value'	=> 'Submit',
+)
+
 ?>
 <fieldset>
+<legend>Activate Account</legend>
 <p><label for="email">Email: </label><?php echo form_input($email); ?></p>
 <p><label for="code">Activation Code: </label><?php echo form_input($code); ?></p>
 
-<?php echo form_submit('', 'Activate'); ?>
+<?php echo form_submit($button); ?>
 
 <div class="error"><?php echo validation_errors(); ?></div>
 

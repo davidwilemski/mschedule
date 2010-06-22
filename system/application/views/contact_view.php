@@ -1,5 +1,3 @@
-<h2>Send us an email!</h2>
-
 <?php 
 
 $this->load->helper('form');
@@ -35,12 +33,13 @@ $message_data = array(
 $submit_data = array(
 	'name'	=> 'sumbit',
 	'id'	=> 'submit_button',
-	'value'	=> 'Submit'
+	'value'	=> 'Submit',
+	'class'	=> 'button'
 );
 
 ?>
 
-
+<legend>Email Us</legend>
 <p><label for="name">Full Name: </label><?php echo form_input($name_data); ?></p>
 <p><label for="email">Email: </label><?php echo form_input($email_data); ?></p>
 <p><label for="email">Message: </label><?php echo form_textarea($message_data); ?></p>

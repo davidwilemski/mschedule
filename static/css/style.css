@@ -45,6 +45,18 @@ h1 {
 	border-top:0px;
 	border-bottom:0px;
 	text-align:left;
+	float: left;
+}
+
+#login_bar {
+	font-family:'Droid Sans';
+	list-style-type:none;
+	margin:0;
+	padding:3px 22% 2px;
+	border:0 1px solid white;
+	border-top:0px;
+	border-bottom:0px;
+	text-align:left;
 }
 
 li.nav_item {
@@ -72,7 +84,7 @@ li.nav_item {
 	min-width:600px;
 	margin:0 auto;
 	min-height:300px;
-	padding:1px 0;
+	padding:5px 0;
 }
 
 #vertical_ad {
@@ -121,9 +133,9 @@ li.nav_item {
 }
 
 label {
-	width:5em;
+	width:43%;
 	float:left;
-	text-aligh:right;
+	text-align:right;
 	margin-right:0.5em;
 	display:block;	
 	text-align:right;
@@ -136,4 +148,56 @@ textarea {
 
 #submit_button {
 	margin-left:5.5em;
+}
+
+fieldset {
+	-moz-border-radius:20px 20px 20px 20px;
+	background:none repeat scroll 0 0 #323740;
+	color:white;
+	margin:15px auto;
+	width:300px;
+	text-align:center;
+}
+
+legend {
+	-moz-border-radius:5px 5px 5px 5px;
+	background:none repeat scroll 0 0 #323740;
+	border:2px solid silver;
+	font-size:15pt;
+	font-weight:bold;
+	padding: 0 5px;
+}
+
+.button {
+	-moz-border-radius:15px;
+	-webkit-border-radius:15px;
+	background-image:url("../images/button.png");
+	background-repeat:repeat-x;
+	height:24px;
+	min-width:70px;
+	font-size:11pt;
+	font-weight:bold;
+}
+
+.button:active {
+	-moz-border-radius:15px;
+	-webkit-border-radius:15px;
+	background-image: url("../images/button_hover.png");
+    background-repeat: repeat-x;
+	height:24px;
+	min-width:70px;
+	font-size:11pt;
+	font-weight:bold;
+}
+
+.error {
+	color:red;
+}
+
+#personal_info {
+	float:right;
+}
+
+#password_reset {
+	float:left;
 }
