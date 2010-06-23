@@ -1,3 +1,9 @@
+<?php
+	/*
+		This is the view for the registration form.
+		Called by login/register.
+	*/
+?>
 <?=form_open('login/register')?>
 <fieldset>
 <legend>Register</legend>
@@ -45,7 +51,7 @@ $last_name_data = array(
 
 <?=form_submit('', 'Register', array('class' => 'button'))?>
 
-<?=validation_errors()?>
+<div class="error"><?=validation_errors()?></div>
 
 </fieldset>
 <?=form_close()?>

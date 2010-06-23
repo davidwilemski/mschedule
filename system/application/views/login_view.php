@@ -1,3 +1,9 @@
+<?php
+	/*
+		This is the login form.
+		It is called by the login controller.
+	*/
+?>
 <?php 
 $this->load->helper('form');
 ?>

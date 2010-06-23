@@ -1,9 +1,11 @@
-<?php 
+<?php
 	/*
 		This model is meant to contain functions that will work with the static_pages table. 
-		It will allow getting page titles for the navigation bar and loading page content as
-		well as the ability to update static pages.
+		getPageContent() - allows getting page titles for the navigation bar and loading page content.
+		Will be able to update static pages.
 	*/
+?>
+<?php 
 	class Static_pages_model extends Model
 	{
 		function Static_pages_model()

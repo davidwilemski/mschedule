@@ -175,8 +175,7 @@ legend {
 	background-repeat:repeat-x;
 	height:24px;
 	min-width:70px;
-	font-size:11pt;
-	font-weight:bold;
+	font-size:10pt;
 }
 
 .button:active {
@@ -186,8 +185,7 @@ legend {
     background-repeat: repeat-x;
 	height:24px;
 	min-width:70px;
-	font-size:11pt;
-	font-weight:bold;
+	font-size:10pt;
 }
 
 .error {

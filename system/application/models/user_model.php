@@ -1,4 +1,39 @@
 <?php
+	/*
+		This model contains functions for dealing with users.
+		All the functions take an array with the field names as parameters (sans activate_account and secure).
+		addUser() - adds a user to the table with status=>inactive and activation_code=>md5(email)
+					returns the id of the new user, or false for an error
+		updateUser() - updates a user.
+					   requires the userID to be passed in
+					   updates all other fields passed to it (send password as hash)
+					   returns the number of affected rows (ideally 1 or 0, except for batch operations by admin)
+		getUsers() - gets all users that match the parameters passed to the function
+					 optional parameters:
+					 	limit - max number of records to return
+					 	offset - starting result record number
+					 	sortby - field to sort by
+					 	sortdirection - direction to sort (asc or desc)
+					 returns user as a singular object if there is only one result
+					 returns array of users if there is more than one result
+		login() - validates credentials and sets session=>userdata
+				  requires username and password (as hash) to be passed
+				  sets session=>userdata with username, first_name, last_name, userType, email, and userID
+				  returns true if login successful
+				  returns false if login unsuccessful
+		email_validation() - sends the user an email with activation code
+							 requires email to be passed in the array
+		activate_account() - activates the user account, setting status=>active
+							 requires a activation code passed in
+							 returns true if activated, returns false if not
+		secure() - function to help secure pages
+				   requires a single value (i.e. 'admin') or array (i.e. array('admin', 'user')) passed in
+				   returns true if session=>userdata['userType'] reflects a parameter in the argument passed in
+				   returns false otherwise
+				   user this in the construct of a controller along with a redirect to secure parts of the site				  
+	*/
+?>
+<?php
 
 class user_model extends Model {
 	
@@ -119,7 +154,10 @@ class user_model extends Model {
 		
 	}
 	
-	function email_validation($u) {
+	function email_validation($u = array()) {
+	
+		if(!$this->user_model->_required(array('email'), $u))
+			return false;
 	
 		$user = $this->user_model->getUsers(array('email'=>$u['email']));
 		
@@ -129,9 +167,10 @@ class user_model extends Model {
 		$name = $user->first_name . ' ' . $user->last_name;
 		$email = $user->email;
 		$message = 'Welcome to MSchedule.com, '. $user->first_name . '!' . "\n\n";
-		$message .= 'To activate your account at MSchedule.com, please use the link below, or go to ' . base_url() . 'login/validate ';
-		$message .= 'and enter your activation code (below).' . "\n\n";
-		$message .= 'Link: ' . base_url() . 'login/validate/' . md5($email) . "\n";
+		$message .= 'To activate your account at MSchedule.com, please use the link below, or go to ';
+		$message .= base_url() . 'login/validate/' . md5($email);
+		$message .= 'and enter your activation code.' . "\n\n";
+		$message .= 'Link: ' . base_url() . 'login/validate' . "\n";
 		$message .= 'Activation code (if link above does not work): ' . md5($email) . "\n\n";
 		$message .= 'Thank you, and enjoy MSchdule.com!';
 		

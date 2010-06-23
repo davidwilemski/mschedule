@@ -1,3 +1,9 @@
+<?php
+	/*
+		This is the form for activating the user account.
+		Called by login/validation				  
+	*/
+?>
 <?php 
 $this->load->helper('form');
 echo form_open('login/validate');

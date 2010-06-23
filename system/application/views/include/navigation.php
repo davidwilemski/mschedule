@@ -1,3 +1,11 @@
+<?php
+	/*
+		This is the navigation view. It has a navigation pane (across the window) and the bar (smaller).
+		This requires a 'nav_data' array to be passed into it, containing 'url' and 'name', best created
+		from the nav_link_model.
+		This is loaded by include/template.
+	*/
+?>
 <div id="navigation_pane">
 	<ul id="nav_bar">
 		<?php

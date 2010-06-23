@@ -1,7 +1,11 @@
 <?php
-
+	/*
+		This controller loads the contact form (public), and sends the email (send_email()) to webmaster@mschedule.com
+	*/
+?>
+<?php
 /*
-	Note for future: you can add TRUE as a second argument to $this->input->post() to filter it
+	Note for future: you can add TRUE as a second argument to $this->input->post() to put it through the XSS filter
 */
 
 class Contact extends controller {
@@ -9,11 +13,7 @@ class Contact extends controller {
 	function Contact() {
 		
 		parent::controller();
-		$this->load->helper("css");
-		$this->load->helper("url");
-		$this->load->helper("html");
 		$this->load->model('static_pages_model');
-		$this->load->model('nav_links_model');
 		
 	}
 	

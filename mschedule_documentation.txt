@@ -1,0 +1,159 @@
+|config
+	|autoload
+		>libraries
+			database
+			session
+		>helpers
+			css
+			url
+			html
+		>model
+			user_model
+			nav_links_model
+
+|controllers
+	|admin
+		>dashboard*
+			-secure- admin
+			This controller is going to be the main admin interface for updating
+			user information, static page content, and navigation links.
+			
+	>contact
+		This controller loads the contact form (public), and sends the email (send_email()) to webmaster@mschedule.com
+		
+	>dashboard
+		-secure- user, admin
+		This controller is the main user interface for users to change their preferences.
+		It loads the dashboard_view to show the password reset and personal info update forms.
+		This has several custom form_validation callback functions:
+		For the password reset:
+			_check_user_password - validates the user's password agains the database hash
+			_check_password - validates that the new password is typed correctly twice
+			_check_same - validates that the user isn't changing the password to the same thing
+		For the user information update:
+			_check_email - checks that the user isn't changing the password to a currently registered
+						   email, and if the user doesn't change their email (it's already registered
+						   to them) it will allow the form to update the email with the same email.
+	>home
+		This controller loads the home page. Its contents are static.
+		
+	>login
+		This controller loads the login form, and all the various login functions are run though here.
+		Additionally, this page plays host to the register function (login/register), the user
+		validation functions (login/validate), and the logout function (login/logout).
+		This has several custom form_validation callback functions:
+		For login:
+			_check_login - makes sure the user's credentials are valid
+		For register:
+			_check_email - makes sure the email is not already registered
+			_umich_email - makes sure that the email provided is @umich.edu 
+			_check_username - makes sure the username is available
+			_check_password - makes sure the two passwords match up
+		For validate
+			_check_validation - checks the validation code; the correct code is the md5 hash of the user's email
+
+|models
+	>nav_bar_model
+		Model for creating the nav_bar. 
+		getNavBarLinks() - Retrieves the navigation links from nav_links and returns them as a table to the caller
+		
+	>static_pages_model
+		This model is meant to contain functions that will work with the static_pages table. 
+		getPageContent() - allows getting page titles for the navigation bar and loading page content.
+		Will be able to update static pages.
+		
+	>user_model
+		This model contains functions for dealing with users.
+		All the functions take an array with the field names as parameters (sans activate_account and secure).
+		addUser() - adds a user to the table with status=>inactive and activation_code=>md5(email)
+					returns the id of the new user, or false for an error
+		updateUser() - updates a user.
+					   requires the userID to be passed in
+					   updates all other fields passed to it (send password as hash)
+					   returns the number of affected rows (ideally 1 or 0, except for batch operations by admin)
+		getUsers() - gets all users that match the parameters passed to the function
+					 optional parameters:
+					 	limit - max number of records to return
+					 	offset - starting result record number
+					 	sortby - field to sort by
+					 	sortdirection - direction to sort (asc or desc)
+					 returns user as a singular object if there is only one result
+					 returns array of users if there is more than one result
+		login() - validates credentials and sets session=>userdata
+				  requires username and password (as hash) to be passed
+				  sets session=>userdata with username, first_name, last_name, userType, email, and userID
+				  returns true if login successful
+				  returns false if login unsuccessful
+		email_validation() - sends the user an email with activation code
+							 requires email to be passed in the array
+		activate_account() - activates the user account, setting status=>active
+							 requires a activation code passed in
+							 returns true if activated, returns false if not
+		secure() - function to help secure pages
+				   requires a single value (i.e. 'admin') or array (i.e. array('admin', 'user')) passed in
+				   returns true if session=>userdata['userType'] reflects a parameter in the argument passed in
+				   returns false otherwise
+				   user this in the construct of a controller along with a redirect to secure parts of the site
+
+|views
+	|include
+		>footer
+			This is the footer view. It contains the div for the bottom style bar, the small about box,
+			and Google Analytics.
+			This is loaded by include/template.
+			
+		>header
+			This is the header view. It includes the html5 doctype, the head, the css link, and the title image.
+			It requires 'css' to be sent into it.
+			This is loaded by include/template.
+			
+		>navigation
+			This is the navigation view. It has a navigation pane (across the window) and the bar (smaller).
+			This requires a 'nav_data' array to be passed into it, containing 'url' and 'name', best created
+			from the nav_link_model.
+			This is loaded by include/template.
+			
+		>template
+			This is the main view that should be used.
+			Requires the following variables to be passed to it:
+				css - HTML for the css to be loaded
+				navigation - the name of the nav bar view
+				nav_data - array for creating the navigation bar
+				ad - which google ad to use
+				view_name - name of the view to load
+				page_data - the content/title array for the page (if applicable)
+			Most imporatantly, this loads:
+				include/header, css
+				include/ . navigation, nav_data
+				echos the div for the body_pane
+				if there is an ad, it loads the divs and the ad
+				if there is a view_name
+					it loads the body and content divs (nested)
+					if there is page_data passed in we pass that to the view_name as well
+					and we close the body and content divs
+				echos the closing div for the body_pane
+				include/footer
+			This loads the entire template for the site, so most views should be loaded through this.
+			Also, this makes it so that you don't have to have any specific requirements in your view
+			files, you can just put in the content that you want to be on the page
+			
+	>activate_view
+		This is the form for activating the user account.
+		Called by login/validation.
+		
+	>contact_view
+		This is the form for the contact us page.
+		Called by the contact controller.
+		
+	>dashboard_view
+		-needs to be secure- user, admin
+		This is the user dashboard view. It contains a password change and a personal info update form.
+		It is called by the (user) dashboard controller.
+		
+	>home_view
+		This is the login form.
+		It is called by the login controller.
+		
+	>register_view
+		This is the view for the registration form.
+		Called by login/register.

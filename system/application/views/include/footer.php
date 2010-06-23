@@ -1,4 +1,10 @@
-
+<?php
+	/*
+		This is the footer view. It contains the div for the bottom style bar, the small about box,
+		and Google Analytics.
+		This is loaded by include/template.
+	*/
+?>
 <div id="bottom_bar"></div>
 <div id="footer">
 	<div id="footer_content">

@@ -1,3 +1,9 @@
+<?php
+	/*
+		This is the form for the contact us page.
+		Called by the contact controller
+	*/
+?>
 <?php 
 
 $this->load->helper('form');

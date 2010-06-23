@@ -1,3 +1,10 @@
+<?php
+	/*
+		-needs to be secure- user, admin
+		This is the user dashboard view. It contains a password change and a personal info update form.
+		It is called by the (user) dashboard controller
+	*/
+?>
 <div id="announcement"><?=$this->session->flashdata('action')?></div>
 <div class="error"><?php echo validation_errors(); ?></div>
 <div id="password_reset">

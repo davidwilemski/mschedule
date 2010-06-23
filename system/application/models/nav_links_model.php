@@ -1,4 +1,10 @@
 <?php
+	/*
+		Model for creating the nav_bar. 
+		getNavBarLinks() - Retrieves the navigation links from nav_links and returns them as a table to the caller
+	*/
+?>
+<?php
 
 //handles nav bar
 class Nav_links_model extends Model

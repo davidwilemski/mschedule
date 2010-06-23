@@ -1,3 +1,10 @@
+<?php
+	/*
+		This is the header view. It includes the html5 doctype, the head, the css link, and the title image.
+		It requires 'css' to be sent into it.
+		This is loaded by include/template.
+	*/
+?>
 <!DOCTYPE html>
 
 <html>

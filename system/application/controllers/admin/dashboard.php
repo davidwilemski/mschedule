@@ -1,4 +1,11 @@
 <?php
+	/*
+		-secure- admin
+		This controller is going to be the main admin interface for updating
+		user information, static page content, and navigation links.
+	*/
+?>
+<?php
 
 class dashboard extends Controller {
 	
@@ -13,8 +20,8 @@ class dashboard extends Controller {
 			redirect('login');
 		
 		}
-			
-	}
+		
+ 	}
 	
 	function index() {
 		
@@ -24,8 +31,28 @@ class dashboard extends Controller {
 			'css'		=> includeCSSFile("style"),
 			'nav_data'	=> $this->nav_links_model->getNavBarLinks()
 		);
-		
+
+
 		$this->load->view('include/template', $data);
+	}
+	
+	function users() {
+	
+	
+	
+	}
+	
+	
+	function pages() {
+	
+	
+	
+	}
+	
+	function nav_links() {
+	
+	
+	
 	}
 	
 }

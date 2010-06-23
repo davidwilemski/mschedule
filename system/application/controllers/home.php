@@ -1,16 +1,16 @@
 <?php
+	/*
+		This controller loads the home page. Its contents are static.
+	*/
+?>
+<?php
 
 class Home extends Controller {
 	
 	function Home() {
 		
 		parent::controller();
-		$this->load->helper("url");
-		$this->load->helper("html");
-		$this->load->helper("css");
-		
 		$this->load->model('static_pages_model');
-		$this->load->model('nav_links_model');
 	}
 	
 	function index($page = 'index') {		
