@@ -9,7 +9,7 @@
 		For register:
 			_check_email - makes sure the email is not already registered
 			_umich_email - makes sure that the email provided is @umich.edu 
-			_check_username - makes sure the username is avaliable
+			_check_username - makes sure the username is avaliable, taking the username from the email
 			_check_password - makes sure the two passwords match up
 		For validate
 			_check_validation - checks the validation code; the correct code is the md5 hash of the user's email
@@ -33,8 +33,8 @@ class login extends Controller {
 	function index() {
 		
 		
-		$this->form_validation->set_rules('password', 'Password', 'trim|required');
 		$this->form_validation->set_rules('username', 'Username', 'trim|required|callback__check_login');
+		$this->form_validation->set_rules('password', 'Password', 'trim|required');
 		
 		if($this->form_validation->run()) {
 			
@@ -74,8 +74,7 @@ class login extends Controller {
 	
 		$this->form_validation->set_rules('first_name', 'First Name', 'trim|required');
 		$this->form_validation->set_rules('last_name', 'Last Name', 'trim|required');
-		$this->form_validation->set_rules('email', 'Email', 'trim|required|valid_email|callback__check_email|callback__umich_email');
-		$this->form_validation->set_rules('username', 'Username', 'trim|required|callback__check_username');
+		$this->form_validation->set_rules('email', 'umich Email', 'trim|required|valid_email|callback__check_email|callback__umich_email|callback__check_username');
 		$this->form_validation->set_rules('password', 'Password', 'trim|required|callback__check_password');
 		$this->form_validation->set_rules('password_confirm', 'Password Confirmation', 'trim|required');
 	
@@ -85,7 +84,7 @@ class login extends Controller {
 				'first_name'=>$this->input->post('first_name'), 
 				'last_name'=>$this->input->post('last_name'),
 				'email'=>$this->input->post('email'),
-				'username'=>$this->input->post('username'),
+				'username'=>preg_replace('/@umich.edu/', '', $this->input->post('email')),
 				'password'=>md5($this->input->post('password'))
 			);
 			
@@ -118,20 +117,18 @@ class login extends Controller {
 	
 	}
 	
-	function _check_username($username) {
+	function _check_username($email) {
 		
-		if($this->input->post('username')) {
+		if($this->input->post('email')) {
 			
+			$username = preg_replace('/@umich.edu/', '', $email);
 			$user = $this->user_model->getUsers(array('username' => $username));
-			if($user) {
-			
-				$this->form_validation->set_message('_check_username', 'Your username is already registered. Try, try again.');
-				return false;
-			
-			}		
+			if(!$user) 
+				return true;
+				
 		}
-		
-		return true;
+		$this->form_validation->set_message('_check_username', 'Your uniqname (email) is already registered. Try, try again.');
+		return false;
 		
 	}
 	
@@ -140,15 +137,13 @@ class login extends Controller {
 		if($this->input->post('email')) {
 			
 			$user = $this->user_model->getUsers(array('email' => $email));
-			if($user) {
-			
-				$this->form_validation->set_message('_check_email', 'Your email is already registered. Try, try again.');
-				return false;
-			
-			}		
+			if(!$user) 
+				return true;
+				
 		}
 		
-		return true;
+		$this->form_validation->set_message('_check_email', 'Your email is already registered. Try, try again.');
+		return false;
 		
 	}
 	

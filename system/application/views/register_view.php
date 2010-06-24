@@ -8,12 +8,6 @@
 <fieldset>
 <legend>Register</legend>
 <?php
-$username_data = array(
-	'name'	=> 'username',
-	'id'	=> 'username',
-	'value'	=> set_value('username')
-);
-
 $email_data = array(
 	'name'	=> 'email',
 	'id'	=> 'email',
@@ -44,8 +38,7 @@ $last_name_data = array(
 ?>
 <p><label for="first_name">First Name: </label><?php echo form_input($first_name_data); ?></p>
 <p><label for="last_name">Last Name: </label><?php echo form_input($last_name_data); ?></p>
-<p><label for="email">Email: </label><?php echo form_input($email_data); ?></p>
-<p><label for="username">Username: </label><?php echo form_input($username_data); ?></p>
+<p><label for="email">Umich Email: </label><?php echo form_input($email_data); ?></p>
 <p><label for="password">Password: </label><?php echo form_password($password_data); ?></p>
 <p><label for="password_confirm">Password (again): </label><?php echo form_password($password_confirm_data); ?></p>
 

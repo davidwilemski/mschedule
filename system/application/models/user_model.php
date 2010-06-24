@@ -167,9 +167,9 @@ class user_model extends Model {
 		$name = $user->first_name . ' ' . $user->last_name;
 		$email = $user->email;
 		$message = 'Welcome to MSchedule.com, '. $user->first_name . '!' . "\n\n";
-		$message .= 'To activate your account at MSchedule.com, please use the link below, or go to ';
+		$message .= 'To activate your account at MSchedule.com, please use this link: ';
 		$message .= base_url() . 'login/validate/' . md5($email);
-		$message .= 'and enter your activation code.' . "\n\n";
+		$message .= "\n\n" . ' If you have trouble, use the link below and and enter your activation code.' . "\n\n";
 		$message .= 'Link: ' . base_url() . 'login/validate' . "\n";
 		$message .= 'Activation code (if link above does not work): ' . md5($email) . "\n\n";
 		$message .= 'Thank you, and enjoy MSchdule.com!';

@@ -47,7 +47,7 @@
 		For register:
 			_check_email - makes sure the email is not already registered
 			_umich_email - makes sure that the email provided is @umich.edu 
-			_check_username - makes sure the username is available
+			_check_username - makes sure the username is avaliable, taking the username from the email
 			_check_password - makes sure the two passwords match up
 		For validate
 			_check_validation - checks the validation code; the correct code is the md5 hash of the user's email
