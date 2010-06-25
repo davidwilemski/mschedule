@@ -78,6 +78,11 @@ class login extends Controller {
 		$this->form_validation->set_rules('password', 'Password', 'trim|required|callback__check_password');
 		$this->form_validation->set_rules('password_confirm', 'Password Confirmation', 'trim|required');
 	
+		if($this->session->userdata('userID'))
+		{
+			redirect('dashboard');
+		}
+		
 		if($this->form_validation->run()) {
 		
 			$user = array(
