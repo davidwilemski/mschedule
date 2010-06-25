@@ -42,7 +42,7 @@ $last_name_data = array(
 <p><label for="password">Password: </label><?php echo form_password($password_data); ?></p>
 <p><label for="password_confirm">Password (again): </label><?php echo form_password($password_confirm_data); ?></p>
 
-<?=form_submit('', 'Register', array('class' => 'button'))?>
+<?=form_submit('', 'Register', 'class = "button"')?>
 
 <div class="error"><?=validation_errors()?></div>
 
