@@ -18,6 +18,7 @@
 	</ul>
 	<ul id="login_bar">
 		<?php if($this->session->userdata('userID')) {?>		
+			<li class="nav_item"><?=anchor('dashboard', 'Dashboard')?></li>
 			<li class="nav_item"><?=anchor('login/logout', 'Logout')?></li>
 		<?php } else { ?>
 			<li class="nav_item"><?=anchor('login', 'Login')?></li>
