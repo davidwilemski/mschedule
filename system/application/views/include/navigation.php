@@ -21,6 +21,7 @@
 			<li class="nav_item"><?=anchor('login/logout', 'Logout')?></li>
 		<?php } else { ?>
 			<li class="nav_item"><?=anchor('login', 'Login')?></li>
+			<li class="nav_item"><?=anchor('login/register', 'Register')?></li>
 		<?php } ?>
 	</ul>
 </div>
