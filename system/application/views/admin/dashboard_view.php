@@ -5,7 +5,7 @@
 		<?php
 			for($i = 0; $i < 10; $i++)
 			{
-				echo "<p>Left $i</p>";
+				echo "<p>Center $i</p>";
 			}
 		?>
 	</div>
@@ -17,8 +17,9 @@
 		<?php
 			for($i = 0; $i < 10; $i++)
 			{
-				echo "<p>Right $i</p>";
+				echo "<p>Center $i</p>";
 			}
+
 		?>
 		
 	</div>

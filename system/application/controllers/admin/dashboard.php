@@ -16,20 +16,22 @@
 		//have recently logged in and which are recently registered.
 		//These will link to the pages that allow you to fully manage pages and users and so on.
 		
-class dashboard extends Controller {
+class Dashboard extends Controller {
 	
 	function dashboard() {
 		
 		parent::controller();
 		
-		if(!$this->user_model->Secure(array('userType'=>'admin'))) {
-		
+		if(!$this->user_model->Secure(array('userType'=>'admin'))) 
+		{
 			$this->session->set_flashdata('flashError', 'You must be logged in as an admin to access this page.');
 			$this->session->set_flashdata('flashRedirect', 'admin/dashboard'); //why is this set to admin/dashboard?
 			redirect('login');
-		
 		}
 		
+		$this->load->model('admin/admin_model');
+		
+				
  	}
 	
 	//Index page
@@ -42,8 +44,8 @@ class dashboard extends Controller {
 			'css'		=> includeCSSFile("style") . includeCSSFile("admin_dashboard"),
 			'nav_data'	=> $this->nav_links_model->getNavBarLinks()
 		);
-
-
+		
+		
 		$this->load->view('include/template', $data);
 	}
 	
@@ -64,6 +66,13 @@ class dashboard extends Controller {
 	
 	
 	
+	}
+	
+	//outputs JSON that contains the most recently updated pages from static_pages including id, title, and date_modified
+	function updatedPages()
+	{
+		$pages = $this->admin_model->updatedPages();
+		print_r($pages);
 	}
 	
 }
