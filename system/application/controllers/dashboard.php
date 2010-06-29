@@ -153,20 +153,27 @@ class dashboard extends Controller {
 	
 	function _check_email($email) {
 		
-		$this->form_validation->set_message('_check_email', 'Your email is already registered. Try, try again.');
-		
 		if($this->input->post('email')) {
 			
-			$user = $this->user_model->getUsers(array('email' => $email));
-			if($user) {
-				if($user->userID == $this->session->userdata['userID'])
-					return true;
-				else 
+			$user_1 = $this->user_model->getUsers(array('email' => $email));
+			$user_2 = $this->user_model->getUsers(array('username' => preg_replace('/@umich.edu/', '', $email)));
+			if($user_1) {
+				if($user_1->userID != $this->session->userdata('userID')) {
+					$this->form_validation->set_message('_check_email', 'That email is already registered. Try, try again.');
 					return false;
-			} else 
+				} else
+					return true;
+			} else if ($user_2) {
+				if($user_2->userID != $this->session->userdata('userID')) {
+					$this->form_validation->set_message('_check_email', 'That uniqname is already registered. Try, try again.');
+					return false;
+				} else
+					return true;
+			} else
 				return true;
 		}
 		
+		$this->form_validation->set_message('_check_email', 'Something went wrong. Try, try again.');
 		return false;
 		
 	}

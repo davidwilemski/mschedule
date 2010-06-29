@@ -1,5 +1,14 @@
 <?php  if ( ! defined('BASEPATH')) exit('No direct script access allowed');
 /*
+	libraries
+		database
+		session
+	helpers
+		url
+		html
+		css
+*/
+/*
 | -------------------------------------------------------------------
 | AUTO-LOADER
 | -------------------------------------------------------------------
