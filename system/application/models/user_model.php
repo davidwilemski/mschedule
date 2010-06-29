@@ -86,7 +86,8 @@ class user_model extends Model {
 			'last_name',
 			'status',
 			'password',
-			'userType'
+			'userType',
+			'activate_code'
 		);
 		
 		foreach($fields as $field)
@@ -156,10 +157,10 @@ class user_model extends Model {
 	
 	function email_validation($u = array()) {
 	
-		if(!$this->user_model->_required(array('email'), $u))
+		if(!$this->_required(array('email'), $u))
 			return false;
 	
-		$user = $this->user_model->getUsers(array('email'=>$u['email']));
+		$user = $this->getUsers(array('email'=>$u['email']));
 		
 		$this->load->library('email');
 		$this->load->helper('date');
@@ -184,13 +185,17 @@ class user_model extends Model {
 	
 	}
 	
-	function activate_account($code) {
+	function activate_account($options = array()) {
 		
-		$user = $this->getUsers(array('activate_code'=>$code));
-		
-		if($user)
-			if($this->updateUser(array('userID'=>$user->userID, 'status'=>'active')))
-				return true;
+		if(!$this->_required(array('userID', 'status'), $options))
+			return false;
+			
+		if($this->updateUser($options)) {
+			$this->session->set_flashdata('resent', 'oops');
+			return true;
+		}
+			
+		$this->session->set_flashdata('resent', 'oops');
 		return false;
 	
 	}
@@ -216,6 +221,46 @@ class user_model extends Model {
 		}
 			
 		return false;
+	}
+	
+	function forgot_password($options = array()) {
+		
+		if(!$this->_required(array('userID'), $options))
+			return false;
+		
+		$user = $this->getUsers($options);
+		
+		if($user) {
+			$this->load->library('email');
+			$this->load->helper('date');
+			
+			$name = $user->first_name . ' ' . $user->last_name;
+			$email = $user->email;
+			$code = md5($user->activate_code);
+			
+			$message = 'Greetings from MSchedule.com, '. $user->first_name . '!' . "\n\n";
+			$message .= 'To re-activate your account and change your password at MSchedule.com, please use this link: ';
+			$message .= base_url() . 'login/password_reset/' . $code;
+			$message .= "\n\n" . ' If you have trouble, use the link below and and enter your activation code.' . "\n\n";
+			$message .= 'Link: ' . base_url() . 'login/password_reset' . "\n";
+			$message .= 'Activation code (if link above does not work): ' . $code . "\n\n";
+			$message .= 'Thank you, and we hope you continue to use MSchdule.com!';
+			
+			$this->email->set_newline("\r\n");
+			$this->email->from('Webmaster <noreply@mschedule.com>');
+			$this->email->to($email);
+			$this->email->subject('Your MSchedule.com Account Password Reset!');
+			$this->email->message($message);
+			
+			if(!$this->email->send()) {
+				$this->session->set_flashdata('email', 'Something went wrong. Sorry');
+			}
+			
+			$this->updateUser(array('userID' => $user->userID, 'activate_code' => $code, 'status' => 'inactive'));
+		} else {
+			$this->session->set_flashdata('email', 'Something went wrong. Sorry');
+		}
+			
 	}
 	
 }

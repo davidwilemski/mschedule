@@ -24,9 +24,6 @@ class login extends Controller {
 		parent::Controller();
 		
 		$this->load->library('form_validation');
-		$this->load->helper('css');
-		$this->load->model('nav_links_model');
-		//$this->load->model('static_page_model');
 		
 	}
 	
@@ -71,17 +68,15 @@ class login extends Controller {
 	}
 	
 	function register() {
+		
+		if($this->session->userdata('userID'))
+			redirect('dashboard');
 	
 		$this->form_validation->set_rules('first_name', 'First Name', 'trim|required');
 		$this->form_validation->set_rules('last_name', 'Last Name', 'trim|required');
 		$this->form_validation->set_rules('email', 'umich Email', 'trim|required|valid_email|callback__check_email|callback__umich_email|callback__check_username');
 		$this->form_validation->set_rules('password', 'Password', 'trim|required|callback__check_password');
 		$this->form_validation->set_rules('password_confirm', 'Password Confirmation', 'trim|required');
-	
-		if($this->session->userdata('userID'))
-		{
-			redirect('dashboard');
-		}
 		
 		if($this->form_validation->run()) {
 		
@@ -179,10 +174,16 @@ class login extends Controller {
 	}
 	
 	function validate() {
+		
+		if($this->session->userdata('userID'))
+			redirect('dashboard');
 	
 		if('' != $this->uri->segment(3))
-			if($this->user_model->activate_account($this->uri->segment(3)))
-				redirect('home/activated_account');
+			$user = $this->user_model->getUsers(array('activate_code' => $this->uri->segment(3)));
+			if($user) {
+				if($this->user_model->activate_account(array('status' => 'active', 'userID' => $user->userID)))
+					redirect('home/activated_account');
+			}
 		
 		$this->form_validation->set_rules('email', 'Email', 'trim|required|valid_email');
 		$this->form_validation->set_rules('code', 'Activation Code', 'trim|required|callback__check_validation');
@@ -209,11 +210,11 @@ class login extends Controller {
 		if($this->input->post('code')) {
 			if($this->input->post('email')) {			
 				if(md5($this->input->post('email')) == $code) {
-					if(!$this->user_model->activate_account($code)) {
-					
-						return false;
-					
-					} return true;
+					$user = $this->user_model->getUsers(array('activate_code' => $code));
+					if($user) {
+						if($this->user_model->activate_account(array('status' => 'active', 'userID' => $user->userID)))
+						return true;
+					}
 				}
 			}
 		}
@@ -222,5 +223,97 @@ class login extends Controller {
 		
 	}
 	
-
+	function forgot() {
+		
+		if($this->session->userdata('userID'))
+			redirect('dashboard');
+		
+		$this->form_validation->set_rules('email', 'Email', 'trim|required|valid_email|callback__registered_email');
+		
+		if($this->form_validation->run()) {
+			redirect('home/reactivation_sent');
+		}
+		
+		$data = array(
+			'view_name'	=> 'forgot_view',
+			'ad'		=> 'static/ads/google_ad_120_234.php',
+			'navigation'=> "navigation",
+			'css'		=> includeCSSFile("style"),
+			'nav_data'	=> $this->nav_links_model->getNavBarLinks()
+		);
+		
+		$this->load->view('include/template', $data);
+				
+	}
+	
+	function _registered_email($email) {
+		
+		if($this->input->post('email')) {
+			
+			$user_1 = $this->user_model->getUsers(array('email' => $email));
+			$user_2 = $this->user_model->getUsers(array('username' => preg_replace('/@umich.edu/', '', $this->input->post('email'))));
+			
+			if($user_1) {
+				$this->user_model->forgot_password(array('userID' => $user_1->userID));
+				return true;
+			} else if($user_2) {
+				$this->user_model->forgot_password(array('userID' => $user_2->userID));
+				return true;
+			}
+				
+		}
+		
+		$this->form_validation->set_message('_registered_email', 'This email does not match any of our records. Try, try again.');
+		return false;
+		
+	}
+	
+	function password_reset() {
+		
+		if($this->session->userdata('userID'))
+			redirect('dashboard');
+		
+		$this->form_validation->set_rules('code', 'Code', 'trim|required|callback__password_activate');
+		$this->form_validation->set_rules('password', 'Password', 'trim|required|callback__check_password');
+		$this->form_validation->set_rules('password_confirm', 'Password Confirmation', 'trim|required');
+		
+		
+		if($this->form_validation->run()) {
+			
+			$u = $this->user_model->getUsers(array('activate_code' => $this->input->post('code'), 'status' => 'inactive'));
+			if($u) {
+				$user = $this->user_model->activate_account(array('userID' => $u->userID, 'password' => md5($this->input->post('password')), 'status' => 'active'));
+				if($user) {
+					$this->session->set_flashdata('flashError', 'Password reset. Try logging in.');
+					redirect('login');
+				}
+			} else
+				$this->session->set_flashdata('resent', 'This code is no longer valid. Try logging in.');
+				
+		}
+		
+		$data = array(
+			'view_name'	=> 'password_reset_view',
+			'ad'		=> 'static/ads/google_ad_120_234.php',
+			'navigation'=> "navigation",
+			'css'		=> includeCSSFile("style"),
+			'nav_data'	=> $this->nav_links_model->getNavBarLinks()
+		);
+		
+		$this->load->view('include/template', $data);
+		
+	}
+	
+	function _password_activate($code) {
+		
+		$this->form_validation->set_message('_password_activate', 'Your activation code is invalid for this email. Try, try again.');
+		
+		if($this->input->post('code')) {			
+			if($this->user_model->getUsers(array('activate_code' => $code)))
+				return true;
+		}
+		
+		return false;
+		
+	}
 }
