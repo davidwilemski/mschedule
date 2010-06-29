@@ -15,6 +15,11 @@
 		This controller is going to be the main admin interface for updating
 		user information, static page content, and navigation links.
 
+>controllers/classes.php
+		This controller is for working with a user's class information.
+		import() - loads view for importing classes by classID
+		view() - loads view for showing classes
+
 >controllers/contact.php
 		This controller loads the contact form (public), and sends the email (send_email()) to webmaster@mschedule.com
 
@@ -49,6 +54,12 @@
 			_check_password - makes sure the two passwords match up
 		For validate
 			_check_validation - checks the validation code; the correct code is the md5 hash of the user's email
+
+>models/class_model.php
+		Model for working with student schedules
+		importClasses() - takes the userID and the array of classIDs and adds them to the db
+		addRow() - adds a row to the database with parameters set in $options
+		getClasses() - gets all classes for a userID
 
 >models/nav_links_model.php
 		Model for creating the nav_bar. 
@@ -97,6 +108,13 @@
 		Called by login/validation				  
 
 >views/admin/dashboard_view.php
+
+>views/class/class_view.php
+		This view needs to be handed $page_data, an object that has the classes in it from getClasses().
+		Displays them out on the page.
+
+>views/class/import_view.php
+		This view is for loading in classes BY CLASS NUMBER.
 
 >views/contact_view.php
 		This is the form for the contact us page.
