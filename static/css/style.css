@@ -92,6 +92,14 @@ li.nav_item {
 	padding:16px 5px 0;
 }
 
+#social
+{
+	float: left;
+	padding: 16px 5px 0;
+	width: 80px;
+	height: 200px;
+}
+
 #footer {
 	background:#323740; /*6088C8*/
 	width:800px;

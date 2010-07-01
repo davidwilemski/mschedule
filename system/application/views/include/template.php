@@ -39,6 +39,9 @@ if(isset($ad))
 	include($ad);
 	echo '</div>';
 }
+
+
+
 if(isset($view_name)) 
 {
 	echo '<div id="body">';
@@ -50,6 +53,8 @@ if(isset($view_name))
 	echo '</div>';
 	echo '</div>';
 }
+
+
 
 echo '</div>';
 

@@ -23,4 +23,3 @@
 			<?php echo anchor('home', img('static/images/mschedule_text.png')); ?>
 		</div>
 </div>
-
