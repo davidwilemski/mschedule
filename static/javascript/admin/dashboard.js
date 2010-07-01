@@ -36,7 +36,7 @@ function updateChangedPages()
 				div_content += "<div class='admin_entry'><p>";
 				div_content += json.pages[page].title;
 				div_content += "</p></div>";
-				page_div.append(div_content);
+				page_div.prepend(div_content);
 			}
 			
 	        
