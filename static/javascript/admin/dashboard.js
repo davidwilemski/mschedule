@@ -36,7 +36,7 @@ function updateChangedPages()
 				div_content += "<div class='admin_entry'><p>";
 				div_content += json.pages[page].title;
 				div_content += "</p></div>";
-				page_div.prepend(div_content);
+				page_div.append(div_content);
 			}
 			
 	        
@@ -73,7 +73,7 @@ function updateNewUsers()
 				div_content += ' ';
 				div_content += json.new_users[user].last_name;
 				div_content += "</p></div>";
-				newusers_div.prepend(div_content);
+				newusers_div.html(div_content);
 			}
 			
 	        
