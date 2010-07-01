@@ -73,7 +73,7 @@ function updateNewUsers()
 				div_content += ' ';
 				div_content += json.new_users[user].last_name;
 				div_content += "</p></div>";
-				newusers_div.html(div_content);
+				newusers_div.prepend(div_content);
 			}
 			
 	        
