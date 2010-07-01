@@ -8,6 +8,7 @@
 			ad - which google ad to use
 			view_name - name of the view to load
 			page_data - the content/title array for the page (if applicable)
+			javascript (optional) - HTML to include JS files
 		Most imporatantly, this loads:
 			include/header, css
 			include/ . navigation, nav_data
@@ -25,8 +26,9 @@
 	*/
 ?>
 <?php
-$this->load->view('include/header', $css);
+$data['css'] = $css;
 
+$this->load->view('include/header', $data);
 $this->load->view('include/' . $navigation, $nav_data);
 
 echo '<div id="body_pane">';
@@ -37,7 +39,7 @@ if(isset($ad))
 	include($ad);
 	echo '</div>';
 }
-if(isset($view_name))
+if(isset($view_name)) 
 {
 	echo '<div id="body">';
 	echo '<div id="content">';
@@ -51,6 +53,14 @@ if(isset($view_name))
 
 echo '</div>';
 
-$this->load->view('include/footer');
+//Include Google Analytics for all pages and pass that along with any other JS file loaded into the footer
+if(isset($javascript))
+	$javascript .= includeJSFile('google_analytics');
+else
+	$javascript = includeJSFile('google_analytics');
+
+$footer_data['javascript'] = $javascript;
+
+$this->load->view('include/footer', $footer_data);
 
 ?>

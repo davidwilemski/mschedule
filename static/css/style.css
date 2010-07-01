@@ -80,8 +80,8 @@ li.nav_item {
 }
 
 #content {
-	width:650px;
-	min-width:600px;
+	width:675px;
+	min-width:675px;
 	margin:0 auto;
 	min-height:300px;
 	padding:5px 0;
@@ -151,8 +151,9 @@ textarea {
 }
 
 fieldset {
-	-moz-border-radius:20px 20px 20px 20px;
-	background:none repeat scroll 0 0 #323740;
+	-moz-border-radius:20px;
+	-webkit-border-radius:20px;
+	background:none repeat scroll 0 0 #2C4567;
 	color:white;
 	margin:15px auto;
 	width:300px;
@@ -160,8 +161,9 @@ fieldset {
 }
 
 legend {
-	-moz-border-radius:5px 5px 5px 5px;
-	background:none repeat scroll 0 0 #323740;
+	-moz-border-radius:5px;
+	-webkit-border-radius:5px;
+	background:none repeat scroll 0 0 #2C4567;
 	border:2px solid silver;
 	font-size:15pt;
 	font-weight:bold;

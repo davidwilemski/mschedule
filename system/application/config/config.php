@@ -1,5 +1,7 @@
 <?php  if ( ! defined('BASEPATH')) exit('No direct script access allowed');
-
+/*
+	Whoo hoo! Here's some comments for the config.php file!
+*/
 /*
 |--------------------------------------------------------------------------
 | Base Site URL
@@ -246,7 +248,7 @@ $config['sess_use_database']	= TRUE;
 $config['sess_table_name']		= 'ci_sessions';
 $config['sess_match_ip']		= FALSE;
 $config['sess_match_useragent']	= TRUE;
-$config['sess_time_to_update'] 	= 300;
+$config['sess_time_to_update'] 	= 1200;
 
 /*
 |--------------------------------------------------------------------------
@@ -271,7 +273,7 @@ $config['cookie_path']		= "/";
 | COOKIE data is encountered
 |
 */
-$config['global_xss_filtering'] = FALSE;
+$config['global_xss_filtering'] = TRUE;
 
 /*
 |--------------------------------------------------------------------------

@@ -13,6 +13,7 @@
 #pane_center
 {
     margin: 0px 220px 0px 220px;
+    min-height: 380px;
 }
 
 .pane
@@ -20,5 +21,12 @@
 	width: 200px;
 	margin: auto;
 	padding: 0 3px;
-	border: 2px solid #ffc61e;
+	border: 2px solid #fc3;
+	text-align: left;
+	
+}
+
+.dashboard_head
+{
+	text-align: center;
 }

@@ -9,9 +9,7 @@
 	be mschedule/static/css. You may place CSS
 	files in that directory or create directories
 	under that one.
-*/
 
-/*
 	This function will search the CSS directory for the
 	specified $filename (without .css extension) and 
 	return a string containing the HTML code to load the

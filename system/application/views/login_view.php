@@ -48,6 +48,8 @@ $button_data = array(
 
 <?php echo form_submit($button_data); ?>
 
+<?=anchor('login/forgot', 'Forgot Password')?>
+
 <div class="error"><?php echo validation_errors(); ?></div>
 
 </fieldset>

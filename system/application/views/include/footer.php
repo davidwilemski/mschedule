@@ -12,6 +12,12 @@
 		<p>Maintained by Bryan Kendall, David Wilemski, Tom Bombach, and Jake Schwartz. Copyright 2010.</p>
 	</div>
 </div>
-<script type="text/javascript" src="static/javascript/google_analytics.js" ></script>
+
+<?php
+	if(isset($javascript))
+	{
+		echo $javascript;
+	}
+?>
 </body>
 </html>

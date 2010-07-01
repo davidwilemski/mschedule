@@ -44,6 +44,8 @@ $last_name_data = array(
 
 <?=form_submit('', 'Register', 'class = "button"')?>
 
+<?=anchor('login/forgot', 'Forgot Password')?>
+
 <div class="error"><?=validation_errors()?></div>
 
 </fieldset>

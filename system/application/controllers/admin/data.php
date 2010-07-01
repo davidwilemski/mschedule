@@ -39,6 +39,10 @@
  	//Returns JSON of 10 most recently updated pages
  	function updatedPages()
  	{
+ 		header('Content-Type: text/javascript');    
+ 		header('Cache-Control: no-cache');    
+ 		header('Pragma: no-cache');
+ 		
  		$pages = $this->admin_model->updatedPages();
  		print_r($pages);
  	}
@@ -47,8 +51,21 @@
  	//Outputs JSON of 10 most recently registered users
  	function newUsers()
  	{
+ 		header('Content-Type: text/javascript');    
+ 		header('Cache-Control: no-cache');    
+ 		header('Pragma: no-cache');
+ 		
  		$new_users = $this->admin_model->newUsers();
  		print_r($new_users);
+ 	}
+ 	
+ 	function recentActivity()
+ 	{
+ 		header('Content-Type: text/javascript');    
+ 		header('Cache-Control: no-cache');    
+ 		header('Pragma: no-cache');
+
+ 		echo '{"error": "This feature is not yet available"}';
  	}
  	
  	

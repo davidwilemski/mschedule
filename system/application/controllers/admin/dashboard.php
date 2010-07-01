@@ -45,6 +45,8 @@ class Dashboard extends Controller {
 			'nav_data'	=> $this->nav_links_model->getNavBarLinks()
 		);
 		
+		$data['javascript'] = includeJSFile('jquery');
+		$data['javascript'] .= includeJSFile('admin/dashboard');
 		
 		$this->load->view('include/template', $data);
 	}
