@@ -23,6 +23,8 @@ class Classes extends controller {
 		
 		}
 		
+		$TERM = 'fall10';
+		
 	}
 	
 	function index() {
@@ -43,7 +45,8 @@ class Classes extends controller {
 			$data = array();
 			if($this->input->post('class_boxes')) {
 				for($i = 1; $i <= $this->input->post('class_boxes'); $i++)
-					$data[$i] = $this->input->post('class' . $i);
+					if($this->input->post('class' . $i) != '')
+						$data[$i] = $this->input->post('class' . $i);
 			}
 			
 			if(!$this->class_model->importClasses(array('userID' => $this->session->userdata('userID'), 'class_list' => $data)))
@@ -60,6 +63,9 @@ class Classes extends controller {
 			'nav_data'	=> $this->nav_links_model->getNavBarLinks()
 		);
 		
+		$data['javascript'] = includeJSFile('jquery');
+		$data['javascript'] .= includeJSFile('class_view');
+		
 		$this->load->view('include/template', $data);
 	
 	}
@@ -69,6 +75,10 @@ class Classes extends controller {
 		$this->form_validation->set_message('_check_duplicates', $class . ' has a duplicate here. Please fix and try, try again.');
 		
 		$count = 0;
+		
+		if(!$class) {
+			return true;
+		}
 		
 		for($i = 1; $i <= $this->input->post('class_boxes'); $i++) {
 		
@@ -85,9 +95,23 @@ class Classes extends controller {
 	
 	function _check_valid_class($class) {
 	
-		$this->form_validation->set_message('_check_duplicates', $class . ' is not a valid class ID. Please fix and try, try again.');
+		$this->form_validation->set_message('_check_valid_class', $class . ' is not a valid class ID. Please fix and try, try again.');
 		
-		return true;
+		$list = $this->class_model->getClassIDList();
+		
+		for($i = 1; $i <= $this->input->post('class_boxes'); $i++) {
+		
+			if($this->input->post('class' . $i) == $class) {
+				
+				if(isset($list[$class])) {
+					return true;
+				}
+			
+			} 
+		
+		}
+		
+		return false;
 	
 	}
 	
@@ -95,13 +119,18 @@ class Classes extends controller {
 	
 		$classes = $this->class_model->getClasses(array('userID' => $this->session->userdata('userID')));
 		
+		$info = array();
+		foreach($classes as $class) {
+			$info[] = $this->class_model->getClassDetail(array('classid' => $class->classID));
+		}
+		
 		$data = array(
 			'view_name'	=> 'class/class_view',
 			'ad'		=> 'static/ads/google_ad_120_234.php',
 			'navigation'=> "navigation",
 			'css'		=> includeCSSFile("style"),
 			'nav_data'	=> $this->nav_links_model->getNavBarLinks(),
-			'page_data'	=> $classes
+			'page_data'	=> $info
 		);
 		
 		$this->load->view('include/template', $data);

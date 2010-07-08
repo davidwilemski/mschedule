@@ -14,10 +14,10 @@ if($this->session->flashdata('error')) { ?>
 <fieldset>
 <legend>Import Classes</legend>
 
-<?=form_hidden('class_boxes', '6')?>
+<input type="hidden" id="class_boxes" name="class_boxes" value="3"></input>
 <?php
 $inputs = array();
-for($i = 1; $i <=6; $i++) {
+for($i = 1; $i <=3; $i++) {
 	$inputs[$i] = array(
 		'name'	=> 'class' . $i,
 		'id'	=> 'class' . $i,
@@ -31,12 +31,31 @@ $button_data = array(
 	'value'	=> 'Submit',
 	'class'	=> 'button'
 );
+
+$add_button_data = array(
+	'name'	=> 'add',
+	'id'	=> 'add',
+	'value'	=> 'true',
+	'content'	=> '+',
+	'class'	=> 'button'
+);
+
+$remove_button_data = array(
+	'name'	=> 'remove',
+	'id'	=> 'remove',
+	'value'	=> 'true',
+	'content'	=> '-',
+	'class'	=> 'button'
+);
+
 ?>
 <?php foreach($inputs as $input) { ?>
-<p><label for="<?=$input['name']?>">Class ID: </label><?=form_input($input)?></p>
+<p id="<?=$input['id']?>"><label for="<?=$input['name']?>">Class ID: </label><?=form_input($input)?></p>
 <?php } ?>
 
 <?=form_submit($button_data)?>
+<?=form_button($add_button_data)?>
+<?=form_button($remove_button_data)?>
 
 <div class="error"><?=validation_errors()?></div>
 
