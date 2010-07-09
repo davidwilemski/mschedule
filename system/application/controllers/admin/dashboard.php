@@ -25,7 +25,7 @@ class Dashboard extends Controller {
 		if(!$this->user_model->Secure(array('userType'=>'admin'))) 
 		{
 			$this->session->set_flashdata('flashError', 'You must be logged in as an admin to access this page.');
-			$this->session->set_flashdata('flashRedirect', 'admin/dashboard'); //why is this set to admin/dashboard?
+			$this->session->set_flashdata('flashRedirect', 'admin/dashboard');
 			redirect('login');
 		}
 		

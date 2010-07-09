@@ -79,5 +79,38 @@ class class_model extends Model {
 		return $q->result();
 	
 	}
+	
+	function getClassDetail($options = array()) {
+	
+		if(!$this->_required(array('classid'), $options))
+			return false;
+		
+		$this->db->where('classid', $options['classid']);
+			
+		$this->db->from('classes_fall10');
+		$q = $this->db->get();
+		
+		return $q->row(0);
+	
+	}
+	
+	function getClassIDList() {
+		
+		$this->db->select('classid');
+		
+		$this->db->from('classes_fall10');
+		
+		$q = $this->db->get();
+		
+		$list = $q->result();
+		
+		$return = array();
+		foreach($list as $l) {
+			$return[$l->classid] = 1;
+		}
+		
+		return $return;
+		
+	}
 
 }

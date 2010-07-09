@@ -13,7 +13,8 @@ $this->load->helper('form');
 echo form_open('dashboard/password_reset'); 
 ?>
 <fieldset>
-<legend>Change Password</legend>
+<legend id="password_label">Change Password</legend>
+<div id="password_form" style="display: none;">
 <?php
 $curr_password = array(
 	'name'	=> 'password',
@@ -42,6 +43,7 @@ $button_data = array(
 <p><label for="new_password2">Confirm Password: </label><?=form_password($new_password2)?></p>
 
 <?php echo form_submit($button_data); ?>
+</div>
 
 </fieldset>
 
@@ -54,7 +56,8 @@ $this->load->helper('form');
 echo form_open('dashboard/modify_user'); 
 ?>
 <fieldset>
-<legend>Personal Info</legend>
+<legend id="info_label">Personal Info</legend>
+<div id="personal_info_form" style="display: none;">
 <?php
 $email = array(
 	'name'	=> 'email',
@@ -86,6 +89,7 @@ $button_data = array(
 <p><label for="new_password2">Email: </label><?=form_input($email)?></p>
 
 <?php echo form_submit($button_data); ?>
+</div>
 
 </fieldset>
 

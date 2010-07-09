@@ -14,6 +14,15 @@
 		-secure- admin
 		This controller is going to be the main admin interface for updating
 		user information, static page content, and navigation links.
+		
+		This controller will handle the management of static pages and static page content as well as user profiles and 
+		will later be integrated with the mschedule app giving the ability to manage user schedules and manually update the
+		classes in our database.	
+		
+
+>controllers/admin/data.php
+	These methods will output the JSON data required for the admin pages (could be used elsewhere if needed... would just 
+	have to adjust the authentication a bit...)
 
 >controllers/classes.php
 		This controller is for working with a user's class information.
@@ -159,6 +168,7 @@
 			ad - which google ad to use
 			view_name - name of the view to load
 			page_data - the content/title array for the page (if applicable)
+			javascript (optional) - HTML to include JS files
 		Most imporatantly, this loads:
 			include/header, css
 			include/ . navigation, nav_data

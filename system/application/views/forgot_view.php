@@ -8,7 +8,7 @@
 $this->load->helper('form');
 if($this->session->flashdata('resent')) { ?>
 <div class="error"><?=$this->session->flashdata('resent')?></div>
-<?php}
+<?php }
 ?>
 <?=form_open('login/forgot')?>
 <fieldset>

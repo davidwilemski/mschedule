@@ -3,6 +3,8 @@
 	These methods will output the JSON data required for the admin pages (could be used elsewhere if needed... would just 
 	have to adjust the authentication a bit...)
  */
+?>
+<?php
  
  class Data extends Controller 
  {
