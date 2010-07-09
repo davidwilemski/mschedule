@@ -46,6 +46,7 @@ class dashboard extends Controller {
 		
 		$data['javascript'] = includeJSFile('jquery');
 		$data['javascript'] .= includeJSFile('dashboard_view');
+		
 		$this->load->view('include/template', $data);
 	}
 	

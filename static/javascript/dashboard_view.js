@@ -1,5 +1,4 @@
 $('document').ready(function() {
-	console.log("something");
 	var password = $("#password_form");
 	var info = $("#personal_info_form");
 	
