@@ -41,9 +41,11 @@ class dashboard extends Controller {
 			'ad'		=> 'static/ads/google_ad_120_234.php',
 			'navigation'=> "navigation",
 			'css'		=> includeCSSFile("style"),
-			'nav_data'	=> $this->nav_links_model->getNavBarLinks()
+			'nav_data'	=> $this->nav_links_model->getNavBarLinks(),
 		);
 		
+		$data['javascript'] = includeJSFile('jquery');
+		$data['javascript'] .= includeJSFile('dashboard_view');
 		$this->load->view('include/template', $data);
 	}
 	

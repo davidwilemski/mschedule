@@ -59,9 +59,10 @@ class Classes extends controller {
 			'view_name'	=> 'class/import_view',
 			'ad'		=> 'static/ads/google_ad_120_234.php',
 			'navigation'=> "navigation",
-			'css'		=> includeCSSFile("style"),
 			'nav_data'	=> $this->nav_links_model->getNavBarLinks()
 		);
+		
+		$data['css'] = includeCSSFile("style");
 		
 		$data['javascript'] = includeJSFile('jquery');
 		$data['javascript'] .= includeJSFile('class_view');
@@ -73,6 +74,8 @@ class Classes extends controller {
 	function _check_duplicates($class) {
 	
 		$this->form_validation->set_message('_check_duplicates', $class . ' has a duplicate here. Please fix and try, try again.');
+		
+		$this->session->set_flashdata('fields', $this->input->post('class_boxes'));
 		
 		$count = 0;
 		
@@ -96,6 +99,8 @@ class Classes extends controller {
 	function _check_valid_class($class) {
 	
 		$this->form_validation->set_message('_check_valid_class', $class . ' is not a valid class ID. Please fix and try, try again.');
+		
+		$this->session->set_flashdata('fields', $this->input->post('class_boxes'));
 		
 		$list = $this->class_model->getClassIDList();
 		
@@ -128,10 +133,11 @@ class Classes extends controller {
 			'view_name'	=> 'class/class_view',
 			'ad'		=> 'static/ads/google_ad_120_234.php',
 			'navigation'=> "navigation",
-			'css'		=> includeCSSFile("style"),
 			'nav_data'	=> $this->nav_links_model->getNavBarLinks(),
 			'page_data'	=> $info
 		);
+		
+		$data['css'] = includeCSSFile("style");
 		
 		$this->load->view('include/template', $data);
 	

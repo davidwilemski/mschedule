@@ -7,17 +7,18 @@
 $this->load->helper('form');
 if($this->session->flashdata('error')) { ?>
 <div class="error"><?=$this->session->flashdata('error')?></div>
-<?php } ?>
-
+<?php }
+// This sets the number of fields that are loaded in the view
+if(!$this->session->flashdata('fields')) $fields = '3'; else $fields = $this->session->flashdata('fields'); ?>
 <?=form_open('classes/import')?>
 
 <fieldset>
 <legend>Import Classes</legend>
 
-<input type="hidden" id="class_boxes" name="class_boxes" value="3"></input>
+<input type="hidden" id="class_boxes" name="class_boxes" value=<?=$fields?>></input>
 <?php
 $inputs = array();
-for($i = 1; $i <=3; $i++) {
+for($i = 1; $i <=$fields; $i++) {
 	$inputs[$i] = array(
 		'name'	=> 'class' . $i,
 		'id'	=> 'class' . $i,
