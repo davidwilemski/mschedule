@@ -44,7 +44,7 @@ class Admin_model extends Model
 	//Returns JSON for the most recently registered users
 	function newUsers()
 	{
-		$this->db->select('userID, first_name, last_name')->from('users')->order_by('userID', 'DESC')->limit(10);
+		$this->db->select('userID, first_name, last_name')->from('users')->order_by('userID', 'ASC')->limit(10);
 		
 		$query = $this->db->get();
 		

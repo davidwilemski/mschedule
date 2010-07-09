@@ -30,13 +30,21 @@ function updateChangedPages()
 	
 	    success : function(json) 
 	    {
-	    				for(var page in json.pages)
+	    	for(var page in json.pages)
 			{
-				var div_content ="";
-				div_content += "<div class='admin_entry'><p>";
-				div_content += json.pages[page].title;
-				div_content += "</p></div>";
-				page_div.prepend(div_content);
+				if($('#' + json.pages[page].id).length == 0)
+				{
+					var div_content ="";
+					div_content += "<div class='admin_entry' id='" + json.pages[page].id + "' ><p>";
+					div_content += json.pages[page].title;
+					div_content += "</p></div>";
+					page_div.prepend(div_content);
+				}
+				else
+				{
+					//$('#' + json.pages[page].id).fadeOut('slow');
+					//$('#' + json.new_users[user].userID).remove();
+				}
 			}
 			
 	        
@@ -67,13 +75,39 @@ function updateNewUsers()
 			
 			for(var user in json.new_users)
 			{
-				var div_content ="";
-				div_content += "<div class='admin_entry'><p>";
-				div_content += json.new_users[user].first_name;
-				div_content += ' ';
-				div_content += json.new_users[user].last_name;
-				div_content += "</p></div>";
-				newusers_div.prepend(div_content);
+			
+				if($('#newuser_' + json.new_users[user].userID).length == 0)
+				{
+					var div_content ="";
+					div_content += "<div class='admin_entry' id='newuser_" + json.new_users[user].userID + "'><p>";
+					div_content += json.new_users[user].first_name;
+					div_content += ' ';
+					div_content += json.new_users[user].last_name;
+					div_content += "</p></div>";
+					newusers_div.prepend(div_content);
+					$('#newuser_' + json.new_users[user].userID).hide();
+					$('#newuser_' + json.new_users[user].userID).fadeIn();
+				}
+				else
+				{
+					/*
+$('#newuser_' + json.new_users[user].userID).fadeOut();
+					$('#newuser_' + json.new_users[user].userID).remove();
+					
+					
+					var div_content ="";
+					div_content += "<div class='admin_entry' id='newuser_" + json.new_users[user].userID + "'><p>";
+					div_content += json.new_users[user].first_name;
+					div_content += ' ';
+					div_content += json.new_users[user].last_name;
+					div_content += "</p></div>";
+					newusers_div.prepend(div_content);
+					$('#newuser_' + json.new_users[user].userID).hide();
+					$('#newuser_' + json.new_users[user].userID).fadeIn();
+
+*/
+
+				}
 			}
 			
 	        

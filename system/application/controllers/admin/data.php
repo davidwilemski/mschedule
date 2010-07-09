@@ -14,9 +14,10 @@
 		
 		if(!$this->user_model->Secure(array('userType'=>'admin'))) 
 		{
-			$this->session->set_flashdata('flashError', 'You must be logged in as an admin to access this page.');
-			$this->session->set_flashdata('flashRedirect', 'admin/data'); //why is this set to admin/dashboard?
-			redirect('login');
+			//$this->session->set_flashdata('flashError', 'You must be logged in as an admin to access this page.');
+			//$this->session->set_flashdata('flashRedirect', 'admin/data'); //why is this set to admin/dashboard?
+			//redirect('login');
+			return '{"error": "You are not authorized to request this information"}';
 		}
 		
 		$this->load->model('admin/admin_model');

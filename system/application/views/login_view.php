@@ -48,7 +48,7 @@ $button_data = array(
 
 <?php echo form_submit($button_data); ?>
 
-<?=anchor('login/forgot', 'Forgot Password')?>
+<?=anchor('login/forgot', 'Forgot Your Password?', 'class="text"')?>
 
 <div class="error"><?php echo validation_errors(); ?></div>
 
