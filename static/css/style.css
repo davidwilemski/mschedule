@@ -36,7 +36,7 @@ h1 {
 	height:90px;
 	background-repeat:repeat-x;
 }
-#nav_bar {
+#nav_bar, #admin_nav_bar{
 	font-family:'Droid Sans';
 	list-style-type:none;
 	margin:0;
@@ -52,7 +52,7 @@ h1 {
 	font-family:'Droid Sans';
 	list-style-type:none;
 	margin:0;
-	padding:3px 22% 2px;
+	padding:3px 0 2px;
 	border:0 1px solid white;
 	border-top:0px;
 	border-bottom:0px;
@@ -119,7 +119,7 @@ li.nav_item {
 	font-size:10pt;
 }
 
-#navigation_pane {
+#navigation_pane, #admin_nav_pane {
 	width:100%;
 	background:#7AAEFF;
 	background-image:url("../images/title_bar.png");

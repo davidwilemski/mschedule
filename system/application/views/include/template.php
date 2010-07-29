@@ -30,6 +30,9 @@ $data['css'] = $css;
 
 $this->load->view('include/header', $data);
 $this->load->view('include/' . $navigation, $nav_data);
+if($this->user_model->Secure(array('userType'=>'admin'))) {
+	$this->load->view('include/admin_nav');
+}
 
 echo '<div id="body_pane">';
 
