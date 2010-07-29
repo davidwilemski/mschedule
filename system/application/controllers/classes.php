@@ -29,7 +29,7 @@ class Classes extends controller {
 	
 	function index() {
 	
-		
+		redirect('classes/view');
 	
 	}
 	
