@@ -40,10 +40,13 @@ class scheduler extends Controller {
 			'view_name'	=> 'mischedule_view',
 			'ad'		=> 'static/ads/google_ad_120_234.php',
 			'navigation'=> "navigation",
-			'css'		=> includeCSSFile("style"),
+			'css'		=> includeCSSFile("style") . includeCSSFile("scheduler"),
 			'nav_data'	=> $this->nav_links_model->getNavBarLinks(),
 			'term' => $term
 		);
+		
+		$data['javascript'] = includeJSFile('jquery');
+		$data['javascript'] .= includeJSFile('mschedule');
 		
 		$this->load->view('include/template', $data);
 	}

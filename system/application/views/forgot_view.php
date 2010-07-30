@@ -24,7 +24,7 @@ $email = array(
 $button_data = array(
 	'name'	=> 'forgot',
 	'id'	=> 'submit',
-	'value'	=> 'Recover',
+	'content'	=> 'Recover',
 	'class'	=> 'button'
 );
 
