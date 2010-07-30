@@ -60,7 +60,7 @@ class user_model extends Model {
 		$options = array_merge(array('status'=>'inactive'), $options);
 		
 		// adds ['activate_code'] = md5(email) to $options
-		$options = array_merge(array('activate_code'=>md5($options['email'])), $options);
+		$options = array_merge(array('activate_code'=>md5($options['email'] + microtime())), $options);
 		
 		// puts it into the table, $options must include all table fields
 		$this->db->insert('users', $options);
@@ -169,10 +169,10 @@ class user_model extends Model {
 		$email = $user->email;
 		$message = 'Welcome to MSchedule.com, '. $user->first_name . '!' . "\n\n";
 		$message .= 'To activate your account at MSchedule.com, please use this link: ';
-		$message .= base_url() . 'login/validate/' . md5($email);
+		$message .= base_url() . 'login/validate/' . md5($email + microtime());
 		$message .= "\n\n" . ' If you have trouble, use the link below and and enter your activation code.' . "\n\n";
 		$message .= 'Link: ' . base_url() . 'login/validate' . "\n";
-		$message .= 'Activation code (if link above does not work): ' . md5($email) . "\n\n";
+		$message .= 'Activation code (if link above does not work): ' . md5($email + microtime()) . "\n\n";
 		$message .= 'Thank you, and enjoy MSchdule.com!';
 		
 		$this->email->set_newline("\r\n");
@@ -236,7 +236,7 @@ class user_model extends Model {
 			
 			$name = $user->first_name . ' ' . $user->last_name;
 			$email = $user->email;
-			$code = md5($user->activate_code);
+			$code = md5($user->activate_code + microtime());
 			
 			$message = 'Greetings from MSchedule.com, '. $user->first_name . '!' . "\n\n";
 			$message .= 'To re-activate your account and change your password at MSchedule.com, please use this link: ';

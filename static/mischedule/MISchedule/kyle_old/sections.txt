@@ -1,0 +1,16 @@
+1			Number of Sections Total
+10453			classid
+3			credits
+45			open_seats
+-1			waitlist (-1 indicates none)
+Lecture			type
+001			section
+			instructor (blank indicates none)
+1			(linkage group - first number in section number?)
+1			(number of meetings below)
+M, 11:00AM - 12:00PM	times (shown to user, program doesn't care)
+HALE AUD BUS		location
+1			(number of class sessions below per week)
+22			Start time (hours past sunday times 2)
+24			End time (hours past sunday times 2)
+Central			campus
