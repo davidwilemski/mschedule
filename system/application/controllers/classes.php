@@ -29,15 +29,13 @@ class Classes extends controller {
 	
 	function index() {
 	
-		
-	
 	}
 	
 	function import() {
 	
 		if($this->input->post('class_boxes')) {
 			for($i = 1; $i <= $this->input->post('class_boxes'); $i++)
-				$this->form_validation->set_rules('class' . $i, 'Class ' . $i, 'trim|callback__check_duplicates|callback__check_valid_class');
+				$this->form_validation->set_rules('class' . $i, 'Class ' . $i, 'trim|callback__check_duplicates|callback__check_valid_class|callback__check_inDB');
 		}
 		
 		if($this->form_validation->run()) {
@@ -69,6 +67,23 @@ class Classes extends controller {
 		
 		$this->load->view('include/template', $data);
 	
+	}
+	
+	function _check_inDB($class) {
+	
+		$go = true;
+		if($class) {
+			$classes = $this->class_model->getClasses(array('userID' => $this->session->userdata('userID')));
+			foreach($classes as $c) {
+				if($c->classID == $class) {
+					$go = false;
+				}
+			}
+		}
+		
+		$this->form_validation->set_message('_check_inDB', $class . ' is already in your list. Please fix and try, try again.');
+	
+		return $go;
 	}
 	
 	function _check_duplicates($class) {
