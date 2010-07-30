@@ -34,7 +34,7 @@ class scheduler extends Controller {
 		
 	}
 	
-	function index() {
+	function index($term = "f10") {
 		
 		$data = array(
 			'view_name'	=> 'mischedule_view',
@@ -42,6 +42,7 @@ class scheduler extends Controller {
 			'navigation'=> "navigation",
 			'css'		=> includeCSSFile("style"),
 			'nav_data'	=> $this->nav_links_model->getNavBarLinks(),
+			'term' => $term
 		);
 		
 		$this->load->view('include/template', $data);

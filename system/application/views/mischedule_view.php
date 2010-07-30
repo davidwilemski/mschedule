@@ -2,8 +2,6 @@
 
 require_once("static/mischedule/v20/php/checkopen.php");
 
-$term = $this->uri->segment(3);
-
 $request = base_url() . "static/mischedule/v20/php/request.php";
 $base = base_url() . "static/mischedule/v20/";
 
