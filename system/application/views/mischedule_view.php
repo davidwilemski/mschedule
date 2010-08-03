@@ -66,6 +66,7 @@ echo form_open();
 	<? $rows = 4; ?>
 	<input type="hidden" value="<?=$rows?>" id="rows">
 	<input type="hidden" value="sel_1" id="selected_row">
+	<p id="class_header">Department   -   Class</p>
 	<?php
 		for($i = 1; $i <= $rows; $i++) {
 			echo '<p id="sel_' . $i . '" class="sel_p">' . form_input(array('id'=>'dept_' . $i, 'name'=>'dept_' . $i, 'class'=>'dept_input', 'readonly'=>'readonly'));
@@ -79,7 +80,7 @@ echo form_open();
 </div>
 
 <div id="time_div">
-Some Content for Times
+	<p id="load_times">Click here to load class times!</p>
 </div>
 
 <div id="section_div">

@@ -2,12 +2,29 @@
 	background-color:green;	
 }
 
-.highlight_p {
-	border: lime 2px solid;
+.sel_p, #class_header {
+	margin: 7px;
+	text-align: center;
+}
+
+.dept_input {
+	width:100px;
+	margin: 0 5px;
+}
+
+.class_input {
+	width:75px;
+	margin: 0 5px;
 }
 
 .highlight_row {
 	background-color:fuchsia;
+}
+
+.highlight_p {
+	border: lime 2px solid;
+	margin: 3px;
+	padding: 0;
 }
 
 table {

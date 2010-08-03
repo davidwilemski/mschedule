@@ -38,6 +38,10 @@ $('document').ready(function () {
 		sch.show();
 	});
 	
+	/**
+	*** Classes Section
+	**/
+	
 	// Let's color our table!
 	var color = false;
 	$(".dept_tr").each( function(item) {
@@ -88,5 +92,18 @@ $('document').ready(function () {
 			$(this).addClass('highlight_p');
 		});
 	});
+	
+	/**
+	*** Times Section
+	**/
 
+	var classes = new Array();
+	$("#load_times").click( function () {
+		$(".sel_p").each( function(item) {
+			var input = $(this).children();
+			if($(input[0]).val() != "")
+				classes.push([$(input[0]).val(), $(input[1]).val()]);
+		});
+		console.log(classes);
+	});
 });
