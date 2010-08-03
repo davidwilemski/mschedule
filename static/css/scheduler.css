@@ -1,21 +1,31 @@
-div.left {
-	float:left;
-	display:block;
-	width:315px;
+.dept_tr, .class_tr {
+	background-color:green;	
 }
 
-div.right {
-	width:315px;
-	float:right;
-	display:block;
+.highlight_p {
+	border: lime 2px solid;
 }
 
-fieldset.left {
-	width:100%;
+.highlight_row {
+	background-color:fuchsia;
 }
 
-fieldset.right {
-	width:100%;
+table {
+	width:675px;
+}
+
+#depts, .class_table {
+	width:325px;
+}
+
+#right_side, #left_side{
+	width:340px;
+}
+
+#department_list, #class_list {
+	height:200px;
+	overflow-y:auto;
+	overflow-x:hidden;
 }
 
 fieldset {

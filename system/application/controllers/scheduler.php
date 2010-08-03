@@ -35,6 +35,8 @@ class scheduler extends Controller {
 	}
 	
 	function index($term = "f10") {
+	
+		$this->load->model('class_model');
 		
 		$data = array(
 			'view_name'	=> 'mischedule_view',
@@ -45,8 +47,7 @@ class scheduler extends Controller {
 			'term' => $term
 		);
 		
-		$data['javascript'] = includeJSFile('jquery');
-		$data['javascript'] .= includeJSFile('mschedule');
+		$data['page_data'] = array('master_list' => $this->class_model->getMasterList());
 		
 		$this->load->view('include/template', $data);
 	}

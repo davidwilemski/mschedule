@@ -112,5 +112,20 @@ class class_model extends Model {
 		return $return;
 		
 	}
+	
+	function getMasterList() {
+		
+		$this->db->from('classes_fall10');
+		$this->db->order_by('dept', 'asc');
+		$this->db->order_by('number', 'asc');
+		$this->db->order_by('section', 'asc');
+		
+		$q = $this->db->get();
+		
+		$list = $q->result_array();
+		
+		return $list;
+		
+	}
 
 }
