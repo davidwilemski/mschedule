@@ -1,7 +1,18 @@
 <?php  if ( ! defined('BASEPATH')) exit('No direct script access allowed');
 /*
-	Whoo hoo! Here's some comments for the config.php file!
+	Here we set the current_term config variable! IMPORTANT TO DO!
 */
+/*
+|--------------------------------------------------------------------------
+| Term
+|--------------------------------------------------------------------------
+|
+| This is the config for what term we are into and scheduling
+| It is going to be in the format "<season><year>"
+|
+*/
+$config['current_term'] = 'fall10';
+
 /*
 |--------------------------------------------------------------------------
 | Base Site URL

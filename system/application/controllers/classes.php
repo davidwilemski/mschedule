@@ -23,8 +23,6 @@ class Classes extends controller {
 		
 		}
 		
-		$TERM = 'fall10';
-		
 	}
 	
 	function index() {

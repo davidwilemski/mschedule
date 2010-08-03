@@ -18,11 +18,9 @@
 
 class scheduler extends Controller {
 	
-	function dashboard() {
+	function scheduler() {
 		
 		parent::controller();
-		
-		$this->load->library('form_validation');
 		
 		if(!$this->user_model->Secure(array('userType'=>array('admin', 'user')))) {
 		
@@ -34,7 +32,7 @@ class scheduler extends Controller {
 		
 	}
 	
-	function index($term = "f10") {
+	function index() {
 	
 		$this->load->model('class_model');
 		
@@ -43,8 +41,7 @@ class scheduler extends Controller {
 			'ad'		=> 'static/ads/google_ad_120_234.php',
 			'navigation'=> "navigation",
 			'css'		=> includeCSSFile("style") . includeCSSFile("scheduler"),
-			'nav_data'	=> $this->nav_links_model->getNavBarLinks(),
-			'term' => $term
+			'nav_data'	=> $this->nav_links_model->getNavBarLinks()
 		);
 		
 		$data['page_data'] = array('master_list' => $this->class_model->getMasterList());

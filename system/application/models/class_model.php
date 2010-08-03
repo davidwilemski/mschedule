@@ -4,6 +4,9 @@
 		importClasses() - takes the userID and the array of classIDs and adds them to the db
 		addRow() - adds a row to the database with parameters set in $options
 		getClasses() - gets all classes for a userID
+		
+		getClassIDList() - returns all class IDs or if DEPT terms are passed as values of an
+						   array, it will return just those DEPT classIDs
 	*/
 ?>
 <?php
@@ -28,7 +31,7 @@ class class_model extends Model {
 			return false;
 	
 		foreach($options['class_list'] as $class) {
-			if(!$this->addRow(array('userID' => $options['userID'], 'classID' => $class)))
+			if(!$this->addRow(array('userID' => $options['userID'], 'classID' => $class, 'term' => $this->config->item('current_term'))))
 				return false;
 		}
 		
@@ -63,6 +66,7 @@ class class_model extends Model {
 			return false;
 		
 		$this->db->where('userID', $options['userID']);
+		$this->db->where('term', $this->config->item('current_term'));
 		
 		
 		if(isset($options['limit']) && isset($options['offset']))
@@ -87,18 +91,22 @@ class class_model extends Model {
 		
 		$this->db->where('classid', $options['classid']);
 			
-		$this->db->from('classes_fall10');
+		$this->db->from('classes_' . $this->config->item('current_term'));
 		$q = $this->db->get();
 		
 		return $q->row(0);
 	
 	}
 	
-	function getClassIDList() {
+	function getClassIDList($options = array()) {
 		
 		$this->db->select('classid');
 		
-		$this->db->from('classes_fall10');
+		foreach($options as $o) {
+			$this->db->where('dept', $o);
+		}
+		
+		$this->db->from('classes_' . $this->config->item('current_term'));
 		
 		$q = $this->db->get();
 		
@@ -113,9 +121,9 @@ class class_model extends Model {
 		
 	}
 	
-	function getMasterList() {
+	function getMasterList($options = array()) {
 		
-		$this->db->from('classes_fall10');
+		$this->db->from('classes_' . $this->config->item('current_term'));
 		$this->db->order_by('dept', 'asc');
 		$this->db->order_by('number', 'asc');
 		$this->db->order_by('section', 'asc');
