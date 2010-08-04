@@ -10,6 +10,7 @@ echo '<script src="' . base_url() . 'static/javascript/mschedule.js" type="text/
 
 $this->load->helper('form');
 
+/*
 $dept_tables = array();
 $dept_html = '<table id="depts">';
 
@@ -26,6 +27,7 @@ foreach($master_list as $l) {
 }
 
 $dept_html .= '</table>';
+*/
 
 echo form_open();
 
@@ -43,14 +45,17 @@ echo form_open();
 	<tr>
 	<td id="left_side">
 		<div id="department_list">
-		<?=$dept_html?>
+		<table id="depts">
+		<?php
+			foreach($master_list as $m) {
+				echo '<tr id="' . $m[0] . '" class="dept_tr"><td>' . $m[0] . '</td><td>' . $m[1] . '</td></tr>';
+			}
+		?>
+		</table>
 		</div>
 		<hr />
 		<div id="class_list">
-		<?php
-			foreach($dept_tables as $d)
-				echo $d['class_html'] . '</table>';
-		?>
+		<table id="class_table" class="class_table"></table>
 		</div>
 	</td>
 	

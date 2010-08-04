@@ -7,6 +7,7 @@
 		
 		getClassIDList() - returns all class IDs or if DEPT terms are passed as values of an
 						   array, it will return just those DEPT classIDs
+		getMasterDepartmentList() - returns an array ready for CI's table helper to show DEPTs
 	*/
 ?>
 <?php
@@ -121,18 +122,43 @@ class class_model extends Model {
 		
 	}
 	
-	function getMasterList($options = array()) {
+	function getMasterDepartmentList($options = array()) {
 		
 		$this->db->from('classes_' . $this->config->item('current_term'));
+		$this->db->select('dept');
 		$this->db->order_by('dept', 'asc');
-		$this->db->order_by('number', 'asc');
-		$this->db->order_by('section', 'asc');
 		
 		$q = $this->db->get();
 		
 		$list = $q->result_array();
 		
-		return $list;
+		$table = array();
+		$junk = array();
+		foreach($list as $l) {
+			if(!isset($junk[$l['dept']])) {
+				$table[] = array($l['dept'], 'dept full name');
+				$junk[$l['dept']] = 1;
+			}
+		}
+		
+		//return $this->table->generate($table);
+		return $table;
+	}
+	
+	function getDeptClassList($options = array()) {
+		
+		$this->db->select('dept, number, class_name, classid');
+		$this->db->order_by('number', 'asc');
+		
+		foreach($options as $o) {
+			$this->db->where('dept', $o);
+		}
+		
+		$this->db->from('classes_' . $this->config->item('current_term'));
+		
+		$q = $this->db->get();
+		
+		return $q->result_array();
 		
 	}
 

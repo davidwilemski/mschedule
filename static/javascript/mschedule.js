@@ -49,12 +49,6 @@ $('document').ready(function () {
 			$(this).addClass('highlight_row');
 		color = !color;
 	});
-	
-	$(".class_tr").each( function(item) {
-		if(color) 
-			$(this).addClass('highlight_row');
-		color = !color;
-	});
 	// Done coloring our tables!
 	
 	var dept = $("#department_list");
@@ -62,20 +56,37 @@ $('document').ready(function () {
 	// Show class list when we click on a department
 	$(".dept_tr").each( function(item) {
 		$(this).click( function () {
-			$("#" + dept.attr('class') + "_classes").hide();
+			// Make sure we can reference what department is selected
 			dept.removeClass().addClass(this.id);
-			$("#" + this.id + "_classes").show();
-		});
-	});
-	
-	// Put the department and class number into the selected paragraph
-	$(".class_tr").each( function (item) {
-		$(this).click( function () {
-			var r = $("#selected_row")
-			var row = r.val();
-			var input = $("#" + row).children();
-			$(input[0]).val( dept.attr('class') );
-			$(input[1]).val( $(this).children().html() );
+			
+			// Make our JSON post call
+			$.post("api/json/class_model/getDeptClassList", { 'data[]': [this.id]}, function(data) {
+				var table = jQuery.parseJSON(data);
+				var cl = $("#class_table");
+				cl.html("");
+				for(var item in table)  {
+					cl.append('<tr id="' + table[item].classid + '" class="class_tr"><td>' + table[item].number + '</td><td>' + table[item].class_name + '</td></tr>');
+				}
+				
+				// Put the department and class number into the selected paragraph
+				$(".class_tr").each( function (item) {
+					$(this).click( function () {
+						var r = $("#selected_row")
+						var row = r.val();
+						var input = $("#" + row).children();
+						$(input[0]).val( dept.attr('class') );
+						$(input[1]).val( $(this).children().html() );
+					});
+				});
+				
+				// Color our table!
+				$(".class_tr").each( function(item) {
+					if(color) 
+						$(this).addClass('highlight_row');
+					color = !color;
+				});
+				
+			});
 		});
 	});
 	
