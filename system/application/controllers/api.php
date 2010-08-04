@@ -19,6 +19,8 @@ class Api extends Controller {
 		
 		$post = $this->input->post('data');
 		
+		//if($method == "getClassSections") print_r($post);
+		
 		$data = $this->$model->$method($post);
 		
 		print_r(json_encode($data));

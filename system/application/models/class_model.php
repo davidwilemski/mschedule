@@ -8,6 +8,7 @@
 		getClassIDList() - returns all class IDs or if DEPT terms are passed as values of an
 						   array, it will return just those DEPT classIDs
 		getMasterDepartmentList() - returns an array ready for CI's table helper to show DEPTs
+		getClassSections() - must recieve a vector in the order of: dept, number
 	*/
 ?>
 <?php
@@ -141,7 +142,6 @@ class class_model extends Model {
 			}
 		}
 		
-		//return $this->table->generate($table);
 		return $table;
 	}
 	
@@ -158,8 +158,37 @@ class class_model extends Model {
 		
 		$q = $this->db->get();
 		
-		return $q->result_array();
+		$list = $q->result_array();
+		
+		$table = array();
+		$junk = array();
+		foreach($list as $l) {
+			if(!isset($junk[$l['number']])) {
+				$table[] = $l;
+				$junk[$l['number']] = 1;
+			}
+		}
+		
+		return $table;
 		
 	}
-
+	
+	function getClassSections($options = array()) {
+		
+		//$this->db->select('dept, number, section');
+		
+		//$this->db->where('dept', 'AERO');
+		//$this->db->where('number', '101');
+		$this->db->where('dept', $options[0]);
+		$this->db->where('number', $options[1]);
+	
+		//$this->db->order_by('section', 'asc');
+		
+		$this->db->from('classes_' . $this->config->item('current_term'));
+		
+		$q = $this->db->get();
+		
+		return $q->result_array();
+	
+	}
 }
