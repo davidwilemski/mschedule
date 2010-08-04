@@ -23,6 +23,20 @@ class Api extends Controller {
 		
 		
 	}
+	
+	function test()
+	{
+		$this->load->library('table');
+
+$data = array(
+             array('Name', 'Color', 'Size'),
+             array('Fred', 'Blue', 'Small'),
+             array('Mary', 'Red', 'Large'),
+             array('John', 'Green', 'Medium')	
+             );
+
+echo $this->table->generate($data);
+	}
 }
 
 ?>

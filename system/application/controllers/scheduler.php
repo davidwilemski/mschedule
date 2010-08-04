@@ -18,7 +18,7 @@
 
 class scheduler extends Controller {
 	
-	function dashboard() {
+	function scheduler() {
 		
 		parent::controller();
 		
