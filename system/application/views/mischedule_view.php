@@ -1,5 +1,9 @@
 <?php 
 
+/*
+	Documentation
+*/
+
 ?>
 
 <?php
