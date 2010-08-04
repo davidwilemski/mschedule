@@ -118,41 +118,72 @@ $('document').ready(function () {
 		
 		$("#section_div").html("");
 		// LOAD SECTION TIMES!
-		var j = 1;
 		$(".sel_p").each( function(item) {
 			// this is the group of text inputs, [0] and [1] are the dept and class number
 			var input = $(this).children();
 			if($(input[0]).val() != "") {
 				var dept = $(input[0]).val();
 				var num = $(input[1]).val();
+				/*start.append('<div id="class_' + j + '_div></div>');
+				start = $("#class_" + j + "_div");
+				start.append('<p><strong>' + dept + ' ' + num + '</strong></p>');
+				start.append('<table border=1 id="' + j + '" class="sections_table">');
+				start.append('</table>');
+				start = $("#" + j);
+				//$("#class_" + j + "_div").prepend('<p><strong>' + dept + ' ' + num + '</strong></p>');*/
+				
+				$("#section_div").append( $('<div>', {
+					id: 'class_' + dept + num + '_div'
+				}));
+				$('#class_' + dept + num + '_div').append( $('<p>', {
+					text: dept + ' ' + num
+				}));
+				$('#class_' + dept + num + '_div').append( $('<table>', {
+					id: 'class_' + dept + num + '_table',
+					border: 1,
+					class: 'sections_table'
+				}));
+				
 				$.post("api/json/class_model/getClassSections", { 'data[]': [dept, num]}, function(data) {
 					var json = jQuery.parseJSON(data);
-					var start = $("#section_div");
-					start.append('<div id="class_' + j + '_div>');
-					start.append('<table border=1 id="' + j + '" class="sections_table">');
-					start.append('</table>');
-					start.append('</div>');
-					var title = true;
 					for(var item in json) {
-						start = $("#" + j);
-						if(title) {
-							$("#class_" + j + "_div").prepend('<p><strong>' + json[item].dept + ' ' + json[item].number + '</strong></p>');
-							title = false;
-						}
-						start.append('<tr id="' + json[item].classid + '"><td>' + '<input use="1" checked="true" type="checkbox" name="section" class_number="' + json[item].number + '" value="' + json[item].classid + '" />' + '</td><td>' + json[item].classid + '</td><td>' + json[item].section + '</td><td>' + json[item].type + '</td><td>' + json[item].days + '</td><td>' + formatNiceTime(json[item].time) + '</td></tr>');
+						var a = json[item].dept;
+						var b = json[item].number;
+						$('#class_' + a + b + '_table').append( $('<tr>', {
+							id: 'show_' + json[item].classid
+						}));
+						$('#show_' + json[item].classid).append( $('<td>', {
+							html: '<input checked="true" type="checkbox" name="section" class_number="' + json[item].number + '" value="' + json[item].classid + '" />'
+						}));
+						$('#show_' + json[item].classid).append( $('<td>', {
+							text: json[item].classid
+						}));
+						$('#show_' + json[item].classid).append( $('<td>', {
+							text: json[item].section
+						}));
+						$('#show_' + json[item].classid).append( $('<td>', {
+							text: json[item].type
+						}));
+						$('#show_' + json[item].classid).append( $('<td>', {
+							text: json[item].days
+						}));
+						$('#show_' + json[item].classid).append( $('<td>', {
+							text: formatNiceTime(json[item].time)
+						}));
 					}
-					j = j + 1;
+					
+					// Add listener to checkboxes $("input[type='checkbox']").each( function(){ $(this).click( function(){ $(this).hide(); }); });
+					$("input[type='checkbox']").each( function(item) {
+						console.log(item);
+						$(this).click( function() {
+							$(this).hide();
+						});
+					});
 				});
 			}
 		});
 		
-		// Add listener to checkboxes
-		$("input[type='checkbox']").each( function(item) {
-			console.log(item);
-			$(this).click( function() {
-				$(this).hide();
-			});
-		});
+		
 	});
 	
 	/**
