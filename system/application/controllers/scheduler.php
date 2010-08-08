@@ -35,6 +35,7 @@ class scheduler extends Controller {
 	function index() {
 	
 		$this->load->model('class_model');
+		$this->load->library('table');
 		
 		$data = array(
 			'view_name'	=> 'mischedule_view',
@@ -44,7 +45,7 @@ class scheduler extends Controller {
 			'nav_data'	=> $this->nav_links_model->getNavBarLinks()
 		);
 		
-		$data['page_data'] = array('master_list' => $this->class_model->getMasterList());
+		$data['page_data'] = array('master_list' => $this->class_model->getMasterDepartmentList());
 		
 		$this->load->view('include/template', $data);
 	}

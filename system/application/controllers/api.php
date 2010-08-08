@@ -12,12 +12,16 @@ class Api extends Controller {
 		
 	}
 	
-	function json($model, $method, $options = null)	
+	function json($model, $method)	
 	{
 
 		$this->load->model($model);
 		
-		$data = $this->$model->$method($options);
+		$post = $this->input->post('data');
+		
+		//if($method == "getClassSections") print_r($post);
+		
+		$data = $this->$model->$method($post);
 		
 		print_r(json_encode($data));
 		
