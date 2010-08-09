@@ -191,4 +191,30 @@ class class_model extends Model {
 		return $q->result_array();
 	
 	}
+	
+	function createSchedules($options = array()) {
+	
+		// Create the largest 4-d array I have ever seen.
+		// Then use it to create schedules.
+		$classes = array();
+		// $o is a classid
+		foreach($options as $o) {
+			$c = $this->class_model->getClassDetail(array('classid'=>$o));
+			if(!isset($classes[$c->dept . $c->number])) {
+				$classes[$c->dept . $c->number] = array();
+			}
+			if(!isset( $classes[$c->dept . $c->number][$c->type] )) {
+				$classes[$c->dept . $c->number][$c->type] = array();
+			}
+			$classes[$c->dept . $c->number][$c->type][$c->section] = array();
+			$classes[$c->dept . $c->number][$c->type][$c->section]['days'] = $c->days;
+			$classes[$c->dept . $c->number][$c->type][$c->section]['time'] = $c->time;
+			$classes[$c->dept . $c->number][$c->type][$c->section]['id'] = $c->classid;
+			$classes[$c->dept . $c->number][$c->type][$c->section]['location'] = $c->location;
+		}
+		
+		print_r($m_sch);		
+		return 1;
+	
+	}
 }

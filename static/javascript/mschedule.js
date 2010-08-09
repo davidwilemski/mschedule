@@ -110,6 +110,7 @@ $('document').ready(function () {
 	*** Sections Section
 	**/
 
+	var classes = Array();
 	$("#sections").click( function () {
 		c.hide();
 		t.hide();
@@ -149,34 +150,40 @@ $('document').ready(function () {
 					for(var item in json) {
 						var a = json[item].dept;
 						var b = json[item].number;
+						
+						classes[json[item].classid] = Array(json[item].dept, json[item].number, json[item].classid, json[item].section, json[item].type, json[item].days, json[item].time);
+						
 						$('#class_' + a + b + '_table').append( $('<tr>', {
 							id: 'show_' + json[item].classid
 						}));
-						$('#show_' + json[item].classid).append( $('<td>', {
-							html: '<input checked="true" type="checkbox" name="section" class_number="' + json[item].number + '" value="' + json[item].classid + '" />'
+						var row = $('#show_' + json[item].classid)
+						row.append( $('<td>', {
+							html: '<input checked="true" type="checkbox" use="1" name="section" value="' + json[item].classid + '" />'
 						}));
-						$('#show_' + json[item].classid).append( $('<td>', {
+						row.append( $('<td>', {
 							text: json[item].classid
 						}));
-						$('#show_' + json[item].classid).append( $('<td>', {
+						row.append( $('<td>', {
 							text: json[item].section
 						}));
-						$('#show_' + json[item].classid).append( $('<td>', {
+						row.append( $('<td>', {
 							text: json[item].type
 						}));
-						$('#show_' + json[item].classid).append( $('<td>', {
+						row.append( $('<td>', {
 							text: json[item].days
 						}));
-						$('#show_' + json[item].classid).append( $('<td>', {
+						row.append( $('<td>', {
 							text: formatNiceTime(json[item].time)
 						}));
 					}
 					
-					// Add listener to checkboxes $("input[type='checkbox']").each( function(){ $(this).click( function(){ $(this).hide(); }); });
+					// Add listener to checkboxes
 					$("input[type='checkbox']").each( function(item) {
-						console.log(item);
 						$(this).click( function() {
-							$(this).hide();
+							if($(this).attr('use') == '1')
+								$(this).attr('use', '0');
+							else
+								$(this).attr('use', '1');
 						});
 					});
 				});
@@ -196,16 +203,21 @@ $('document').ready(function () {
 		sec.hide();
 		sch.show();
 		
-		// TODO: Get information from previous step with checked sections, and start making schedules.
+		var use = Array();
+		
+		$('input[type="checkbox"]').each( function(item) {
+			if($(this).attr('use') == '1') {
+				use.push($(this).val());
+			}
+		});
+		
+		$.post("api/json/class_model/createSchedules", { 'data[]': use }, function(data) {
+			console.log(data);
+		});
+		
 	});
 	
 });
-
-function splitTime(time) {
-	var t = time.split('-');
-	console.log(t);
-	return time;
-}
 
 function formatNiceTime(time) {
 	var t = time.split('-');
