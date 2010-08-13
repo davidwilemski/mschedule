@@ -197,14 +197,19 @@ class class_model extends Model {
 		// Create the largest 4-d array I have ever seen.
 		// Then use it to create schedules.
 		$classes = array();
+		$class_count = 0;
+		$types_count = 0;
+		
 		// $o is a classid
 		foreach($options as $o) {
 			$c = $this->class_model->getClassDetail(array('classid'=>$o));
 			if(!isset($classes[$c->dept . $c->number])) {
 				$classes[$c->dept . $c->number] = array();
+				$class_count++;
 			}
 			if(!isset( $classes[$c->dept . $c->number][$c->type] )) {
 				$classes[$c->dept . $c->number][$c->type] = array();
+				$types_count++;
 			}
 			$classes[$c->dept . $c->number][$c->type][$c->section] = array();
 			$classes[$c->dept . $c->number][$c->type][$c->section]['days'] = $c->days;
@@ -213,8 +218,44 @@ class class_model extends Model {
 			$classes[$c->dept . $c->number][$c->type][$c->section]['location'] = $c->location;
 		}
 		
-		print_r($m_sch);		
-		return 1;
+		$types = array();
+		$place = array();
+		$place_max = array();
+		$k = 0;
+		foreach($classes as $c) {
+			foreach($c as $t) {
+				$types[$k] = $t;
+				$place[$k] = '0';
+				$place_max[] = count($t);
+				$k++;
+			}
+		}
+		
+		$schedules_count = 1;
+		foreach($place_max as $m) {
+			$schedules_count = $schedules_count * $m;
+		}
+		
+		$schedules = array();
+		$last_place = count($place) - 1;
+		for($i = 0; $i < $schedules_count; $i++){
+			$s = array();
+			for($j = 0; $j <= $last_place; $j++) {
+				$p = 0;
+				foreach($types[$j] as $t) {
+					if($p == $place[$j]) {
+						$s[] = $t;
+					}
+					$p++;
+				}
+				
+				//$s[] = $types[$j][$place[$j]];
+			}
+			$schedules[] = $s;
+		}
+		
+		
+		return($schedules);
 	
 	}
 }
