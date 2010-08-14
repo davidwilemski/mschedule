@@ -252,6 +252,19 @@ class class_model extends Model {
 				//$s[] = $types[$j][$place[$j]];
 			}
 			$schedules[] = $s;
+			$go = false;
+			$place[$last_place]++;
+			for($z = $last_place; $z >= 0; $z--) {
+				if($go == false) {
+					if($place[$z] >= $place_max[$z]) {
+						if($schedules_count != ($i + 1) ) {
+							$place[$z] = 0;
+							$place[$z - 1]++;
+							$go = true;
+						}
+					}
+				}
+			}
 		}
 		
 		

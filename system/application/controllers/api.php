@@ -31,9 +31,9 @@ class Api extends Controller {
 	function test() {
 	
 		$this->load->model('class_model');
-		print_r($this->class_model->createSchedules(
+		print_r(json_encode($this->class_model->createSchedules(
 			array(
-				'14785',
+				/*'14785',
 				'14787',
 				'14789',
 				'49025',
@@ -41,7 +41,7 @@ class Api extends Controller {
 				'49027',
 				'14795',
 				'14797',
-				'14799',
+				'14799',*/
 				'11351',
 				'11353',
 				'11355',
@@ -49,7 +49,7 @@ class Api extends Controller {
 				'11367',
 				'11369'
 			)
-		));
+		)));
 	
 	}
 	
