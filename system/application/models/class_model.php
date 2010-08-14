@@ -216,6 +216,42 @@ class class_model extends Model {
 			$classes[$c->dept . $c->number][$c->type][$c->section]['time'] = $c->time;
 			$classes[$c->dept . $c->number][$c->type][$c->section]['id'] = $c->classid;
 			$classes[$c->dept . $c->number][$c->type][$c->section]['location'] = $c->location;
+			$classes[$c->dept . $c->number][$c->type][$c->section]['dept'] = $c->dept;
+			$classes[$c->dept . $c->number][$c->type][$c->section]['number'] = $c->number;
+			$classes[$c->dept . $c->number][$c->type][$c->section]['section'] = $c->section;
+			$classes[$c->dept . $c->number][$c->type][$c->section]['type'] = $c->type;
+		}
+		
+		foreach($classes as $c) {
+			if(isset($c['LEC'])) {
+				if(count($c['LEC']) > 1) {
+					$j = 0;
+					$go = 1;
+					$diff = 0;
+					$lec_sec = array();
+					foreach($c['LEC'] as $s) {
+						if($go < 3) {
+							$diff = $diff + ($s['section'] * pow(-1, $go));
+						}
+						$go++;
+						$lec_sec[$j] = $s['section'];
+						$j++;
+					}
+					
+					$type_names = array('LAB', 'DISC', 'RESC');
+					foreach($type_names as $type_name) {
+						if(isset($c[$type_name])) {
+							foreach($c[$type_name] as $z) {
+								foreach($lec_sec as $l) {
+									if( floor( $z['section'] / $l ) == 1 ) {
+										$classes[$z['dept'] . $z['number']][$type_name][$z['section']]['assoc_lec'] = $l;
+									}
+								}
+							}							
+						}
+					}
+				}
+			}
 		}
 		
 		$types = array();
@@ -248,10 +284,16 @@ class class_model extends Model {
 					}
 					$p++;
 				}
-				
-				//$s[] = $types[$j][$place[$j]];
 			}
-			$schedules[] = $s;
+			
+			// do some checking of the schedule we just created ($s)
+			$tests = true;
+			$tests = $this->class_model->_check_section_assoc($s);
+			// put the schedule into the list, if it passed the tests
+			if($tests)
+				$schedules[] = $s;
+			
+			// increment the place holders so we can create the next one
 			$go = false;
 			$place[$last_place]++;
 			for($z = $last_place; $z >= 0; $z--) {
@@ -267,8 +309,28 @@ class class_model extends Model {
 			}
 		}
 		
-		
 		return($schedules);
 	
+	}
+	
+	function _check_section_assoc($s = array()) {
+		foreach($s as $c) {
+			//print_r($c);
+			if($c['type'] != 'LEC') {
+				$d = $c['dept'];
+				$n = $c['number'];
+				$id = $c['id'];
+				$al = $c['assoc_lec'];
+				foreach($s as $c2) {
+					if($c2['type'] == 'LEC') {
+						if($c2['dept'] == $d and $c2['number'] == $n and $c2['section'] != $al) {
+							return false;
+						}
+					}
+				}
+			}
+		}
+		
+		return true;
 	}
 }
