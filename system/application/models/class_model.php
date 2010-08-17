@@ -212,9 +212,18 @@ class class_model extends Model {
 				$types_count++;
 			}
 			$classes[$c->dept . $c->number][$c->type][$c->section] = array();
+			if(strchr($c->days)) {
+				$c->days = preg_split('/","/', $c->days);
+			}
 			$classes[$c->dept . $c->number][$c->type][$c->section]['days'] = $c->days;
+			if(strchr($c->time)) {
+				$c->time = preg_split('/","/', $c->time);
+			}
 			$classes[$c->dept . $c->number][$c->type][$c->section]['time'] = $c->time;
 			$classes[$c->dept . $c->number][$c->type][$c->section]['id'] = $c->classid;
+			if(strchr($c->location)) {
+				$c->location = preg_split('/","/', $c->location);
+			}
 			$classes[$c->dept . $c->number][$c->type][$c->section]['location'] = $c->location;
 			$classes[$c->dept . $c->number][$c->type][$c->section]['dept'] = $c->dept;
 			$classes[$c->dept . $c->number][$c->type][$c->section]['number'] = $c->number;
@@ -309,7 +318,7 @@ class class_model extends Model {
 			}
 		}
 		
-		return($schedules);
+		return $schedules;
 	
 	}
 	
