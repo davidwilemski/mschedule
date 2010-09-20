@@ -194,7 +194,7 @@ class class_model extends Model {
 	
 	function createSchedules($options = array()) {
 	
-		// Create the largest 4-d array I have ever seen.
+		// Create the largest 4-d array I have ever seen.   <- True Statement - that is a monster
 		// Then use it to create schedules.
 		$classes = array();
 		$class_count = 0;
