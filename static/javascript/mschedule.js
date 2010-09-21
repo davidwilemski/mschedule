@@ -142,8 +142,7 @@ $('document').ready(function () {
 				$('#class_' + dept + num + '_div').append( $('<table>', {
 					id: 'class_' + dept + num + '_table',
 					border: 1,
-					class: 'sections_table'
-				}));
+				}).addClass('sections_table'));
 				
 				$.post("api/json/class_model/getClassSections", { 'data[]': [dept, num]}, function(data) {
 					var json = jQuery.parseJSON(data);
@@ -221,43 +220,20 @@ $('document').ready(function () {
 
 function formatNiceTime(time) {
 	var t = time.split('-');
-	var s = Array();
+	var s = '';
+	var first = 1;
+	
 	for(var a in t) {
-		var suffix = "am";
-		var l = t[a].length;
-		t[a] = t[a] * 1;
-		if(l == 1) {
-			if(t[a] < 1 && t[a] >= 0) {
-				t[a] = t[a] + 12;
-			}
-			s[a] = t[a] + ":00 " + suffix;
-		} else if(l == 2) {
-			if(t[a] > 12) {
-				t[a] = t[a] - 12;
-				suffix = "pm";
-			}
-			s[a] = t[a] + ":00 " + suffix;
-		} else if(l == 3) {
-			if(t[a] < 100 && t[a] >= 0) {
-				t[a] = t[a] + 1200;
-				t[a] = t[a] + "z"
-				s[a] = t[a].charAt(0) + t[a].charAt(1) + ":" + t[a].charAt(2) + t[a].charAt(3) + " " + suffix;
-			} else
-				t[a] = t[a] + "z"
-				s[a] = t[a].charAt(0) + ":" + t[a].charAt(1) + t[a].charAt(2) + " " + suffix;
-		} else if(l == 4) {
-			if(t[a] > 1259) {
-				t[a] = t[a] - 1200;
-				suffix = "pm";
-			} 
-			if(t[a] < 1000) {
-				t[a] = t[a] + "z"
-				s[a] = t[a].charAt(0) + ":" + t[a].charAt(1) + t[a].charAt(2) + " " + suffix;
-			} else {
-				t[a] = t[a] + "z"
-				s[a] = t[a].charAt(0) + t[a].charAt(1) + ":" + t[a].charAt(2) + t[a].charAt(3) + " " + suffix;
-			}
+		if(a[0] == '0') {
+			s = s + String(a[1]) + String(a[2]) + String(a[3]);
+		} else {
+			s = s + String(a[0]) + String(a[1]) + String(a[2]) + String(a[3]);
+		}
+		if(first == 1) {
+			s = s + '-';
+			first = 0;
 		}
 	}
-	return s[0] + " - " + s[1];
+	
+	return s;
 }
