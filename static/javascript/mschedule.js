@@ -244,7 +244,40 @@ $('document').ready(function () {
 		});
 		
 		$.post("api/json/class_model/createSchedules", { 'data[]': use }, function(data) {
-			console.log(data);
+			//console.log(data);
+			var tableString = "";
+			var json = jQuery.parseJSON(data);
+			for(var j in json) {
+				tableString += '<table><tbody><tr>';
+				tableString += '<td>Class ID</td>';
+				tableString += '<td>Department</td>';
+				tableString += '<td>Class Number</td>';
+				tableString += '<td>Class Section</td>';
+				tableString += '<td>Class Type</td>';
+				tableString += '</tr>';
+				for(var c in json[j]) {
+					//console.log(json[j][c]);
+					tableString += '<tr>';
+					tableString += '<td>';
+					tableString += json[j][c].classid;
+					tableString += '</td>';
+					tableString += '<td>';
+					tableString += json[j][c].dept;
+					tableString += '</td>';
+					tableString += '<td>';
+					tableString += json[j][c].number;
+					tableString += '</td>';
+					tableString += '<td>';
+					tableString += json[j][c].section;
+					tableString += '</td>';
+					tableString += '<td>';
+					tableString += json[j][c].type;
+					tableString += '</td>';
+					tableString += '</tr>';
+				}
+				tableString += '</tbody></table>';
+			}
+			$("#schedule_div").html(tableString);
 		});
 		
 	});
