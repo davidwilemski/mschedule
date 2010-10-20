@@ -168,11 +168,44 @@ $('document').ready(function () {
 						row.append( $('<td>', {
 							text: json[item].type
 						}));
+						
+						var l = json[item].location.split(';');
+						var lString = json[item].location;
+						if(l[1]) {
+							lString = '';
+							for(var z in l) {
+								lString += '<p>' + l[z] + '</p>';
+							}
+						}
+						
 						row.append( $('<td>', {
-							text: json[item].days
+							html: lString 
 						}));
+						
+						var d = json[item].days.split(';');
+						var dString = json[item].days;
+						if(d[1]) {
+							dString = '';
+							for(var z in d) {
+								dString += '<p>' + d[z] + '</p>';
+							}
+						}
+						
 						row.append( $('<td>', {
-							text: formatNiceTime(json[item].time)
+							html: dString
+						}));
+						
+						var t = json[item].time.split(';');
+						var tString = json[item].time;
+						if(t[1]) {
+							tString = '';
+							for(var z in t) {
+								tString += '<p>' + formatNiceTime(t[z]) + '</p>';
+							}
+						}
+						
+						row.append( $('<td>', {
+							html: tString
 						}));
 					}
 					
@@ -211,7 +244,40 @@ $('document').ready(function () {
 		});
 		
 		$.post("api/json/class_model/createSchedules", { 'data[]': use }, function(data) {
-			console.log(data);
+			//console.log(data);
+			var tableString = "";
+			var json = jQuery.parseJSON(data);
+			for(var j in json) {
+				tableString += '<table><tbody><tr>';
+				tableString += '<td>Class ID</td>';
+				tableString += '<td>Department</td>';
+				tableString += '<td>Class Number</td>';
+				tableString += '<td>Class Section</td>';
+				tableString += '<td>Class Type</td>';
+				tableString += '</tr>';
+				for(var c in json[j]) {
+					//console.log(json[j][c]);
+					tableString += '<tr>';
+					tableString += '<td>';
+					tableString += json[j][c].classid;
+					tableString += '</td>';
+					tableString += '<td>';
+					tableString += json[j][c].dept;
+					tableString += '</td>';
+					tableString += '<td>';
+					tableString += json[j][c].number;
+					tableString += '</td>';
+					tableString += '<td>';
+					tableString += json[j][c].section;
+					tableString += '</td>';
+					tableString += '<td>';
+					tableString += json[j][c].type;
+					tableString += '</td>';
+					tableString += '</tr>';
+				}
+				tableString += '</tbody></table>';
+			}
+			$("#schedule_div").html(tableString);
 		});
 		
 	});
@@ -221,18 +287,28 @@ $('document').ready(function () {
 function formatNiceTime(time) {
 	var t = time.split('-');
 	var s = '';
-	var first = 1;
 	
-	for(var a in t) {
-		if(a[0] == '0') {
-			s = s + String(a[1]) + String(a[2]) + String(a[3]);
-		} else {
-			s = s + String(a[0]) + String(a[1]) + String(a[2]) + String(a[3]);
+	for(var i = 0; i <= 1; i++) {
+		var suf = 'AM';
+		var num = t[i] * 1;
+	
+		if(num > 1200) {
+			suf = 'PM';
 		}
-		if(first == 1) {
-			s = s + '-';
-			first = 0;
+		
+		if(num > 1259) {
+			num = num - 1200;
 		}
+		
+		num_str = num.toString();
+		
+		if(num_str.length == 3)
+			s += num_str[0] + ':' + num_str[1] + num_str[2] + suf;
+		else
+			s += num_str[0] + num_str[1] + ':' + num_str[2] + num_str[3] + suf;
+		
+		if(i == 0)
+			s += '-';
 	}
 	
 	return s;

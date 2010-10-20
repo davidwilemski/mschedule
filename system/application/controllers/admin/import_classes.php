@@ -107,7 +107,43 @@ class import_classes extends Controller {
 			$time = $newtime;
 			
 			$tue = preg_replace('/T/', 'TU', $tue);
-			$days = $mon.$tue.$wed.$thu.$fri.$sat.$sun;
+			
+			// Splitting up the days to make it easier to split them
+			$days = '';
+			
+			if($mon)
+				$days .= $mon;
+			if($tue)
+				if(!$days)
+					$days .= $tue;
+				else 
+					$days .= ',' . $tue;
+			if($wed)
+				if(!$days)
+					$days .= $wed;
+				else 
+					$days .= ',' . $wed;
+			if($thu)
+				if(!$days)
+					$days .= $thu;
+				else 
+					$days .= ',' . $thu;
+			if($fri)
+				if(!$days)
+					$days .= $fri;
+				else 
+					$days .= ',' . $fri;
+			if($sat)
+				if(!$days)
+					$days .= $sat;
+				else 
+					$days .= ',' . $sat;
+			if($sun)
+				if(!$days)
+					$days .= $sun;
+				else 
+					$days .= ',' . $sun;
+			
 		
 			//make the fields sql-friendly - automatically done by code-igniter		
 
@@ -155,6 +191,7 @@ class import_classes extends Controller {
 					//echo "argh" . $classnum . '</br>';
 					if($name != "" && $num != "" && $classnum != "")
 					{
+						//echo $time . '</br>';
 						$data['days'] = $data['days'] . ';' . $days;
 						$data['time'] = $data['time'] . ';' . $time;
 						$data['location'] = $data['location'] . ';' . $location;

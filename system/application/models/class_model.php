@@ -212,16 +212,16 @@ class class_model extends Model {
 				$types_count++;
 			}
 			$classes[$c->dept . $c->number][$c->type][$c->section] = array();
-			if(strchr($c->days)) {
+			if($c->days) {
 				$c->days = preg_split('/","/', $c->days);
 			}
 			$classes[$c->dept . $c->number][$c->type][$c->section]['days'] = $c->days;
-			if(strchr($c->time)) {
+			if($c->time) {
 				$c->time = preg_split('/","/', $c->time);
 			}
 			$classes[$c->dept . $c->number][$c->type][$c->section]['time'] = $c->time;
-			$classes[$c->dept . $c->number][$c->type][$c->section]['id'] = $c->classid;
-			if(strchr($c->location)) {
+			$classes[$c->dept . $c->number][$c->type][$c->section]['classid'] = $c->classid;
+			if($c->location) {
 				$c->location = preg_split('/","/', $c->location);
 			}
 			$classes[$c->dept . $c->number][$c->type][$c->section]['location'] = $c->location;
@@ -231,6 +231,9 @@ class class_model extends Model {
 			$classes[$c->dept . $c->number][$c->type][$c->section]['type'] = $c->type;
 		}
 		
+		/*
+		 * This loop is to associate LABs, DISCs, and RESCs with the appropriate LEC.
+		 */
 		foreach($classes as $c) {
 			if(isset($c['LEC'])) {
 				if(count($c['LEC']) > 1) {
@@ -246,17 +249,18 @@ class class_model extends Model {
 						$lec_sec[$j] = $s['section'];
 						$j++;
 					}
-					
-					$type_names = array('LAB', 'DISC', 'RESC');
-					foreach($type_names as $type_name) {
-						if(isset($c[$type_name])) {
-							foreach($c[$type_name] as $z) {
-								foreach($lec_sec as $l) {
-									if( floor( $z['section'] / $l ) == 1 ) {
-										$classes[$z['dept'] . $z['number']][$type_name][$z['section']]['assoc_lec'] = $l;
+					if($diff <= 2) { // We don't need to associate things if the lectures are very close together
+						$type_names = array('LAB', 'DISC', 'RESC', 'SEM');
+						foreach($type_names as $type_name) {
+							if(isset($c[$type_name])) {
+								foreach($c[$type_name] as $z) {
+									foreach($lec_sec as $l) {
+										if( floor( $z['section'] / $l ) == 1 ) {
+											$classes[$z['dept'] . $z['number']][$type_name][$z['section']]['assoc_lec'] = $l;
+										}
 									}
-								}
-							}							
+								}							
+							}
 						}
 					}
 				}
@@ -298,6 +302,8 @@ class class_model extends Model {
 			// do some checking of the schedule we just created ($s)
 			$tests = true;
 			$tests = $this->class_model->_check_section_assoc($s);
+			$tests = $this->class_model->_check_times($s);
+			
 			// put the schedule into the list, if it passed the tests
 			if($tests)
 				$schedules[] = $s;
@@ -328,8 +334,11 @@ class class_model extends Model {
 			if($c['type'] != 'LEC') {
 				$d = $c['dept'];
 				$n = $c['number'];
-				$id = $c['id'];
-				$al = $c['assoc_lec'];
+				$id = $c['classid'];
+				if(isset($c['assoc_lec']))
+					$al = $c['assoc_lec'];
+				else
+					$al = '-1';
 				foreach($s as $c2) {
 					if($c2['type'] == 'LEC') {
 						if($c2['dept'] == $d and $c2['number'] == $n and $c2['section'] != $al) {
@@ -341,5 +350,52 @@ class class_model extends Model {
 		}
 		
 		return true;
+	}
+	
+	function _check_times($s = array()) {
+	
+		for($i = 0; $i < count($s); $i++) {
+			//print_r($s);
+			// Test to see if the first one has multiple times
+			$test1 = explode(';', $s[$i]['time'][0]);
+			if(count($test1) == 0) {
+			
+				$times1 = explode('-', $s[$i]['time'][0]);
+
+				for($j = $i + 1; $j < count($s); $j++) {
+					
+					// Test to see if the second has multiple times
+					$test2 = explode($s[$j]['time'][$z], ';');
+					if(count($test2) == 0) {
+					
+						for($y = 0; $y < count($s[$j]['time']); $y++) {
+							$times2 = explode('-', $s[$j]['time'][$y]);
+						}
+						
+						// If we got here, it means that both classes have 1 time. Time to check them!
+						$days1 = explode(',', $s[$i]['days']);
+						//print_r($days1);
+					
+					} else {
+					
+					
+					
+					}
+				}
+			
+			} else {
+			
+			
+			
+			
+			}
+			
+			
+			
+			
+		}
+	
+		return true;
+	
 	}
 }
