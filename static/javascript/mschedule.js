@@ -142,8 +142,7 @@ $('document').ready(function () {
 				$('#class_' + dept + num + '_div').append( $('<table>', {
 					id: 'class_' + dept + num + '_table',
 					border: 1,
-					class: 'sections_table'
-				}));
+				}).addClass('sections_table'));
 				
 				$.post("api/json/class_model/getClassSections", { 'data[]': [dept, num]}, function(data) {
 					var json = jQuery.parseJSON(data);
