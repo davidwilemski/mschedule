@@ -212,16 +212,16 @@ class class_model extends Model {
 				$types_count++;
 			}
 			$classes[$c->dept . $c->number][$c->type][$c->section] = array();
-			if(strchr($c->days)) {
+			if($c->days) {
 				$c->days = preg_split('/","/', $c->days);
 			}
 			$classes[$c->dept . $c->number][$c->type][$c->section]['days'] = $c->days;
-			if(strchr($c->time)) {
+			if($c->time) {
 				$c->time = preg_split('/","/', $c->time);
 			}
 			$classes[$c->dept . $c->number][$c->type][$c->section]['time'] = $c->time;
 			$classes[$c->dept . $c->number][$c->type][$c->section]['id'] = $c->classid;
-			if(strchr($c->location)) {
+			if($c->location) {
 				$c->location = preg_split('/","/', $c->location);
 			}
 			$classes[$c->dept . $c->number][$c->type][$c->section]['location'] = $c->location;
@@ -298,6 +298,8 @@ class class_model extends Model {
 			// do some checking of the schedule we just created ($s)
 			$tests = true;
 			$tests = $this->class_model->_check_section_assoc($s);
+			$tests = $this->class_model->_check_times($s);
+			
 			// put the schedule into the list, if it passed the tests
 			if($tests)
 				$schedules[] = $s;
@@ -341,5 +343,52 @@ class class_model extends Model {
 		}
 		
 		return true;
+	}
+	
+	function _check_times($s = array()) {
+	
+		for($i = 0; $i < count($s); $i++) {
+			print_r($s);
+			// Test to see if the first one has multiple times
+			$test1 = explode(';', $s[$i]['time'][0]);
+			if(count($test1) == 0) {
+			
+				$times1 = explode('-', $s[$i]['time'][0]);
+
+				for($j = $i + 1; $j < count($s); $j++) {
+					
+					// Test to see if the second has multiple times
+					$test2 = explode($s[$j]['time'][$z], ';');
+					if(count($test2) == 0) {
+					
+						for($y = 0; $y < count($s[$j]['time']); $y++) {
+							$times2 = explode('-', $s[$j]['time'][$y]);
+						}
+						
+						// If we got here, it means that both classes have 1 time. Time to check them!
+						$days1 = explode(',', $s[$i]['days']);
+						print_r($days1);
+					
+					} else {
+					
+					
+					
+					}
+				}
+			
+			} else {
+			
+			
+			
+			
+			}
+			
+			
+			
+			
+		}
+	
+		return true;
+	
 	}
 }

@@ -15,16 +15,14 @@
 				echo '<li class="nav_item">'. anchor($nav_item['url'] , $nav_item['name']) . '</li>';
 			}
 		?>
-	</ul>
-	<ul id="login_bar">
 		<?php if($this->session->userdata('userID')) {?>
-			<li class="nav_item"><?=anchor('dashboard', 'Dashboard')?></li>
+			<li class="nav_item"><?=anchor('dashboard', 'User Dashboard')?></li>
 			<li class="nav_item"><?=anchor('classes/import', 'Import Classes')?></li>
 			<li class="nav_item"><?=anchor('classes/view', 'View Classes')?></li>
-			<li class="nav_item"><?=anchor('login/logout', 'Logout')?></li>
+			<li class="nav_item nav_item_end"><?=anchor('login/logout', 'Logout')?></li>
 		<?php } else { ?>
 			<li class="nav_item"><?=anchor('login', 'Login')?></li>
-			<li class="nav_item"><?=anchor('login/register', 'Register')?></li>
+			<li class="nav_item nav_item_end"><?=anchor('login/register', 'Register')?></li>
 		<?php } ?>
 	</ul>
 </div>
