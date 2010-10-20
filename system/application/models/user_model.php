@@ -62,6 +62,10 @@ class user_model extends Model {
 		// adds ['activate_code'] = md5(email) to $options
 		$options = array_merge(array('activate_code'=>md5($options['email'] + microtime())), $options);
 		
+		// adds ['user_key'] = unique string of length 32 to $options
+		$this->load->helper('string');
+		$options = array_merge(array('user_key'=>random_string('unique')), $options);
+		
 		// puts it into the table, $options must include all table fields
 		$this->db->insert('users', $options);
 		
