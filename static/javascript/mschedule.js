@@ -157,7 +157,7 @@ $('document').ready(function () {
 						}));
 						var row = $('#show_' + json[item].classid)
 						row.append( $('<td>', {
-							html: '<input checked="true" type="checkbox" use="1" name="section" value="' + json[item].classid + '" />'
+							html: '<input checked="false" type="checkbox" use="1" name="section" value="' + json[item].classid + '" />'
 						}));
 						row.append( $('<td>', {
 							text: json[item].classid
@@ -211,6 +211,7 @@ $('document').ready(function () {
 					
 					// Add listener to checkboxes
 					$("input[type='checkbox']").each( function(item) {
+						$(this).unbind('click');
 						$(this).click( function() {
 							if($(this).attr('use') == '1')
 								$(this).attr('use', '0');
@@ -243,11 +244,14 @@ $('document').ready(function () {
 			}
 		});
 		
+		//console.log(use);
+		
 		$.post("api/json/class_model/createSchedules", { 'data[]': use }, function(data) {
 			//console.log(data);
 			var tableString = "";
 			var json = jQuery.parseJSON(data);
 			for(var j in json) {
+				console.log(j);
 				tableString += '<table><tbody><tr>';
 				tableString += '<td>Class ID</td>';
 				tableString += '<td>Department</td>';

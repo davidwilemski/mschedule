@@ -70,9 +70,9 @@ Class api_auth_model extends Model
 		$secret = $this->getSecretKey($app_id);
 		$user = $this->getUserKey($uid);
 		
-		echo 'uid: ' . $uid;
+		//echo 'uid: ' . $uid;
 		
-		echo 'user: ' . $user . ' secret: ' . $secret;
+		//echo 'user: ' . $user . ' secret: ' . $secret;
 
 		//Build hash based on info sent in request
 		$server_hash = hash_hmac('sha256', $user.$nonce, $secret);

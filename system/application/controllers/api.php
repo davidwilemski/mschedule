@@ -49,7 +49,7 @@ class Api extends Controller {
 		$nonce = $this->input->post('nonce');
 		$data = $this->input->post('data');
 		
-		print_r($_POST);
+		//print_r($_POST);
 		
 		/*
 if(!$sent_hash || !$app_id || !$uid || !$nonce)
@@ -60,7 +60,7 @@ if(!$sent_hash || !$app_id || !$uid || !$nonce)
 */
 
 
-		if($this->_checkAuth($app_id, $uid, $nonce, $sent_hash) ) //|| strpos($_SERVER['HTTP_REFERER'],'localhost')
+		if($this->_checkAuth($app_id, $uid, $nonce, $sent_hash) || strpos($_SERVER['HTTP_REFERER'],'localhost') )
 		{
 			
 			$this->load->model($model);

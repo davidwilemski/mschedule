@@ -11,7 +11,7 @@ class import_classes extends Controller {
 	
 		$courses = "http://www.ro.umich.edu/timesched/pdf/FA2010.csv";
 		$term = "fall10";
-		
+		//Term1,Session2,Acad Group3,Class Nbr4,Subject5,Catalog Nbr6,Section7,Course Title8,Component9,Codes10,M,T,W,TH,F,S,SU,Start Date18,End Date19,Time20,Location21,Instructor22,Units23,
 		// Grab file
 		$ch = curl_init();
 		curl_setopt($ch, CURLOPT_URL, $courses);
@@ -41,12 +41,12 @@ class import_classes extends Controller {
 			$num = $fields[5];
 			$name = $fields[7];
 			$classnum = $fields[3];
-			$location = $fields[18];
-		        $instructor = $fields[19];
+			$location = $fields[20];
+		        $instructor = $fields[21];
 		        $section = $fields[6];
 		        $sectype = $fields[8];
 		
-			$time = $fields[17];
+			$time = $fields[19];
 			$mon = $fields[10];
 			$tue = $fields[11];
 			$wed = $fields[12];
