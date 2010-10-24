@@ -252,7 +252,7 @@ $('document').ready(function () {
 			var tableString = "";
 			var json = jQuery.parseJSON(data);
 			for(var j in json) {
-				console.log(j);
+				//console.log(j);
 				tableString += '<table><tbody><tr>';
 				tableString += '<td>Class ID</td>';
 				tableString += '<td>Department</td>';
