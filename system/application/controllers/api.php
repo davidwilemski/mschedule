@@ -50,13 +50,6 @@ class Api extends Controller {
 		$data = $this->input->post('data');
 		
 
-		/*
-if(!$sent_hash || !$app_id || !$uid || !$nonce)
-		{
-			echo 'Please send all required variables';
-			return false;
-		}
-*/
 
 		$this->load->helper('url');
 		

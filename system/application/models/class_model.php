@@ -232,7 +232,7 @@ class class_model extends Model {
 		}
 		
 		/*
-		 * This loop is to associate LABs, DISCs, and RESCs with the appropriate LEC.
+		 * This loop is to associate LABs, DISCs, and RESCs, and SEMs, with the appropriate LEC.
 		 */
 		foreach($classes as $c) {
 			if(isset($c['LEC'])) {
@@ -279,15 +279,21 @@ class class_model extends Model {
 				$k++;
 			}
 		}
+		//print_r($place_max);
 		
 		$schedules_count = 1;
 		foreach($place_max as $m) {
 			$schedules_count = $schedules_count * $m;
 		}
 		
+		//print_r($types);
+		
 		$schedules = array();
 		$last_place = count($place) - 1;
-		for($i = 0; $i < $schedules_count; $i++){
+		//echo $schedules_count . '<br />';
+		for($i = 0; $i < $schedules_count; $i++){ // This loops through the # of possible schedules
+			//echo $i. '<br />';
+			//print_r($place);
 			$s = array();
 			for($j = 0; $j <= $last_place; $j++) {
 				$p = 0;
@@ -301,28 +307,36 @@ class class_model extends Model {
 			
 			// do some checking of the schedule we just created ($s)
 			$tests = true;
-			$tests = $this->class_model->_check_section_assoc($s);
+			//$tests = $this->class_model->_check_section_assoc($s);
 			$tests = $this->class_model->_check_times($s);
 			
 			// put the schedule into the list, if it passed the tests
 			if($tests)
 				$schedules[] = $s;
+				
+			//echo 'count: ' . count($schedules) . '<br />';
 			
 			// increment the place holders so we can create the next one
 			$go = false;
+			//print_r($last_place);
 			$place[$last_place]++;
 			for($z = $last_place; $z >= 0; $z--) {
-				if($go == false) {
-					if($place[$z] >= $place_max[$z]) {
-						if($schedules_count != ($i + 1) ) {
+				//if($go == false) {
+					if($place[$z] >= $place_max[$z]) { // If the place is not reached the last option
+						if($schedules_count != ($i + 1) ) { // If we're not on the last one
 							$place[$z] = 0;
 							$place[$z - 1]++;
-							$go = true;
+							//$go = true;
 						}
 					}
-				}
+				//}
 			}
+			
+			if(count($schedules) == 50)
+				return $schedules;
 		}
+		
+		//print_r($schedules_count . ' ' . count($schedules));
 		
 		return $schedules;
 	
@@ -342,6 +356,7 @@ class class_model extends Model {
 				foreach($s as $c2) {
 					if($c2['type'] == 'LEC') {
 						if($c2['dept'] == $d and $c2['number'] == $n and $c2['section'] != $al) {
+							//echo 'broke <br />';
 							return false;
 						}
 					}
@@ -354,48 +369,98 @@ class class_model extends Model {
 	
 	function _check_times($s = array()) {
 	
-		for($i = 0; $i < count($s); $i++) {
-			//print_r($s);
-			// Test to see if the first one has multiple times
-			$test1 = explode(';', $s[$i]['time'][0]);
-			if(count($test1) == 0) {
-			
-				$times1 = explode('-', $s[$i]['time'][0]);
-
-				for($j = $i + 1; $j < count($s); $j++) {
-					
-					// Test to see if the second has multiple times
-					$test2 = explode($s[$j]['time'][$z], ';');
-					if(count($test2) == 0) {
-					
-						for($y = 0; $y < count($s[$j]['time']); $y++) {
-							$times2 = explode('-', $s[$j]['time'][$y]);
+		for($i = 0; $i < count($s) - 1; $i++) {
+			//print_r($s[$i]['days']);
+			$d1 = explode(',', $s[$i]['days'][0]);
+			$d2 = explode(',', $s[$i]['days'][0]);
+			//echo count($s[$i]['days']);
+			if(count($d1) == 0) {
+				// if this true, we only have one day for the first class
+				if(count($d2) == 0) {
+					// if this is true, the second class only has one day
+					if($d1[0] == $d2[0]) {
+						// if the days are the same, we need to check the time.
+						return $this->class_model->_check_times_helper($s[$i]['time'], $s[$i+1]['time'], 0, 0);
+					}
+				} else {
+					// we have multiple days to check against
+					for($z = 0; $z < count($d1); $i++) {
+						if($d1[0] == $d2[$z]) {
+							// then the second only has one time
+							if(!$this->class_model->_check_times_helper($s[$i]['time'], $s[$i+1]['time'], 0, $z)) {
+								return false;
+							}
 						}
-						
-						// If we got here, it means that both classes have 1 time. Time to check them!
-						$days1 = explode(',', $s[$i]['days']);
-						//print_r($days1);
-					
-					} else {
-					
-					
-					
 					}
 				}
-			
 			} else {
-			
-			
-			
-			
+				// we have multiple days for the first class
+				if($d2 == 0) {
+					// we only have one day to check against for the second one
+					for($z = 0; $z < count($d1); $z++) {
+						if($d1[$z] == $d1[0]) {
+							if(!$this->class_model->_check_times_helper($s[$i]['time'], $s[$i+1]['time'], $z, 0)) {
+								return false;
+							}
+						}
+					}
+				} else {
+					// both have multiple days! fun stuff
+					for($y = 0; $y < count($d1); $y++) {
+						for($z = 0; $z < count($d2); $z++) {
+							if($d1[$y] == $d2[$z]) {
+								if(!$this->class_model->_check_times_helper($s[$i]['time'], $s[$i+1]['time'], $y, $z)) {
+									return false;
+								} 
+							}
+						}
+					}
+				}
 			}
-			
-			
-			
-			
 		}
 	
 		return true;
+	
+	}
+	
+	function _check_times_helper($c1, $c2, $i1, $i2) {
+		
+		//print_r($c1);
+		//print_r($c2);
+		
+		if(count($c1 == 0)) {
+			// then the second one has only one time set				
+			$c1 = explode('-', $c1[0]);
+		} else {
+			$c1 = explode('-', $c1[$i1]);
+		}	
+		if(count($c2 == 0)) {
+			// then the second one has only one time set
+			$c2 = explode('-', $c2[0]);
+		} else {
+			// the second has more than one time
+			$c2 = explode('-', $c2[$i2]);	
+		}
+		
+		//print_r($c1);
+		//echo ' --- ' ;
+		//print_r($c2);
+		
+		if($c1[0] < $c2[0]) {
+			if($c1[1] <= $c2[0]) {
+				return true;
+			} else {
+				return false;
+			}
+		} else if($c1[0] > $c2[0]) {
+			if($c2[1] <= $c1[0]) {
+				return true;
+			} else {
+				return false;
+			}
+		} else {
+			return false;
+		}
 	
 	}
 }
