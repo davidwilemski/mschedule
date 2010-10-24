@@ -69,10 +69,6 @@ Class api_auth_model extends Model
 	{
 		$secret = $this->getSecretKey($app_id);
 		$user = $this->getUserKey($uid);
-		
-		echo 'uid: ' . $uid;
-		
-		echo 'user: ' . $user . ' secret: ' . $secret;
 
 		//Build hash based on info sent in request
 		$server_hash = hash_hmac('sha256', $user.$nonce, $secret);
@@ -88,11 +84,12 @@ Class api_auth_model extends Model
 	}
 	
 	//Verify the nonce is greater than the previous one sent.
-	//Returns true if nonce > prev_nonce, else returns false
+	//Returns true if nonce > prev_nonce and increases the nonce counter, else returns false
 	function verifyNonce($app_id, $nonce)
 	{
 		if($nonce > $this->getLastCall($app_id))
 		{
+			$this->db->where('id', $app_id)->update('api_users', array('last_call' => $nonce));
 			return true;
 		}
 		return false;

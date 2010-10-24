@@ -44,13 +44,12 @@ class Api extends Controller {
 	function json($model, $method)	
 	{
 		$sent_hash = $this->input->post('hash');
-		$app_id = $this->input->post('app_id');
+		$app_id = $this->input->post('appid');
 		$uid = $this->input->post('uid');
 		$nonce = $this->input->post('nonce');
 		$data = $this->input->post('data');
 		
-		print_r($_POST);
-		
+
 		/*
 if(!$sent_hash || !$app_id || !$uid || !$nonce)
 		{
@@ -59,10 +58,10 @@ if(!$sent_hash || !$app_id || !$uid || !$nonce)
 		}
 */
 
-
-		if($this->_checkAuth($app_id, $uid, $nonce, $sent_hash) ) //|| strpos($_SERVER['HTTP_REFERER'],'localhost')
-		{
-			
+		$this->load->helper('url');
+		
+		if($this->_checkAuth($app_id, $uid, $nonce, $sent_hash))
+		{	
 			$this->load->model($model);
 			
 			$output = $this->$model->$method($data);
@@ -70,10 +69,18 @@ if(!$sent_hash || !$app_id || !$uid || !$nonce)
 			print_r(json_encode($output));
 
 		}
+		elseif(isset($_SERVER['HTTP_REFERER']))
+		{
+			 if(strpos($_SERVER['HTTP_REFERER'],base_url()))
+			 	return true;
+			 
+		}
 		else
 		{
 			echo "There was an error with authentication, please check your credentials and try again";
 		}	
+
+
 	}
 	
 	function test() {
@@ -145,8 +152,8 @@ if(!$sent_hash || !$app_id || !$uid || !$nonce)
 		//echo hash_hmac('sha256', '61dc0f2021aec1cfe9d08f1aaa141a58' . '99', '279f58556746bec11a507bf9d5e540a9');
 		$this->load->model('admin/api_auth_model');
 		
-		echo $this->api_auth_model->getUserKey(21);
-		return false;
+		echo $this->api_auth_model->getLastCall(1);
+		//return false;
 	}
 	
 }
