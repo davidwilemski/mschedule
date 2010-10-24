@@ -51,6 +51,7 @@ $('document').ready(function () {
 			
 			// Make our JSON post call
 			$.post("api/json/class_model/getDeptClassList", { 'data[]': [this.id]}, function(data) {
+				//console.log(data);
 				var table = jQuery.parseJSON(data);
 				var cl = $("#class_table");
 				cl.html("");

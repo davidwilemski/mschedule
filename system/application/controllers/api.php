@@ -52,7 +52,6 @@ class Api extends Controller {
 
 
 		$this->load->helper('url');
-		
 		if($this->_checkAuth($app_id, $uid, $nonce, $sent_hash))
 		{	
 			$this->load->model($model);
@@ -64,9 +63,15 @@ class Api extends Controller {
 		}
 		elseif(isset($_SERVER['HTTP_REFERER']))
 		{
-			 if(strpos($_SERVER['HTTP_REFERER'],base_url()))
-			 	return true;
-			 
+			//echo strpos($_SERVER['HTTP_REFERER'], 'localhost');
+			 if(strpos($_SERVER['HTTP_REFERER'],'localhost') || strpos($_SERVER['HTTP_REFERER'],'mschedule.com')) {
+			 	//echo 'hi';
+				$this->load->model($model);
+				
+				$output = $this->$model->$method($data);
+				
+				print_r(json_encode($output));
+			 }
 		}
 		else
 		{
