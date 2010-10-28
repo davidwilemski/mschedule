@@ -9,8 +9,11 @@ class import_classes extends Controller {
 	
 		$this->load->model('class_model');
 	
-		$courses = "http://www.ro.umich.edu/timesched/pdf/FA2010.csv";
-		$term = "fall10";
+		//$courses = "http://www.ro.umich.edu/timesched/pdf/FA2010.csv";
+		//$term = "fall10";
+		$courses = "http://www.ro.umich.edu/timesched/pdf/WN2011.csv";
+		$term = "winter11";
+		
 		//Term1,Session2,Acad Group3,Class Nbr4,Subject5,Catalog Nbr6,Section7,Course Title8,Component9,Codes10,M,T,W,TH,F,S,SU,Start Date18,End Date19,Time20,Location21,Instructor22,Units23,
 		// Grab file
 		$ch = curl_init();
@@ -233,7 +236,7 @@ class import_classes extends Controller {
 	
 	}
 	
-	function test() {
+	/*function test() {
 	
 		$this->db->select('classid')->from('classes_fall10');
 		$q = $this->db->get();
@@ -249,6 +252,6 @@ class import_classes extends Controller {
 		
 		}
 	
-	}
+	}*/
 
 }
