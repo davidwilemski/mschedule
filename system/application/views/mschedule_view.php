@@ -58,14 +58,21 @@ $this->load->helper('form');
 </div>
 
 <div id="time_div">
-	Times!
+<?
+$times = array(
+	'free_morning' => 'Early Riser',
+	'free_evening' => 'Sleep In',
+	'free_fridays' => 'Friday Off!'
+);
+echo form_dropdown('times', $times, 'free_morning');
+?>
 </div>
 
 <div id="section_div">
 </div>
 
 <div id="schedule_div">
-Schedules!
+	Schedules!
 </div>
 <?php
 //echo form_close();

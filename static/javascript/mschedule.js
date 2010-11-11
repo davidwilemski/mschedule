@@ -17,13 +17,6 @@ $('document').ready(function () {
 		sch.hide();
 	});
 	
-	$('#times').click( function () {
-		c.hide();
-		t.show();
-		sec.hide();
-		sch.hide();
-	});
-	
 	// clicking on sections loads the times now!
 	
 	// clicking on schedules loads below
@@ -106,6 +99,13 @@ $('document').ready(function () {
 	/**
 	*** Times Section
 	**/
+	
+	$('#times').click( function () {
+		c.hide();
+		t.show();
+		sec.hide();
+		sch.hide();
+	});
 	
 	/**
 	*** Sections Section
@@ -238,7 +238,7 @@ $('document').ready(function () {
 		sch.show();
 		
 		var use = Array();
-		
+		use.push(1); // This puts the time pref in the first spot of the POST array
 		$('input[type="checkbox"]').each( function(item) {
 			if($(this).attr('use') == '1') {
 				use.push($(this).val());
