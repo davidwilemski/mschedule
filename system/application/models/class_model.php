@@ -349,8 +349,8 @@ class class_model extends Model {
 				//}
 			}
 			
-			//if(count($schedules) == 50)
-			//	return $schedules;
+			if(count($schedules) == 50)
+				return $schedules;
 			//echo count($schedules) . '<br />';
 		}
 		
