@@ -306,6 +306,8 @@ class class_model extends Model {
 		$last_place = count($place) - 1;
 		//print_r($place);
 		//echo $schedules_count . '<br />';
+		
+		
 		for($i = 0; $i < $schedules_count; $i++){ // This loops through the # of possible schedules
 			//echo $i. '<br />';
 			//print_r($place);
@@ -328,7 +330,7 @@ class class_model extends Model {
 			
 			
 			// put the schedule into the list, if it passed the tests
-			if($tests)
+			if($tests) 
 				$schedules[] = $s;
 				
 			//echo 'count: ' . count($schedules) . '<br />';
@@ -349,7 +351,7 @@ class class_model extends Model {
 				//}
 			}
 			
-			if(count($schedules) == 50)
+			if(count($schedules) == 500)
 				return $schedules;
 			//echo count($schedules) . '<br />';
 		}
