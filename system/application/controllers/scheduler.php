@@ -38,7 +38,7 @@ class scheduler extends Controller {
 		$this->load->library('table');
 		
 		$data = array(
-			'view_name'	=> 'mischedule_view',
+			'view_name'	=> 'mschedule_view',
 			'ad'		=> 'static/ads/google_ad_120_234.php',
 			'navigation'=> "navigation",
 			'css'		=> includeCSSFile("style") . includeCSSFile("scheduler"),

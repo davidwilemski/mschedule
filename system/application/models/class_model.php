@@ -196,12 +196,19 @@ class class_model extends Model {
 	
 		// Create the largest 4-d array I have ever seen.   <- True Statement - that is a monster
 		// Then use it to create schedules.
+		//$this->load->model('time_pref_model');
 		$classes = array();
 		$class_count = 0;
 		$types_count = 0;
-		
+		$time_pref = -1;
 		// $o is a classid
+		$first = true;
 		foreach($options as $o) {
+			if($first) {
+				$time_pref = $o;
+				$first = false;
+				continue;
+			}	
 			$c = $this->class_model->getClassDetail(array('classid'=>$o));
 			if(!isset($classes[$c->dept . $c->number])) {
 				$classes[$c->dept . $c->number] = array();
@@ -243,13 +250,19 @@ class class_model extends Model {
 					$lec_sec = array();
 					foreach($c['LEC'] as $s) {
 						if($go < 3) {
-							$diff = $diff + ($s['section'] * pow(-1, $go));
+							$math = ($s['section'] * pow(-1, $go));
+							//echo $math . 'x';
+							$diff = $diff + $math;
 						}
 						$go++;
+						//if($go = 2)
+						//	$go = 0;
 						$lec_sec[$j] = $s['section'];
 						$j++;
 					}
-					if($diff <= 2) { // We don't need to associate things if the lectures are very close together
+					//echo $diff . '*';
+					//print_r($lec_sec);
+					if($diff >= 2) { // We don't need to associate things if the lectures are very close together
 						$type_names = array('LAB', 'DISC', 'RESC', 'SEM');
 						foreach($type_names as $type_name) {
 							if(isset($c[$type_name])) {
@@ -257,16 +270,17 @@ class class_model extends Model {
 									foreach($lec_sec as $l) {
 										if( floor( $z['section'] / $l ) == 1 ) {
 											$classes[$z['dept'] . $z['number']][$type_name][$z['section']]['assoc_lec'] = $l;
-										}
-									}
-								}							
-							}
-						}
-					}
-				}
-			}
-		}
+										} // if
+									} // foreach
+								} // foreach						
+							} // if
+						} // foreach
+					} // if
+				} // if
+			} // if
+		} // foreach
 		
+		//print_r($classes);
 		$types = array();
 		$place = array();
 		$place_max = array();
@@ -290,7 +304,10 @@ class class_model extends Model {
 		
 		$schedules = array();
 		$last_place = count($place) - 1;
+		//print_r($place);
 		//echo $schedules_count . '<br />';
+		
+		
 		for($i = 0; $i < $schedules_count; $i++){ // This loops through the # of possible schedules
 			//echo $i. '<br />';
 			//print_r($place);
@@ -307,11 +324,13 @@ class class_model extends Model {
 			
 			// do some checking of the schedule we just created ($s)
 			$tests = true;
-			//$tests = $this->class_model->_check_section_assoc($s);
-			$tests = $this->class_model->_check_times($s);
+			$tests = $this->class_model->_check_section_assoc($s);
+			if($tests)
+				$tests = $this->class_model->_check_times($s);
+			
 			
 			// put the schedule into the list, if it passed the tests
-			if($tests)
+			if($tests) 
 				$schedules[] = $s;
 				
 			//echo 'count: ' . count($schedules) . '<br />';
@@ -332,11 +351,12 @@ class class_model extends Model {
 				//}
 			}
 			
-			if(count($schedules) == 50)
+			if(count($schedules) == 500)
 				return $schedules;
+			//echo count($schedules) . '<br />';
 		}
 		
-		//print_r($schedules_count . ' ' . count($schedules));
+		//echo $schedules_count . ' ' . count($schedules);
 		
 		return $schedules;
 	
@@ -348,15 +368,17 @@ class class_model extends Model {
 			if($c['type'] != 'LEC') {
 				$d = $c['dept'];
 				$n = $c['number'];
-				$id = $c['classid'];
+				//$id = $c['classid'];
 				if(isset($c['assoc_lec']))
 					$al = $c['assoc_lec'];
 				else
-					$al = '-1';
+					return true;
 				foreach($s as $c2) {
 					if($c2['type'] == 'LEC') {
 						if($c2['dept'] == $d and $c2['number'] == $n and $c2['section'] != $al) {
 							//echo 'broke <br />';
+							//print_r($c2);
+							//print_r($c);
 							return false;
 						}
 					}
