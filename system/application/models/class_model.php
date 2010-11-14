@@ -196,7 +196,8 @@ class class_model extends Model {
 	
 		// Create the largest 4-d array I have ever seen.   <- True Statement - that is a monster
 		// Then use it to create schedules.
-		//$this->load->model('time_pref_model');
+		$CI =& get_instance();
+		$CI->load->model('time_pref_model');
 		$classes = array();
 		$class_count = 0;
 		$types_count = 0;
@@ -330,7 +331,16 @@ class class_model extends Model {
 			
 			
 			if($tests) {
-				
+				foreach($s as $time_check) {
+					//print_r($time_check);
+					$CI->time_pref_model->checkTime(
+						array(
+							'time_pref' => $time_pref, 
+							'day' => $time_check['days'][0], 
+							'time' => $time_check['time'][0]
+						)
+					);
+				}
 				$schedules[] = $s;
 			}
 				

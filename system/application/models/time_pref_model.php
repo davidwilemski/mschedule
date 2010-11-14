@@ -4,33 +4,33 @@
 	*/
 ?>
 <?php
-class class_model extends Model {
-
-	$early_schedule = array(
-		'M' => array(0730, 1400);
-		'TU' => array(0730, 1400);
-		'W' => array(0730, 1400);
-		'TH' => array(0730, 1400);
-		'F' => array(0730, 1400);
-	);
-	
-	$evening_schedule = array(
-		'M' => array(1100, 1700);
-		'TU' => array(1100, 1700);
-		'W' => array(1100, 1700);
-		'TH' => array(1100, 1700);
-		'F' => array(1100, 1700);
-	);
-	
-	$friday_schedule = array(
-		'M' => array(0900, 1700);
-		'TU' => array(0900, 1700);
-		'W' => array(0900, 1700);
-		'TH' => array(0900, 1700);
-		'F' => array(0000, 0000);
-	);
+class time_pref_model extends Model {
 	
 	function checkTime($options = array()) {
+	
+		$early_schedule = array(
+			'M' => array(0730, 1400),
+			'TU' => array(0730, 1400),
+			'W' => array(0730, 1400),
+			'TH' => array(0730, 1400),
+			'F' => array(0730, 1400)
+		);
+		
+		$evening_schedule = array(
+			'M' => array(1100, 1700),
+			'TU' => array(1100, 1700),
+			'W' => array(1100, 1700),
+			'TH' => array(1100, 1700),
+			'F' => array(1100, 1700)
+		);
+		
+		$friday_schedule = array(
+			'M' => array(0900, 1700),
+			'TU' => array(0900, 1700),
+			'W' => array(0900, 1700),
+			'TH' => array(0900, 1700),
+			'F' => array(0000, 0000)
+		);
 	
 		$check = array();
 		switch($options['time_pref']) {
