@@ -41,7 +41,7 @@ $this->load->helper('form');
 	</td>
 	
 	<td id="right_side">
-	<? $rows = 4; ?>
+	<? $rows = 1; ?>
 	<input type="hidden" value="<?=$rows?>" id="rows">
 	<input type="hidden" value="sel_1" id="selected_row">
 	<p id="class_header">Department   -   Class</p>
