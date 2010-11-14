@@ -327,9 +327,11 @@ class class_model extends Model {
 				$tests = $this->class_model->_check_times($s);
 			
 			
-			// put the schedule into the list, if it passed the tests
-			if($tests)
+			// put the schedule into the list, and score it (visa vi time) if it passed the tests
+			if($tests) {
+				
 				$schedules[] = $s;
+			}
 				
 			//echo 'count: ' . count($schedules) . '<br />';
 			

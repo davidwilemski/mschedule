@@ -1,4 +1,4 @@
-$('document').ready(function() {
+/*$('document').ready(function() {
 	var password = $("#password_form");
 	var info = $("#personal_info_form");
 	
@@ -15,4 +15,4 @@ $('document').ready(function() {
 		else
 			info.slideUp("slow");
 	});
-});
+});*/

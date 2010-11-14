@@ -14,7 +14,7 @@ echo form_open('dashboard/password_reset');
 ?>
 <fieldset>
 <legend id="password_label">Change Password</legend>
-<div id="password_form" style="display: none;">
+<div id="password_form">
 <?php
 $curr_password = array(
 	'name'	=> 'password',
@@ -57,7 +57,7 @@ echo form_open('dashboard/modify_user');
 ?>
 <fieldset>
 <legend id="info_label">Personal Info</legend>
-<div id="personal_info_form" style="display: none;">
+<div id="personal_info_form">
 <?php
 $email = array(
 	'name'	=> 'email',
