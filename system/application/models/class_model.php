@@ -331,19 +331,20 @@ class class_model extends Model {
 			
 			
 			if($tests) {
-				foreach($s as $time_check) {
+				foreach($s as &$time_check) {
 					//print_r($time_check);
-					$CI->time_pref_model->checkTime(
+					$score = $CI->time_pref_model->checkTime(
 						array(
 							'time_pref' => $time_pref, 
 							'day' => $time_check['days'][0], 
 							'time' => $time_check['time'][0]
 						)
 					);
+					$time_check['score'] = $score;
 				}
 				$schedules[] = $s;
 			}
-				
+			//print_r($s);	
 			//echo 'count: ' . count($schedules) . '<br />';
 			
 			// increment the place holders so we can create the next one

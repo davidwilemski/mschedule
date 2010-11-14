@@ -278,13 +278,14 @@ $('document').ready(function () {
 			var tableString = "";
 			var json = jQuery.parseJSON(data);
 			for(var j in json) {
-				//console.log(j);
+				//console.log(json[j]);
 				tableString += '<table><tbody><tr>';
 				tableString += '<td>Class ID</td>';
 				tableString += '<td>Department</td>';
 				tableString += '<td>Class Number</td>';
 				tableString += '<td>Class Section</td>';
 				tableString += '<td>Class Type</td>';
+				tableString += '<td>Score</td>';
 				tableString += '</tr>';
 				for(var c in json[j]) {
 					//console.log(json[j][c]);
@@ -303,6 +304,9 @@ $('document').ready(function () {
 					tableString += '</td>';
 					tableString += '<td>';
 					tableString += json[j][c].type;
+					tableString += '</td>';
+					tableString += '<td>'
+					tableString += json[j][c].score
 					tableString += '</td>';
 					tableString += '</tr>';
 				}

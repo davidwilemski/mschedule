@@ -49,9 +49,9 @@ class time_pref_model extends Model {
 		
 		$day = $options['day'];
 		$time = $options['time'];
-		if(!preg_match(',', $day)) {
-			if(!preg_match(';', $time)) {
-				$this_time = split('-', $time);
+		if(!strpos(',', $day)) {
+			if(!strpos(';', $time)) {
+				$this_time = preg_split('/-/', $time);
 				if($check[$day][0] > $this_time[0]) {
 					if($check[$day][0] - $this_time[0] > 100) {
 						return 1;
