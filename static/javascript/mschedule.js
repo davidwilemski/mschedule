@@ -43,6 +43,8 @@ $('document').ready(function () {
 	
 	var dept = $("#department_list");
 	
+	var num = 2; //id for additional selected class boxes, will be incremented
+	
 	// Show class list when we click on a department
 	$(".dept_tr").each( function(item) {
 		$(this).click( function () {
@@ -70,11 +72,35 @@ $('document').ready(function () {
 						
 						// Move the paragraph selector
 						var curr = $("p[class='sel_p highlight_p']");
-						curr.removeClass('highlight_p');
-						curr.next().addClass('highlight_p');
-						var newRow = row.charAt(4) * 1;
-						var rr = newRow + 1;
-						r.val("sel_" + rr);
+						
+						if(num < 10){
+						
+						
+							curr.parent().append('<p id="sel_' + num.toString() + '" class="sel_p"><input type="text" name="dept_' + num.toString() + '" value="" id="dept_' + num.toString() + '" class="dept_input" readonly="readonly"  /><input type="text" name="class_' + num.toString() + '" value="" id="class_' + num.toString() + '" class="class_input" readonly="readonly"  /></p>');
+							num++;
+							curr.removeClass('highlight_p');
+							curr.next().addClass('highlight_p');
+							
+							var newRow = row.charAt(4) * 1;
+							var rr = newRow + 1;
+							r.val("sel_" + rr);
+							
+							
+							
+							// Highlight the selected paragraph
+							$(".sel_p").each( function(item) {
+								$(this).click( function () {
+									$("#selected_row").val( $(this).attr('id') );
+									$(".sel_p").each( function(elm) {
+										$(this).removeClass('highlight_p');
+									});
+									$(this).addClass('highlight_p');
+								});
+							});
+							
+
+						}
+						
 					});
 				});
 				
