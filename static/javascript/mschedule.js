@@ -287,11 +287,13 @@ $('document').ready(function () {
 				tableString += '<td>Class Type</td>';
 				tableString += '<td>Score</td>';
 				tableString += '</tr>';
+				scheduleID = '';
 				for(var c in json[j]) {
 					//console.log(json[j][c]);
 					tableString += '<tr>';
 					tableString += '<td>';
 					tableString += json[j][c].classid;
+					scheduleID += json[j][c].classid + ';';
 					tableString += '</td>';
 					tableString += '<td>';
 					tableString += json[j][c].dept;
@@ -310,9 +312,22 @@ $('document').ready(function () {
 					tableString += '</td>';
 					tableString += '</tr>';
 				}
+				tableString += '<tr><td class="save_schedule" value="';
+				tableString += scheduleID;
+				tableString += '">Save this schedule!</td></tr>';
 				tableString += '</tbody></table>';
 			}
 			$("#schedule_div").html(tableString);
+			$('.save_schedule').click(function() {
+				$.post("api/json/class_model/saveSchedule", {'data': $(this).attr('value')}, function(data){
+					console.log(data);
+					if(data == "true") {
+						alert('Your schedule is safe');
+					} else {
+						alert('Something went wrong');
+					}
+				});
+			});
 		});
 		
 	});

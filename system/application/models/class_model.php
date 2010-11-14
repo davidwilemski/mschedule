@@ -27,13 +27,35 @@ class class_model extends Model {
 		
 	}
 
+	function saveSchedule($options = array()) {
+		$uid = $this->session->userdata('userID');
+		
+		$this->db->where('userID', $uid);
+		$this->db->from('user_prefs');
+		$q = $this->db->get();
+		$q = $q->result_array();
+
+		if(!count($q)) {
+			
+		}
+
+		$ids = preg_split("/;/", $options);
+		unset($ids[count($ids)-1]);
+		/*return $this->importClasses(array(
+			'userID' => $uid,
+			'class_list' => $ids
+		));*/
+	}
+
 	function importClasses($options = array()) {
-	
+		
 		if(!$this->_required(array('userID', 'class_list'), $options))
 			return false;
 	
+		$scheduleID = sha1($options['userID'] + microtime());
+		
 		foreach($options['class_list'] as $class) {
-			if(!$this->addRow(array('userID' => $options['userID'], 'classID' => $class, 'term' => $this->config->item('current_term'))))
+			if(!$this->addRow(array('scheduleID' => $scheduleID, 'userID' => $options['userID'], 'classID' => $class, 'term' => $this->config->item('current_term'))))
 				return false;
 		}
 		
@@ -46,7 +68,8 @@ class class_model extends Model {
 		$fields = array(
 			'classID',
 			'userID',
-			'term'
+			'term',
+			'scheduleID'
 		);
 		
 		foreach($fields as $field) {
