@@ -29,7 +29,7 @@ class time_pref_model extends Model {
 			'TU' => array(0900, 1700),
 			'W' => array(0900, 1700),
 			'TH' => array(0900, 1700),
-			'F' => array(0000, 0000)
+			'F' => array(2359, 0000)
 		);
 	
 		$check = array();
@@ -60,7 +60,7 @@ class time_pref_model extends Model {
 					}
 				} else if($check[$day][0] < $this_time[0] && $check[$day][1] > $this_time[0]) {
 					return 5;
-				} else if($this_time[0] - $check[$day][2] > 100){
+				} else if($this_time[0] - $check[$day][1] > 100){
 					return 1;
 				} else {
 					return 3;

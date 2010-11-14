@@ -308,7 +308,6 @@ class class_model extends Model {
 		//print_r($place);
 		//echo $schedules_count . '<br />';
 		
-		
 		for($i = 0; $i < $schedules_count; $i++){ // This loops through the # of possible schedules
 			//echo $i. '<br />';
 			//print_r($place);
@@ -328,7 +327,6 @@ class class_model extends Model {
 			$tests = $this->class_model->_check_section_assoc($s);
 			if($tests)
 				$tests = $this->class_model->_check_times($s);
-			
 			
 			if($tests) {
 				foreach($s as &$time_check) {

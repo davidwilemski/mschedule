@@ -264,7 +264,7 @@ $('document').ready(function () {
 		sch.show();
 		
 		var use = Array();
-		use.push(1); // This puts the time pref in the first spot of the POST array
+		use.push($('select[name="times"]').val()); // This puts the time pref in the first spot of the POST array
 		$('input[type="checkbox"]').each( function(item) {
 			if($(this).attr('use') == '1') {
 				use.push($(this).val());
