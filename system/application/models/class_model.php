@@ -27,13 +27,46 @@ class class_model extends Model {
 		
 	}
 
+	function saveSchedule($options = array()) {
+		$uid = $this->session->userdata('userID');
+		
+		$scheduleID = sha1($uid + $options);
+		$this->db->where('scheduleID', $scheduleID);
+		$this->db->from('user_class');
+		$q = $this->db->get();
+		if($q->num_rows() > 0)
+			return false;
+		
+		$this->db->where('userID', $uid);
+		$this->db->from('user_prefs');
+		$q = $this->db->get();
+		$q = $q->result_array();
+		// $options is the class ids formatted as 123456;123456;123456;
+		// note the ending semicolin
+		if(count($q) == 1) {
+			if($q[0]['curr_schedule'] == '') {
+				$this->db->where('userID', $uid);
+				$this->db->set('curr_schedule', $scheduleID);
+				$this->db->update('user_prefs');
+			}
+		}
+
+		$ids = preg_split("/;/", $options);
+		unset($ids[count($ids)-1]);
+		return $this->importClasses(array(
+			'userID' => $uid,
+			'class_list' => $ids,
+			'scheduleID' => $scheduleID
+		));
+	}
+
 	function importClasses($options = array()) {
-	
+		
 		if(!$this->_required(array('userID', 'class_list'), $options))
 			return false;
 	
 		foreach($options['class_list'] as $class) {
-			if(!$this->addRow(array('userID' => $options['userID'], 'classID' => $class, 'term' => $this->config->item('current_term'))))
+			if(!$this->addRow(array('scheduleID' => $options['scheduleID'], 'userID' => $options['userID'], 'classID' => $class, 'term' => $this->config->item('current_term'))))
 				return false;
 		}
 		
@@ -46,7 +79,8 @@ class class_model extends Model {
 		$fields = array(
 			'classID',
 			'userID',
-			'term'
+			'term',
+			'scheduleID'
 		);
 		
 		foreach($fields as $field) {

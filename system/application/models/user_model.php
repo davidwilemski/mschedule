@@ -59,9 +59,6 @@ class user_model extends Model {
 		// adds ['status'] = 'active' to $options
 		$options = array_merge(array('status'=>'inactive'), $options);
 		
-		// adds ['activate_code'] = md5(email) to $options
-		$options = array_merge(array('activate_code'=>md5($options['email'] + microtime())), $options);
-		
 		// adds ['user_key'] = unique string of length 32 to $options
 		$this->load->helper('string');
 		$options = array_merge(array('user_key'=>random_string('unique')), $options);
@@ -70,8 +67,22 @@ class user_model extends Model {
 		$this->db->insert('users', $options);
 		
 		// returns the id of the new user or false
-		return $this->db->insert_id();
-			
+		$id = $this->db->insert_id();
+
+		if(!$id)
+			return false;
+
+		$this->createPrefs($id);
+		
+		return $id;
+	}
+
+	function createPrefs($id) {
+		
+		$this->db->insert('user_prefs', array('userID' => $id));
+
+		return;
+
 	}
 	
 	function updateUser($options = array()) {
@@ -173,10 +184,10 @@ class user_model extends Model {
 		$email = $user->email;
 		$message = 'Welcome to MSchedule.com, '. $user->first_name . '!' . "\n\n";
 		$message .= 'To activate your account at MSchedule.com, please use this link: ';
-		$message .= base_url() . 'login/validate/' . md5($email + microtime());
+		$message .= base_url() . 'login/validate/' . $u['activate_code'];
 		$message .= "\n\n" . ' If you have trouble, use the link below and and enter your activation code.' . "\n\n";
 		$message .= 'Link: ' . base_url() . 'login/validate' . "\n";
-		$message .= 'Activation code (if link above does not work): ' . md5($email + microtime()) . "\n\n";
+		$message .= 'Activation code (if link above does not work): ' . $u['activate_code'] . "\n\n";
 		$message .= 'Thank you, and enjoy MSchdule.com!';
 		
 		$this->email->set_newline("\r\n");
@@ -185,7 +196,7 @@ class user_model extends Model {
 		$this->email->subject('Activate your MSchedule.com Account!');
 		$this->email->message($message);
 		
-		$this->email->send();
+		return $this->email->send();
 	
 	}
 	

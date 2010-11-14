@@ -46,7 +46,7 @@ $last_name_data = array(
 
 <?=anchor('login/forgot', 'Forgot Password')?>
 
-<div class="error"><?=validation_errors()?></div>
+<div class="error"><?=$this->session->flashdata('flasherror')?><?=validation_errors()?></div>
 
 </fieldset>
 <?=form_close()?>

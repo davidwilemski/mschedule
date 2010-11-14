@@ -85,15 +85,18 @@ class login extends Controller {
 				'last_name'=>$this->input->post('last_name'),
 				'email'=>$this->input->post('email'),
 				'username'=>preg_replace('/@umich.edu/', '', $this->input->post('email')),
-				'password'=>md5($this->input->post('password'))
+				'password'=>md5($this->input->post('password')),
+				'activate_code'=>random_string('unique')
 			);
 			
 			if($this->user_model->addUser($user)) {
-				$this->user_model->email_validation($user);
-				redirect('home/validation_sent');
+				if($this->user_model->email_validation($user)) {
+					redirect('home/validation_sent');
+				}
+			} else {
+				$this->session->set_flashdata('flasherror', 'Something went wrong. Please contact mschedule support.');
+				redirect('login/register');
 			}
-			redirect('login/register');
-		
 		}
 
 		$data = array(
@@ -173,13 +176,13 @@ class login extends Controller {
 	
 	}
 	
-	function validate() {
+	function validate($code) {
 		
 		if($this->session->userdata('userID'))
 			redirect('dashboard');
 	
-		if('' != $this->uri->segment(3))
-			$user = $this->user_model->getUsers(array('activate_code' => $this->uri->segment(3)));
+		if($code)
+			$user = $this->user_model->getUsers(array('activate_code' => $code));
 			if($user) {
 				if($this->user_model->activate_account(array('status' => 'active', 'userID' => $user->userID)))
 					redirect('home/activated_account');
