@@ -1,3 +1,5 @@
+var num = 2; //id for additional selected class boxes, will be incremented
+
 $('document').ready(function () {
 
 	var c = $('#class_div');
@@ -16,6 +18,8 @@ $('document').ready(function () {
 		sec.hide();
 		sch.hide();
 	});
+
+    $('.rm_course').click( rm_course);
 	
 	// clicking on sections loads the times now!
 	
@@ -36,7 +40,6 @@ $('document').ready(function () {
 	
 	var dept = $("#department_list");
 	
-	var num = 2; //id for additional selected class boxes, will be incremented
 	
 	// Show class list when we click on a department
 	$(".dept_tr").each( function(item) {
@@ -69,7 +72,7 @@ $('document').ready(function () {
 						if(num < 10){
 						
 						
-							curr.parent().append('<p id="sel_' + num.toString() + '" class="sel_p"><input type="text" name="dept_' + num.toString() + '" value="" id="dept_' + num.toString() + '" class="dept_input" readonly="readonly"  /><input type="text" name="class_' + num.toString() + '" value="" id="class_' + num.toString() + '" class="class_input" readonly="readonly"  /></p>');
+							curr.parent().append('<p id="sel_' + num.toString() + '" class="sel_p"><input type="text" name="dept_' + num.toString() + '" value="" id="dept_' + num.toString() + '" class="dept_input" readonly="readonly"  /><input type="text" name="class_' + num.toString() + '" value="" id="class_' + num.toString() + '" class="class_input" readonly="readonly"  /><span id="c' + num.toString() +'" class="rm_course"><img src="static/images/round_delete.png" /></span></p>');
 							num++;
 							curr.removeClass('highlight_p');
 							curr.next().addClass('highlight_p');
@@ -90,6 +93,11 @@ $('document').ready(function () {
 									$(this).addClass('highlight_p');
 								});
 							});
+                            
+                            $('.rm_course').unbind();
+
+                            $('.rm_course').click( rm_course);
+
 							
 
 						}
@@ -347,4 +355,31 @@ function formatNiceTime(time) {
 	}
 	
 	return s;
+}
+
+function rm_course(event){
+    id = $(this).parent().attr('id').substr(4);
+	//remove row
+    $(this).parent().remove();
+	//subtract 1 from all ids that are > this row's id
+    $('.sel_p').each(function(){
+
+        if(this.id.substr(4) > id){
+            $cNum = (this.id.substr(4)).toString();
+            $nNum = (this.id.substr(4)-1).toString();
+            this.id = 'sel_' + (this.id.substr(4)-1).toString();
+            $(this).children("#dept_" + $cNum).attr("name", "dept_" + $nNum);
+            $(this).children("#class_" + $cNum).attr("name", "class_" + $nNum);
+            $(this).children("#dept_" + $cNum).attr("id","dept_" + $nNum);
+            $(this).children("#class_" + $cNum).attr("id", "class_" + $nNum);
+            $(this).children("#c" + $cNum).attr("id", "c" + $nNum);
+
+            //$(this+':nth-child(1)').id = 'dept_' + (this.id.substr(4)-1).toString();
+            //$(this+':nth-child(2)').id = 'class_' + (this.id.substr(4)-1).toString();
+            //$(this+':nth-child(3)').id = 'c' + (this.id.substr(4)-1).toString();
+        }
+    });
+    //decrement num
+    num--;
+
 }

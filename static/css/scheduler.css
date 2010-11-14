@@ -62,3 +62,6 @@ div {
 .button {
 	min-width: 100px;
 }
+.rm_course img{
+    vertical-align: middle;
+}

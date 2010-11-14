@@ -48,7 +48,7 @@ $this->load->helper('form');
 	<?php
 		for($i = 1; $i <= $rows; $i++) {
 			echo '<p id="sel_' . $i . '" class="sel_p">' . form_input(array('id'=>'dept_' . $i, 'name'=>'dept_' . $i, 'class'=>'dept_input', 'readonly'=>'readonly'));
-			echo form_input(array('id'=>'class_' . $i, 'name'=>'class_' . $i, 'class'=>'class_input', 'readonly'=>'readonly')) . '</p>';
+			echo form_input(array('id'=>'class_' . $i, 'name'=>'class_' . $i, 'class'=>'class_input', 'readonly'=>'readonly')) . '<span id="c' . $rows . '" class="rm_course">' .img('static/images/round_delete.png')  . '</span></p>';
 		}
 	?>
 	</td>
