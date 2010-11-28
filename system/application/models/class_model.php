@@ -160,7 +160,8 @@ class class_model extends Model {
 	function getMasterDepartmentList($options = array()) {
 		
 		$this->db->from('classes_' . $this->config->item('current_term'));
-		$this->db->select('dept');
+		$this->db->select('dept, department_names.full_name');
+		$this->db->join('department_names', 'classes_winter11.dept = department_names.short_name');
 		$this->db->order_by('dept', 'asc');
 		
 		$q = $this->db->get();
@@ -171,7 +172,7 @@ class class_model extends Model {
 		$junk = array();
 		foreach($list as $l) {
 			if(!isset($junk[$l['dept']])) {
-				$table[] = array($l['dept'], 'dept full name');
+				$table[] = array($l['dept'], $l['full_name']);
 				$junk[$l['dept']] = 1;
 			}
 		}
