@@ -30,7 +30,7 @@ if($_SERVER['SERVER_NAME'] == 'localhost')
 }
 else
 {
-	$config['base_url']	= "http://framework.dev.mschedule.com/"; //use mschedule framework for now
+	$config['base_url']	= "http://beta.mschedule.com/"; //use mschedule framework for now
 }
 
 
