@@ -280,12 +280,161 @@ $('document').ready(function () {
 		});
 		
 		//console.log(use);
-		
 		$.post("api/json/class_model/createSchedules", { 'data[]': use }, function(data) {
 			//console.log(data);
 			var tableString = "";
 			var json = jQuery.parseJSON(data);
-			for(var j in json) {
+			
+			var schedule = json[0];
+			var time_denom = 30;
+			var box_per_hour = 60 / time_denom;
+			
+			var weekdays = Array(0,1,2,3,4,5,6);
+			
+			var master = Array();
+			
+			for(var i = 0; i < 24; i++) {
+			
+				master[i] = Array();
+				
+				for(var j = 0; j < box_per_hour; j++) {
+				
+					master[i][j] = Array();
+					
+					for(var day in weekdays) {
+					
+						master[i][j][day] = '';
+					
+					}
+				
+				}
+			
+			}
+			
+			for(var c in schedule) {
+				
+				var days = schedule[c].days[0].split(',');
+				
+				for(var i = 0; i < days.length; i++) {
+				
+					var start_key = -1;
+					var start_key_minor = -1;
+					var end_key = -1;
+					var end_key_minor = -1;
+					
+					if(typeof days[i] != 'undefined')
+						var day = days[i];
+					else
+						var day = days[0];
+					
+					if(typeof schedule[c].time[i] != 'undefined')
+						var time = schedule[c].time[i];
+					else
+						var time = schedule[c].time[0];
+					time = time.split('-');
+					
+					// Work on the start time
+					if(time[0] % 100 == 0) {
+						// Then the start time is on the hour
+						start_key = time[0] / 100;
+						start_key_minor = 0;					
+					} else {
+						start_key_minor = 0;
+						while(time[0] % 100 != 0) {
+							time[0] -= time_denom;
+							start_key_minor++;
+						}
+						start_key = time[0] / 100;
+					}
+					
+					// Work on the end time
+					if(time[1] % 100 == 0) {
+						// Then the end time is on the hour
+						end_key = time[1] / 100;
+						end_key_minor = 0;					
+					} else {
+						end_key_minor = 0;
+						while(time[1] % 100 != 0) {
+							time[1] -= time_denom;
+							end_key_minor++;
+						}
+						end_key = time[1] / 100;
+					}
+					
+					var day_of_week = -1;
+					if(day == 'SU')
+						day_of_week = 0;
+					if(day == 'M')
+						day_of_week = 1;
+					if(day == 'TU')
+						day_of_week = 2;
+					if(day == 'W')
+						day_of_week = 3;
+					if(day == 'TH')
+						day_of_week = 4;
+					if(day == 'F')
+						day_of_week = 5;
+					if(day == 'SA')
+						day_of_week = 6;
+						
+					var begin = false;
+					for(start_key; start_key <= end_key; start_key++) {
+						if(!begin) {
+							begin = true;
+							for(start_key_minor; start_key_minor < box_per_hour; start_key_minor++) {
+								master[start_key][start_key_minor][day_of_week] = 'BUSY';
+							}
+						}
+						// If we are not quite to the end yet
+						if(start_key != end_key) {
+							for(var j = 0; j < box_per_hour; j++) {
+								master[start_key][j][day_of_week] = 'BUSY';
+							}
+						}
+						// If we are at the end
+						if(start_key == end_key) {
+							for(var j = 0; j < end_key_minor; j++) {
+								master[start_key][j][day_of_week] = 'BUSY';
+							}
+						}
+					}
+				
+				}
+			
+			}
+			
+			var day = new Date(2010, 1, 1, 0, 0, 0, 0);
+			
+			var HTML_STRING = '';
+			HTML_STRING += '<table border="1">';
+			HTML_STRING += '<tbody>';
+			HTML_STRING += '<tr><td>Times</td><td>Sunday</td><td>Monday</td><td>Tuesday</td><td>Wednesday</td><td>Thursday</td><td>Friday</td><td>Saturday</td></tr>';
+			for(var hour in master) {
+				for(var hour_part in master[hour]) {
+					HTML_STRING += '<tr>';
+					HTML_STRING += '<td>';
+					HTML_STRING += day.getHours() + ":" + day.getMinutes();
+					//HTML_STRING += date("H:i", $day);
+					day.setMinutes(day.getMinutes() + time_denom);
+					console.log(day);
+					HTML_STRING += '</td>';
+					for(var weekday in master[hour][hour_part]) {
+						HTML_STRING += '<td>';
+						HTML_STRING += master[hour][hour_part][weekday];
+						HTML_STRING += '</td>';
+					}
+					HTML_STRING += '</tr>';
+				}
+			}
+			HTML_STRING += '</tbody>';
+			HTML_STRING += '</table>';
+			
+			console.log(HTML_STRING);
+			
+			var tableString = HTML_STRING;
+			
+			// This used to dump each schedule into the page in various tables. Lets not do that.
+			/*for(var j in json) {
 				//console.log(json[j]);
 				tableString += '<table><tbody><tr>';
 				tableString += '<td>Class ID</td>';
@@ -324,7 +473,8 @@ $('document').ready(function () {
 				tableString += scheduleID;
 				tableString += '">Save this schedule!</td></tr>';
 				tableString += '</tbody></table>';
-			}
+			}*/
+			
 			$("#schedule_div").html(tableString);
 			$('.save_schedule').click(function() {
 				$.post("api/json/class_model/saveSchedule", {'data': $(this).attr('value')}, function(data){
