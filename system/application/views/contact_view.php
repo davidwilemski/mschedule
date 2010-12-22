@@ -8,7 +8,7 @@
 
 $this->load->helper('form');
 
-echo form_open('email/send_email');
+echo form_open('contact/send_email');
 
 echo '<fieldset>';
 
