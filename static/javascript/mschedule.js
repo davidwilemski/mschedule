@@ -413,7 +413,10 @@ $('document').ready(function () {
 				for(var hour_part in master[hour]) {
 					HTML_STRING += '<tr>';
 					HTML_STRING += '<td>';
-					HTML_STRING += day.getHours() + ":" + day.getMinutes();
+					var mins = day.getMinutes();
+					if(mins == "0")
+						mins = "00";
+					HTML_STRING += day.getHours() + ":" + mins;
 					//HTML_STRING += date("H:i", $day);
 					day.setMinutes(day.getMinutes() + time_denom);
 					console.log(day);
