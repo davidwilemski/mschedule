@@ -411,22 +411,28 @@ $('document').ready(function () {
 			HTML_STRING += '<tr><td>Times</td><td>Sunday</td><td>Monday</td><td>Tuesday</td><td>Wednesday</td><td>Thursday</td><td>Friday</td><td>Saturday</td></tr>';
 			for(var hour in master) {
 				for(var hour_part in master[hour]) {
-					HTML_STRING += '<tr>';
-					HTML_STRING += '<td>';
+					var ROW_STRING = '';
+					ROW_STRING += '<td>';
 					var mins = day.getMinutes();
 					if(mins == "0")
 						mins = "00";
-					HTML_STRING += day.getHours() + ":" + mins;
-					//HTML_STRING += date("H:i", $day);
-					day.setMinutes(day.getMinutes() + time_denom);
-					console.log(day);
-					HTML_STRING += '</td>';
+					ROW_STRING += day.getHours() + ":" + mins;
+					//console.log(day);
+					ROW_STRING += '</td>';
+					var hide = false;
 					for(var weekday in master[hour][hour_part]) {
-						HTML_STRING += '<td>';
-						HTML_STRING += master[hour][hour_part][weekday];
-						HTML_STRING += '</td>';
+						ROW_STRING += '<td>';
+						ROW_STRING += master[hour][hour_part][weekday];
+						if(master[hour][hour_part][weekday] == '')
+							hide = true;
+						ROW_STRING += '</td>';
 					}
-					HTML_STRING += '</tr>';
+					if(hide && (day.getHours() < 8) || day.getHours() > 18) // If we can hide this, and it's before 8 am or after 6 pm
+						HTML_STRING += '<tr class="hide">' + ROW_STRING + '</tr>';
+					else
+						HTML_STRING += '<tr>' + ROW_STRING + '</tr>';
+						
+					day.setMinutes(day.getMinutes() + time_denom);
 				}
 			}
 			HTML_STRING += '</tbody>';
@@ -478,7 +484,15 @@ $('document').ready(function () {
 				tableString += '</tbody></table>';
 			}*/
 			
+			// Add the table to the view
 			$("#schedule_div").html(tableString);
+			
+			// And hide the rows to be hidden
+			$('.hide').each(function() {
+				$(this).hide();
+			});
+			
+			// Function for saving a schedule
 			$('.save_schedule').click(function() {
 				$.post("api/json/class_model/saveSchedule", {'data': $(this).attr('value')}, function(data){
 					console.log(data);
