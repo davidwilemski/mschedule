@@ -419,19 +419,20 @@ $('document').ready(function () {
 					ROW_STRING += day.getHours() + ":" + mins;
 					//console.log(day);
 					ROW_STRING += '</td>';
-					var hide = false;
+					var hide = true;
 					for(var weekday in master[hour][hour_part]) {
 						ROW_STRING += '<td>';
 						ROW_STRING += master[hour][hour_part][weekday];
-						if(master[hour][hour_part][weekday] == '')
-							hide = true;
+						if(master[hour][hour_part][weekday] != '')
+							hide = false;
 						ROW_STRING += '</td>';
 					}
-					if(hide && (day.getHours() < 8) || day.getHours() > 18) // If we can hide this, and it's before 8 am or after 6 pm
+					if(hide && (day.getHours() < 8 || day.getHours() > 18)) // If we can hide this, and it's before 8 am or after 6 pm
 						HTML_STRING += '<tr class="hide">' + ROW_STRING + '</tr>';
 					else
 						HTML_STRING += '<tr>' + ROW_STRING + '</tr>';
-						
+					
+					// Increment the day.
 					day.setMinutes(day.getMinutes() + time_denom);
 				}
 			}
