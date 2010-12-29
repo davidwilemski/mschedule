@@ -380,21 +380,22 @@ $('document').ready(function () {
 					var begin = false;
 					for(start_key; start_key <= end_key; start_key++) {
 						if(!begin) {
-							begin = true;
 							for(start_key_minor; start_key_minor < box_per_hour; start_key_minor++) {
-								master[start_key][start_key_minor][day_of_week] = 'BUSY';
+								master[start_key][start_key_minor][day_of_week] = schedule[c].classid;
 							}
-						}
-						// If we are not quite to the end yet
-						if(start_key != end_key) {
-							for(var j = 0; j < box_per_hour; j++) {
-								master[start_key][j][day_of_week] = 'BUSY';
+							begin = true;
+						} else {
+							// If we are not quite to the end yet
+							if(start_key != end_key) {
+								for(var j = 0; j < box_per_hour; j++) {
+									master[start_key][j][day_of_week] = schedule[c].classid;
+								}
 							}
-						}
-						// If we are at the end
-						if(start_key == end_key) {
-							for(var j = 0; j < end_key_minor; j++) {
-								master[start_key][j][day_of_week] = 'BUSY';
+							// If we are at the end
+							if(start_key == end_key) {
+								for(var j = 0; j < end_key_minor; j++) {
+									master[start_key][j][day_of_week] = schedule[c].classid;
+								}
 							}
 						}
 					}
@@ -405,6 +406,9 @@ $('document').ready(function () {
 			
 			var day = new Date(2010, 1, 1, 0, 0, 0, 0);
 			
+			var td_id = 0;
+			// Number of columns: 7 (days of a week)
+			// Number of rows:    48 (24 hours, * 2)
 			var HTML_STRING = '';
 			HTML_STRING += '<table border="1">';
 			HTML_STRING += '<tbody>';
@@ -421,10 +425,13 @@ $('document').ready(function () {
 					ROW_STRING += '</td>';
 					var hide = true;
 					for(var weekday in master[hour][hour_part]) {
-						ROW_STRING += '<td>';
-						ROW_STRING += master[hour][hour_part][weekday];
-						if(master[hour][hour_part][weekday] != '')
+						ROW_STRING += '<td id="' + td_id++ + '" ';
+						if(master[hour][hour_part][weekday] != '') { // We have a class here
 							hide = false;
+							ROW_STRING += 'class="visit" classid="' + master[hour][hour_part][weekday] + '"';
+						}
+						ROW_STRING += '>';
+						ROW_STRING += master[hour][hour_part][weekday];
 						ROW_STRING += '</td>';
 					}
 					if(hide && (day.getHours() < 8 || day.getHours() > 18)) // If we can hide this, and it's before 8 am or after 6 pm
@@ -439,7 +446,7 @@ $('document').ready(function () {
 			HTML_STRING += '</tbody>';
 			HTML_STRING += '</table>';
 			
-			console.log(HTML_STRING);
+			//console.log(HTML_STRING);
 			
 			var tableString = HTML_STRING;
 			
@@ -493,10 +500,13 @@ $('document').ready(function () {
 				$(this).hide();
 			});
 			
+			// combine the boxes that are the same classes
+			combBoxes();
+			
 			// Function for saving a schedule
 			$('.save_schedule').click(function() {
 				$.post("api/json/class_model/saveSchedule", {'data': $(this).attr('value')}, function(data){
-					console.log(data);
+					//	(data);
 					if(data == "true") {
 						alert('Your schedule is safe');
 					} else {
@@ -509,6 +519,36 @@ $('document').ready(function () {
 	});
 	
 });
+
+function combBoxes() {
+	while($('.visit').length > 0) {
+		var this_box = $('.visit').first();
+		var currID = this_box.attr('id') * 1;
+		var currCLASSID = this_box.attr('classid');
+		
+		// We are looking at a new class
+		$(this_box).attr("rowspan", 1);
+		$(this_box).removeClass('visit');
+		
+		// We are still on the same class
+		// Add 7 to the id for the next row.
+		var done = false;
+		var nextNUM = -1;
+		while(!done) {
+			done = true;
+			nextNUM = currID + 7;
+			var nextBX = $('#' + nextNUM);
+			//console.log(nextNUM);
+			if($(nextBX).attr('classid') == currCLASSID) {
+				$(this_box).attr('rowspan', $(this_box).attr('rowspan') + 1);
+				$(nextBX).removeClass('visit');
+				$(nextBX).remove();
+				done = false;
+				currID = nextNUM;
+			}			
+		}
+	}
+}
 
 function formatNiceTime(time) {
 	var t = time.split('-');
