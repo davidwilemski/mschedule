@@ -16,6 +16,10 @@
 					 	sortdirection - direction to sort (asc or desc)
 					 returns user as a singular object if there is only one result
 					 returns array of users if there is more than one result
+		_hasMigrated() - returns true or false. True if the user's 
+						password hash is in the SHA + salt format 
+						and false if it is MD5'd
+						private function - not to be used in public API
 		login() - validates credentials and sets session=>userdata
 				  requires username and password (as hash) to be passed
 				  sets session=>userdata with username, first_name, last_name, userType, email, and userID
@@ -102,7 +106,8 @@ class user_model extends Model {
 			'status',
 			'password',
 			'userType',
-			'activate_code'
+			'activate_code',
+			'migrated'
 		);
 		
 		foreach($fields as $field)
@@ -149,13 +154,35 @@ class user_model extends Model {
 			
 		return $q->result();
 	}
+
+	function _hasMigrated($options = array()){
+		$this->db->select('migrated')->from('users')->where('username', $options['username']);
+		$q = $this->db->get();
+		if($q->row()->migrated == true)
+			return true;
+		return false;
+	}
 	
 	function login($options = array()) {
 		
 		if(!$this->user_model->_required(array('username', 'password'), $options))
 			return false;
-			
-		$user = $this->user_model->getUsers(array('username' => $options['username'], 'password' => md5($options['password'])));
+
+		$user = null;
+
+		if($this->user_model->_hasMigrated(array('username' => $options['username']))){
+			$user = $this->user_model->getUsers(array('username' => $options['username'], 'password' => ($options['password'])));
+		}	
+		else{
+			//otherwise get user data, then if user data matches, migrate the password to the new hash (sha256(username + password))
+			$user = $this->user_model->getUsers(array('username' => $options['username'], 'password' => (md5($options['password']))));
+			if($user){//then migrate
+				$options['password'] = hash('sha256', $user->username . $options['password']);
+				$options['userID'] = $user->userID;
+				$options['migrated'] = 1;
+				$this->user_model->updateUser($options);
+			}
+		}
 		
 		if(!$user) return false;
 		
