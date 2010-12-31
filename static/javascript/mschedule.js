@@ -289,22 +289,24 @@ $('document').ready(function () {
 			
 			var maxSchedules = json.length;
 			
+			//console.log(schedule);
+			
 			$("#schedule_div").html('<span id="put_table_here"></span>');
 			
 			// Function passing in a schedule to make the table
-			createWeekSchedule(schedule, 0, $("#put_table_here"));
+			var schedule_id = createWeekSchedule(schedule, 0, $("#put_table_here"));
 			
 	
 			// Add in the 'schedule id' that we worked with.
 			// This is for when we change what schedule we are looking at
 			// and which one we save.
-			///////////////// NOTE: This actually isn't there any more. We need to add it.
-			//$("#schedule_div").append('<span id="scheduleID" value="' + 0 + '" />');
+			$("#schedule_div").append('<span id="scheduleID" value="' + 0 + '" idstring="' + schedule_id + '" />');
 			
 			// For now, let's also add a simple span to be able to go forward
 			// and backwards in the schedules
 			$("#schedule_div").append('<span id="next_schedule"><p>Next Schedule</p></span>');
 			$("#schedule_div").append('<span id="prev_schedule"><p>Prev Schedule</p></span>');
+			$("#schedule_div").append('<span id="save_schedule"><p>Save Schedule</p></span>');
 			
 			// Hide the right buttons
 			hideNextPrev(0, maxSchedules);
@@ -315,7 +317,9 @@ $('document').ready(function () {
 				next_index = $('#scheduleID').val() * 1 + 1;
 				$('#scheduleID').val(next_index);
 				$("#put_table_here").html("<p>Loading</p>");
-				createWeekSchedule(json[next_index], next_index, $('#put_table_here'));
+				var new_schedule_id = createWeekSchedule(json[next_index], next_index, $('#put_table_here'));
+				//console.log(new_schedule_id);
+				$('#scheduleID').attr('idstring', new_schedule_id);
 				hideNextPrev(next_index, maxSchedules);
 			}
 			$('#next_schedule').click(nextButtonFunction);
@@ -326,15 +330,15 @@ $('document').ready(function () {
 				next_index = $('#scheduleID').val() * 1 - 1;
 				$('#scheduleID').val(next_index);
 				$("#put_table_here").html("<p>Loading</p>");
-				createWeekSchedule(json[next_index], next_index, $('#put_table_here'));
+				var new_schedule_id = createWeekSchedule(json[next_index], next_index, $('#put_table_here'));
+				$('#scheduleID').attr('idstring', new_schedule_id);
 				hideNextPrev(next_index, maxSchedules);
 			} 
 			$('#prev_schedule').click(prevButtonFunction);
 			
 			// Function for saving a schedule
-			$('.save_schedule').click(function() {
-				$.post("api/json/class_model/saveSchedule", {'data': $(this).attr('value')}, function(data){
-					//	(data);
+			$('#save_schedule').click(function() {
+				$.post("api/json/class_model/saveSchedule", {'data': $("#scheduleID").attr('idstring')}, function(data){
 					if(data == "true") {
 						alert('Your schedule is safe');
 					} else {

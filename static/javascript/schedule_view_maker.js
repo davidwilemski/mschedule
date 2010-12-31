@@ -1,10 +1,15 @@
-function createWeekSchedule(schedule, myIndex, location) {
+function createWeekSchedule(schedule, myIndex, location, path_fix) {
+	if(!path_fix)
+		path_fix = "";
+
 	var time_denom = 30;
 	var box_per_hour = 60 / time_denom;
 	
 	var weekdays = Array(0,1,2,3,4,5,6);
 	
 	var master = Array();
+	
+	var return_string = "";
 	
 	for(var i = 0; i < 24; i++) {
 	
@@ -25,6 +30,9 @@ function createWeekSchedule(schedule, myIndex, location) {
 	}
 	
 	for(var c in schedule) {
+	
+		// Here is where I will get our schedule string
+		return_string += schedule[c].classid + ";";
 		
 		var days = schedule[c].days[0].split(',');
 		
@@ -186,15 +194,17 @@ function createWeekSchedule(schedule, myIndex, location) {
 	// Make the popup bubbles!
 	for(var z in TD_IDs) {
 		var id_go = TD_IDs[z] * 1 - 1;
-		console.log(id_go);
+		//console.log(id_go);
 		$("#" + id_go).CreateBubblePopup({ 
 			innerHtml: TD_CONTENT[z], 
-			themePath: 'static/css/bubble-themes', 
+			themePath: path_fix + 'static/css/bubble-themes', 
 			themeName: 'blue',
 			openingSpeed: 100,
 			closingSpeed: 100
 		});
 	}
+	
+	return return_string;
 	
 }
 

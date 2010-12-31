@@ -148,10 +148,10 @@ class Classes extends controller {
 			'ad'		=> 'static/ads/google_ad_120_234.php',
 			'navigation'=> "navigation",
 			'nav_data'	=> $this->nav_links_model->getNavBarLinks(),
-			'page_data'	=> $info
+			'page_data'	=> $info,
+			'css'		=> includeCSSFile("style") . includeCSSFile("jquery.bubblepopup.v2.3.1"),
+			'javascript'=> includeJSFile("jquery") . includeJSFile("class/display_user_schedule") . includeJSFile("schedule_view_maker") . includeJSFile("jquery.bubblepopup.v2.3.1.min")
 		);
-		
-		$data['css'] = includeCSSFile("style");
 		
 		$this->load->view('include/template', $data);
 	

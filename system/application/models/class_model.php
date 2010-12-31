@@ -26,6 +26,30 @@ class class_model extends Model {
 		return true;
 		
 	}
+	
+	function getUserClassDetails($options = array()) {
+	
+		$options = explode(";", $options);
+		unset($options[count($options)-1]);
+		
+		$info = array();
+		
+		foreach($options as $class) {
+			$details = $this->getClassDetail(array('classid' => $class));
+			
+			// fixes to make it the same:
+			$details->days = preg_split('/","/', $details->days);
+			$details->time = preg_split('/","/', $details->time);
+			$details->location = preg_split('/","/', $details->location);
+			
+			$info[] = $details;
+		}
+		
+		//print_r($info);
+		
+		return $info;
+	
+	}
 
 	function saveSchedule($options = array()) {
 		$uid = $this->session->userdata('userID');
@@ -42,7 +66,7 @@ class class_model extends Model {
 		$q = $this->db->get();
 		$q = $q->result_array();
 		// $options is the class ids formatted as 123456;123456;123456;
-		// note the ending semicolin
+		// NOTE: the ending semicolin
 		if(count($q) == 1) {
 			if($q[0]['curr_schedule'] == '') {
 				$this->db->where('userID', $uid);
@@ -66,7 +90,12 @@ class class_model extends Model {
 			return false;
 	
 		foreach($options['class_list'] as $class) {
-			if(!$this->addRow(array('scheduleID' => $options['scheduleID'], 'userID' => $options['userID'], 'classID' => $class, 'term' => $this->config->item('current_term'))))
+			if(!$this->addRow(array(
+				'scheduleID' => $options['scheduleID'], 
+				'userID' => $options['userID'], 
+				'classID' => $class, 
+				'term' => $this->config->item('current_term')
+			)))
 				return false;
 		}
 		
