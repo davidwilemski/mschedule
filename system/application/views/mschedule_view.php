@@ -7,8 +7,8 @@
 ?>
 
 <?php
-echo '<script src="' . base_url() . 'static/javascript/jquery.js" type="text/JavaScript"></script>';
-echo '<script src="' . base_url() . 'static/javascript/mschedule.js" type="text/JavaScript"></script>';
+//echo '<script src="' . base_url() . 'static/javascript/jquery.js" type="text/JavaScript"></script>';
+//echo '<script src="' . base_url() . 'static/javascript/mschedule.js" type="text/JavaScript"></script>';
 
 $this->load->helper('form');
 

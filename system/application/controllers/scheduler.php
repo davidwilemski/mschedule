@@ -41,7 +41,8 @@ class scheduler extends Controller {
 			'view_name'	=> 'mschedule_view',
 			'ad'		=> 'static/ads/google_ad_120_234.php',
 			'navigation'=> "navigation",
-			'css'		=> includeCSSFile("style") . includeCSSFile("scheduler"),
+			'css'		=> includeCSSFile("style") . includeCSSFile("scheduler") . includeCSSFile("jquery.bubblepopup.v2.3.1"),
+			'javascript'=> includeJSFile("jquery") . includeJSFile("schedule_view_maker") . includeJSFile("mschedule") . includeJSFile("jquery.bubblepopup.v2.3.1.min"),
 			'nav_data'	=> $this->nav_links_model->getNavBarLinks()
 		);
 		
