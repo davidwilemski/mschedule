@@ -171,7 +171,7 @@ class user_model extends Model {
 		$user = null;
 
 		if($this->user_model->_hasMigrated(array('username' => $options['username']))){
-			$user = $this->user_model->getUsers(array('username' => $options['username'], 'password' => ($options['password'])));
+			$user = $this->user_model->getUsers(array('username' => $options['username'], 'password' => hash('sha256', $options['username'] . $options['password'])));
 		}	
 		else{
 			//otherwise get user data, then if user data matches, migrate the password to the new hash (sha256(username + password))

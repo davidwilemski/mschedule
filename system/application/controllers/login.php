@@ -32,7 +32,7 @@ class login extends Controller {
 		
 		$this->form_validation->set_rules('username', 'Username', 'trim|required|callback__check_login');
 		$this->form_validation->set_rules('password', 'Password', 'trim|required');
-		
+
 		if($this->form_validation->run()) {
 			
 			if($this->user_model->login(array('username' => $this->input->post('username'), 'password' => $this->input->post('password')))) {
@@ -56,8 +56,7 @@ class login extends Controller {
 	function _check_login($username) {
 		
 		if($this->input->post('password')) {
-			
-			$user = $this->user_model->getUsers(array('username' => $username, 'password' => md5($this->input->post('password')), 'status' => 'active'));
+			$user = $this->user_model->getUsers(array('username' => $username, 'password' => hash('sha256', $username . $this->input->post('password')), 'status' => 'active'));
 			if($user) return true;
 						
 		}
@@ -85,7 +84,7 @@ class login extends Controller {
 				'last_name'=>$this->input->post('last_name'),
 				'email'=>$this->input->post('email'),
 				'username'=>preg_replace('/@umich.edu/', '', $this->input->post('email')),
-				'password'=>md5($this->input->post('password')),
+				'password'=>hash('sha256', preg_replace('/@umich.edu/', '', $this->input->post('email')) . $this->input->post('password')),
 				'activate_code'=>random_string('unique')
 			);
 			
@@ -285,7 +284,7 @@ class login extends Controller {
 			
 			$u = $this->user_model->getUsers(array('activate_code' => $this->input->post('code'), 'status' => 'inactive'));
 			if($u) {
-				$user = $this->user_model->activate_account(array('userID' => $u->userID, 'password' => md5($this->input->post('password')), 'status' => 'active'));
+				$user = $this->user_model->activate_account(array('userID' => $u->userID, 'password' => hash('sha256', $this->session->userdata('username') . $this->input->post('password')), 'status' => 'active'));
 				if($user) {
 					$this->session->set_flashdata('flashError', 'Password reset. Try logging in.');
 					redirect('login');
