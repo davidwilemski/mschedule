@@ -294,54 +294,12 @@ $('document').ready(function () {
 			// Function passing in a schedule to make the table
 			createWeekSchedule(schedule, 0, $("#put_table_here"));
 			
-			// This used to dump each schedule into the page in various tables. Lets not do that.
-			/*for(var j in json) {
-				//console.log(json[j]);
-				tableString += '<table><tbody><tr>';
-				tableString += '<td>Class ID</td>';
-				tableString += '<td>Department</td>';
-				tableString += '<td>Class Number</td>';
-				tableString += '<td>Class Section</td>';
-				tableString += '<td>Class Type</td>';
-				tableString += '<td>Score</td>';
-				tableString += '</tr>';
-				scheduleID = '';
-				for(var c in json[j]) {
-					//console.log(json[j][c]);
-					tableString += '<tr>';
-					tableString += '<td>';
-					tableString += json[j][c].classid;
-					scheduleID += json[j][c].classid + ';';
-					tableString += '</td>';
-					tableString += '<td>';
-					tableString += json[j][c].dept;
-					tableString += '</td>';
-					tableString += '<td>';
-					tableString += json[j][c].number;
-					tableString += '</td>';
-					tableString += '<td>';
-					tableString += json[j][c].section;
-					tableString += '</td>';
-					tableString += '<td>';
-					tableString += json[j][c].type;
-					tableString += '</td>';
-					tableString += '<td>'
-					tableString += json[j][c].score
-					tableString += '</td>';
-					tableString += '</tr>';
-				}
-				tableString += '<tr><td class="save_schedule" value="';
-				tableString += scheduleID;
-				tableString += '">Save this schedule!</td></tr>';
-				tableString += '</tbody></table>';
-			}*/
-			
-			
 	
 			// Add in the 'schedule id' that we worked with.
 			// This is for when we change what schedule we are looking at
 			// and which one we save.
-			$("#schedule_div").append('<span id="scheduleID" value="' + 0 + '" />');
+			///////////////// NOTE: This actually isn't there any more. We need to add it.
+			//$("#schedule_div").append('<span id="scheduleID" value="' + 0 + '" />');
 			
 			// For now, let's also add a simple span to be able to go forward
 			// and backwards in the schedules
@@ -496,23 +454,31 @@ function createWeekSchedule(schedule, myIndex, location) {
 				day_of_week = 6;
 				
 			var begin = false;
+			var CELL_CONTENTS = schedule[c].dept + " " + schedule[c].number + "." + schedule[c].section;
+			var BUBBLE_CONTENTS = "<strong>" + CELL_CONTENTS + "</strong><br />"
+				+ "Class ID: " + schedule[c].classid;
+			var CELL_DATA = new Array();
+			CELL_DATA.push(CELL_CONTENTS);
+			CELL_DATA.push(BUBBLE_CONTENTS);
+			CELL_DATA.push(schedule[c].classid);
+			//console.log(CELL_DATA);
 			for(start_key; start_key <= end_key; start_key++) {
 				if(!begin) {
 					for(start_key_minor; start_key_minor < box_per_hour; start_key_minor++) {
-						master[start_key][start_key_minor][day_of_week] = schedule[c].classid;
+						master[start_key][start_key_minor][day_of_week] = CELL_DATA;
 					}
 					begin = true;
 				} else {
 					// If we are not quite to the end yet
 					if(start_key != end_key) {
 						for(var j = 0; j < box_per_hour; j++) {
-							master[start_key][j][day_of_week] = schedule[c].classid;
+							master[start_key][j][day_of_week] = CELL_DATA;
 						}
 					}
 					// If we are at the end
 					if(start_key == end_key) {
 						for(var j = 0; j < end_key_minor; j++) {
-							master[start_key][j][day_of_week] = schedule[c].classid;
+							master[start_key][j][day_of_week] = CELL_DATA;
 						}
 					}
 				}
@@ -523,6 +489,8 @@ function createWeekSchedule(schedule, myIndex, location) {
 	}
 	
 	var day = new Date(2010, 1, 1, 0, 0, 0, 0);
+	var TD_IDs = new Array();
+	var TD_CONTENT = new Array();
 	
 	var td_id = 0;
 	// Number of columns: 7 (days of a week)
@@ -544,12 +512,16 @@ function createWeekSchedule(schedule, myIndex, location) {
 			var hide = true;
 			for(var weekday in master[hour][hour_part]) {
 				ROW_STRING += '<td id="' + td_id++ + '" ';
-				if(master[hour][hour_part][weekday] != '') { // We have a class here
+				if(master[hour][hour_part][weekday].length > 0) { // We have a class here
+				// This if is repeated below...
 					hide = false;
-					ROW_STRING += 'class="visit" classid="' + master[hour][hour_part][weekday] + '"';
+					ROW_STRING += 'class="visit" classid="' + master[hour][hour_part][weekday][2] + '"';
+					TD_IDs.push(td_id);
+					TD_CONTENT.push(master[hour][hour_part][weekday][1]);
 				}
 				ROW_STRING += '>';
-				ROW_STRING += master[hour][hour_part][weekday];
+				if(master[hour][hour_part][weekday].length > 0) // This if is right above...
+					ROW_STRING += master[hour][hour_part][weekday][0];
 				ROW_STRING += '</td>';
 			}
 			if(hide && (day.getHours() < 8 || day.getHours() > 18)) // If we can hide this, and it's before 8 am or after 6 pm
@@ -573,6 +545,17 @@ function createWeekSchedule(schedule, myIndex, location) {
 	
 	// combine the boxes that are the same classes
 	combBoxes();
+	
+	// Make the popup bubbles!
+	for(var z in TD_IDs) {
+		var id_go = TD_IDs[z] * 1 - 1;
+		console.log(id_go);
+		$("#" + id_go).CreateBubblePopup({ 
+			innerHtml: TD_CONTENT[z], 
+			themePath: '/mschedule/static/css/bubble-themes', 
+			themeName: 'blue' 
+		});
+	}
 	
 }
 
