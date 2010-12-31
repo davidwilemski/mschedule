@@ -155,12 +155,15 @@ class user_model extends Model {
 		return $q->result();
 	}
 
-	function _hasMigrated($options = array()){
+	//Returns migration code
+	//0 for md5 hash of just password
+	//-1 for OLD_PASSWORD hash of just password
+	//1 for sha256 hash of user+pass
+	function hasMigrated($options = array()){
 		$this->db->select('migrated')->from('users')->where('username', $options['username']);
 		$q = $this->db->get();
-		if($q->row()->migrated == true)
-			return true;
-		return false;
+		$usr = $q->row();
+		return $usr->migrated;
 	}
 	
 	function login($options = array()) {
@@ -170,10 +173,10 @@ class user_model extends Model {
 
 		$user = null;
 
-		if($this->user_model->_hasMigrated(array('username' => $options['username']))){
+		if($this->user_model->hasMigrated(array('username' => $options['username']))== 1){
 			$user = $this->user_model->getUsers(array('username' => $options['username'], 'password' => hash('sha256', $options['username'] . $options['password'])));
 		}	
-		else{
+		else if($this->user_model->hasMigrated(array('username' => $options['username']))== 0){
 			//otherwise get user data, then if user data matches, migrate the password to the new hash (sha256(username + password))
 			$user = $this->user_model->getUsers(array('username' => $options['username'], 'password' => (md5($options['password']))));
 			if($user){//then migrate
@@ -181,6 +184,17 @@ class user_model extends Model {
 				$options['userID'] = $user->userID;
 				$options['migrated'] = 1;
 				$this->user_model->updateUser($options);
+			}
+		}
+		else{ //otherwise we know to use the OLD_PASSWORD function - also migrate this
+			$this->load->helper('mysqlcrypt');
+			$user = $this->user_model->getUsers(array('username' => $options['username'], 'password' => (mysql_old_password_hash($options['password']))));
+			if($user){//then migrate
+				$options['password'] = hash('sha256', $user->username . $options['password']);
+				$options['userID'] = $user->userID;
+				$options['migrated'] = 1;
+				$this->user_model->updateUser($options);
+
 			}
 		}
 		
