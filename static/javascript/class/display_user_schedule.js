@@ -2,7 +2,7 @@ $('document').ready(function () {
 
 	var schedule_id = $("#put_schedule_here").attr("value");
 	
-	console.log(schedule_id);
+	//console.log(schedule_id);
 	
 	$.post("../api/json/class_model/getUserClassDetails", { 'data': schedule_id }, function(data) {
 	
