@@ -61,9 +61,7 @@ class login extends Controller {
 			else if($this->user_model->hasMigrated(array('username' => $username)) == 0)
 				$user = $this->user_model->getUsers(array('username' => $username, 'password' => md5($this->input->post('password')), 'status' => 'active'));
 			else{
-				$this->load->helper('mysqlcrypt');
-				echo mysql_password_hash('awsaws09');
-				$user = $this->user_model->getUsers(array('username' => $username, 'password' => (old_password($this->input->post('password')))));
+				$user = $this->user_model->getUsers(array('username' => $username, 'password' => $this->user_model->oldpass($this->input->post('password'))));
 
 			}
 
