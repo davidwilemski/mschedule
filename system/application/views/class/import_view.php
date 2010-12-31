@@ -3,6 +3,29 @@
 		This view is for loading in classes BY CLASS NUMBER.
 	*/
 ?>
+<table border=1>
+<?php
+echo '<tr>';
+echo '<td>Class ID</td>';
+echo '<td>Department</td>';
+echo '<td>Class Number</td>';
+echo '<td>Class Section</td>';
+echo '<td>Class Type</td>';
+echo '</tr>';
+
+$current_schedule_id = "";
+foreach($user_classes as $p) {
+	$current_schedule_id .= $p->classid . ";";
+	echo '<tr>';
+	echo '<td>' . $p->classid . '</td>';
+	echo '<td>' . $p->dept . '</td>';
+	echo '<td>' . $p->number . '</td>';
+	echo '<td>' . $p->section . '</td>';
+	echo '<td>' . $p->type . '</td>';
+	echo '</tr>';
+}
+?>
+</table>
 <?php 
 $this->load->helper('form');
 if($this->session->flashdata('error')) { ?>
@@ -14,8 +37,8 @@ if(!$this->session->flashdata('fields')) $fields = '3'; else $fields = $this->se
 
 <fieldset>
 <legend>Import Classes</legend>
-
 <input type="hidden" id="class_boxes" name="class_boxes" value=<?=$fields?>></input>
+<input type="hidden" id="curr_schedule_string" name="curr_schedule_string" value=<?=$current_schedule_id?>></input>
 <?php
 $inputs = array();
 for($i = 1; $i <=$fields; $i++) {
@@ -50,10 +73,16 @@ $remove_button_data = array(
 );
 
 ?>
+<fieldset>
+<table><tbody>
+<tr><td>Save as New:</td><td><?=form_radio('save_type', 'new', false)?></td></tr>
+<tr><td>Append to current schedule:</td><td><?=form_radio('save_type', 'append', true)?></td></tr>
+</tbody></table>
+</fieldset>
 <?php foreach($inputs as $input) { ?>
 <p id="<?=$input['id']?>"><label for="<?=$input['name']?>">Class ID: </label><?=form_input($input)?></p>
 <?php } ?>
-
+<input type="hidden" value="" >
 <?=form_submit($button_data)?>
 <?=form_button($add_button_data)?>
 <?=form_button($remove_button_data)?>

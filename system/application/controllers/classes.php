@@ -32,6 +32,7 @@ class Classes extends controller {
 	
 	function import() {
 	
+		// This sets the rules for every box that is there and currently created
 		if($this->input->post('class_boxes')) {
 			for($i = 1; $i <= $this->input->post('class_boxes'); $i++)
 				$this->form_validation->set_rules('class' . $i, 'Class ' . $i, 'trim|callback__check_duplicates|callback__check_valid_class|callback__check_inDB');
@@ -40,36 +41,57 @@ class Classes extends controller {
 		if($this->form_validation->run()) {
 		
 			$data = array();
+			
+			if($this->input->post("save_type") == "new") {
+				// save a brand new schedule
+				$schedule_id = "";
+			} else {
+				// remove the current curr_schedule, and add the new one starting with the curr schedule id
+				$schedule_id = $this->class_model->getUserCurrSchedulePref(array('userID' => $this->session->userdata('userID')));
+				$this->db->delete('user_class', array('scheduleID' => $schedule_id));
+				$data = explode(";", $this->input->post('curr_schedule_string'));
+				unset($data[count($data)-1]);
+			}
+						
 			if($this->input->post('class_boxes')) {
-				for($i = 1; $i <= $this->input->post('class_boxes'); $i++)
-					if($this->input->post('class' . $i) != '')
-						$data[$i] = $this->input->post('class' . $i);
+				for($i = 1; $i <= $this->input->post('class_boxes'); $i++) {
+					if($this->input->post('class' . $i) != '') {
+						$data[] = $this->input->post('class' . $i);
+						$schedule_id .= $this->input->post('class' . $i);
+					}
+				}
 			}
 			
-			if(!$this->class_model->importClasses(array('userID' => $this->session->userdata('userID'), 'class_list' => $data)))
+			$import_info = array('scheduleID' => $schedule_id, 'userID' => $this->session->userdata('userID'), 'class_list' => $data);
+			
+			if(!$this->class_model->importClasses($import_info))
 				$this->session->set_flashdata('error', 'Something went wrong.');
 			
-			redirect('classes/view');
+			//redirect('classes/view');
 		}
+		
+		$user_classes = $this->class_model->getUserClassSchedule(array('userID' => $this->session->userdata('userID')));
+		$user_curr_schedule_id = $this->class_model->getUserCurrSchedulePref(array('userID' => $this->session->userdata('userID')));
 	
 		$data = array(
 			'view_name'	=> 'class/import_view',
 			'ad'		=> 'static/ads/google_ad_120_234.php',
 			'navigation'=> "navigation",
-			'nav_data'	=> $this->nav_links_model->getNavBarLinks()
+			'css'		=> includeCSSFile("style"),
+			'javascript'=> includeJSFile('jquery') . includeJSFile('class_view'),
+			'nav_data'	=> $this->nav_links_model->getNavBarLinks(),
+			'page_data' => array('user_classes' => $user_classes, 'curr_schedule' => $user_curr_schedule_id)
 		);
-		
-		$data['css'] = includeCSSFile("style");
-		
-		$data['javascript'] = includeJSFile('jquery');
-		$data['javascript'] .= includeJSFile('class_view');
 		
 		$this->load->view('include/template', $data);
 	
 	}
 	
 	function _check_inDB($class) {
-	
+		
+		if($this->input->post("save_type") == "new")
+			return true;
+		
 		$go = true;
 		if($class) {
 			$classes = $this->class_model->getClasses(array('userID' => $this->session->userdata('userID')));
@@ -136,19 +158,14 @@ class Classes extends controller {
 	
 	function view() {
 	
-		$classes = $this->class_model->getClasses(array('userID' => $this->session->userdata('userID')));
-		
-		$info = array();
-		foreach($classes as $class) {
-			$info[] = $this->class_model->getClassDetail(array('classid' => $class->classID));
-		}
+		$classes = $this->class_model->getUserClassSchedule(array('userID' => $this->session->userdata('userID')));
 		
 		$data = array(
 			'view_name'	=> 'class/class_view',
 			'ad'		=> 'static/ads/google_ad_120_234.php',
 			'navigation'=> "navigation",
 			'nav_data'	=> $this->nav_links_model->getNavBarLinks(),
-			'page_data'	=> $info,
+			'page_data'	=> $classes,
 			'css'		=> includeCSSFile("style") . includeCSSFile("jquery.bubblepopup.v2.3.1"),
 			'javascript'=> includeJSFile("jquery") . includeJSFile("class/display_user_schedule") . includeJSFile("schedule_view_maker") . includeJSFile("jquery.bubblepopup.v2.3.1.min")
 		);

@@ -27,6 +27,42 @@ class class_model extends Model {
 		
 	}
 	
+	function getUserCurrSchedulePref($options = array()) {
+	
+		$this->db->from('user_prefs');
+		$this->db->where('userID', $options['userID']);
+		$q = $this->db->get();
+		if($q->num_rows() == 0) {
+			return false;
+		}
+		
+		$data = $q->row_array(0);
+		return $data['curr_schedule'];
+	
+	}
+	
+	function getUserClassSchedule($options = array()) {
+	
+		$curr_schedule = $this->getUserCurrSchedulePref(array('userID' => $options['userID']));
+		if(!$curr_schedule) {
+			return false;
+		}
+		
+		$this->db->from('user_class');
+		$this->db->where('scheduleID', $curr_schedule);
+		$q = $this->db->get();
+		
+		$return_array = array();
+		foreach($q->result() as $class) {
+			$details = $this->getClassDetail(array('classid' => $class->classID));
+			
+			$return_array[] = $details;
+		}
+		
+		return $return_array;
+	
+	}
+	
 	function getUserClassDetails($options = array()) {
 	
 		$options = explode(";", $options);
@@ -89,15 +125,28 @@ class class_model extends Model {
 		if(!$this->_required(array('userID', 'class_list'), $options))
 			return false;
 	
+		$new_sched_id = sha1($options['userID'] . $options['scheduleID']);
+		
 		foreach($options['class_list'] as $class) {
-			if(!$this->addRow(array(
-				'scheduleID' => $options['scheduleID'], 
-				'userID' => $options['userID'], 
-				'classID' => $class, 
-				'term' => $this->config->item('current_term')
-			)))
-				return false;
+			$this->db->where('scheduleID', $new_sched_id);
+			$this->db->where('userID', $options['userID']);
+			$this->db->where('classID', $class);
+			$this->db->from('user_class');
+			$q = $this->db->get();
+			if($q->num_rows() == 0) {
+				if(!$this->addRow(array(
+					'scheduleID' => $new_sched_id, 
+					'userID' => $options['userID'], 
+					'classID' => $class, 
+					'term' => $this->config->item('current_term')
+				)))
+					return false;
+			}
 		}
+		
+		$this->db->where('userID', $options['userID']);
+		$this->db->set('curr_schedule', $new_sched_id);
+		$this->db->update('user_prefs');
 		
 		return true;
 		
