@@ -16,7 +16,7 @@
 	echo '</tr>';
 	
 	$schedule_id_string = '';
-	foreach($page_data as $p) {
+	foreach($user_classes as $p) {
 		$schedule_id_string .= $p->classid . ';';
 		echo '<tr>';
 		echo '<td>' . $p->classid . '</td>';

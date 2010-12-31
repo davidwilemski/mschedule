@@ -90,6 +90,13 @@ class class_model extends Model {
 	function saveSchedule($options = array()) {
 		$uid = $this->session->userdata('userID');
 		
+		$schedule_id = $this->class_model->getUserCurrSchedulePref(array('userID' => $uid));
+		if(!$schedule_id) {
+			// Then the user doesn't have a record in user_prefs and needs one
+			$this->db->insert('user_prefs', array('userID' => $uid, 'curr_schedule' => 'coming'));
+		}
+		
+		
 		$scheduleID = sha1($uid + $options);
 		$this->db->where('scheduleID', $scheduleID);
 		$this->db->from('user_class');
