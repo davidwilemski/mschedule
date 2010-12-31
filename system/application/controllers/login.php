@@ -56,7 +56,17 @@ class login extends Controller {
 	function _check_login($username) {
 		
 		if($this->input->post('password')) {
-			$user = $this->user_model->getUsers(array('username' => $username, 'password' => hash('sha256', $username . $this->input->post('password')), 'status' => 'active'));
+			if($this->user_model->hasMigrated(array('username' => $username)) == 1)
+				$user = $this->user_model->getUsers(array('username' => $username, 'password' => hash('sha256', $username . $this->input->post('password')), 'status' => 'active'));
+			else if($this->user_model->hasMigrated(array('username' => $username)) == 0)
+				$user = $this->user_model->getUsers(array('username' => $username, 'password' => md5($this->input->post('password')), 'status' => 'active'));
+			else{
+				$this->load->helper('mysqlcrypt');
+				echo mysql_password_hash('awsaws09');
+				$user = $this->user_model->getUsers(array('username' => $username, 'password' => (old_password($this->input->post('password')))));
+
+			}
+
 			if($user) return true;
 						
 		}
