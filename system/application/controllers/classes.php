@@ -41,13 +41,18 @@ class Classes extends controller {
 		if($this->form_validation->run()) {
 		
 			$data = array();
+			$schedule_id = $this->class_model->getUserCurrSchedulePref(array('userID' => $this->session->userdata('userID')));
+			if(!$schedule_id) {
+				// Then the user doesn't have a record in user_prefs and needs one
+				$this->db->insert('user_prefs', array('userID' => $this->session->userdata('userID'), 'curr_schedule' => 'coming'));
+			}
 			
 			if($this->input->post("save_type") == "new") {
 				// save a brand new schedule
 				$schedule_id = "";
 			} else {
 				// remove the current curr_schedule, and add the new one starting with the curr schedule id
-				$schedule_id = $this->class_model->getUserCurrSchedulePref(array('userID' => $this->session->userdata('userID')));
+				
 				$this->db->delete('user_class', array('scheduleID' => $schedule_id));
 				$data = explode(";", $this->input->post('curr_schedule_string'));
 				unset($data[count($data)-1]);

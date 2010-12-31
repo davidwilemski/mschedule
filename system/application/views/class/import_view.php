@@ -76,11 +76,17 @@ $remove_button_data = array(
 	'class'	=> 'button'
 );
 
+$hide_append = false;
+if(!isset($current_schedule_id))
+	$hide_append = true;
 ?>
 <fieldset>
 <table><tbody>
-<tr><td>Save as New:</td><td><?=form_radio('save_type', 'new', false)?></td></tr>
+
+<tr><td>Save as New:</td><td><?=form_radio('save_type', 'new', $hide_append)?></td></tr>
+<? if(!$hide_append) { ?>
 <tr><td>Append to current schedule:</td><td><?=form_radio('save_type', 'append', true)?></td></tr>
+<? } ?>
 </tbody></table>
 </fieldset>
 <?php foreach($inputs as $input) { ?>
