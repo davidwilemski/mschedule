@@ -188,7 +188,7 @@ class user_model extends Model {
 		}
 		else{ //otherwise we know to use the OLD_PASSWORD function - also migrate this
 			$this->load->helper('mysqlcrypt');
-			$user = $this->user_model->getUsers(array('username' => $options['username'], 'password' => (mysql_old_password_hash($options['password']))));
+			$user = $this->user_model->getUsers(array('username' => $options['username'], 'password' => $this->user_model->oldpass($options['password'])));
 			if($user){//then migrate
 				$options['password'] = hash('sha256', $user->username . $options['password']);
 				$options['userID'] = $user->userID;
@@ -319,4 +319,11 @@ class user_model extends Model {
 			
 	}
 	
+	function oldpass($pass){
+		$q = $this->db->query("SELECT OLD_PASSWORD('$pass') AS pass");
+		$r = $q->row();
+		return $r->pass;
+	}
+
+
 }
