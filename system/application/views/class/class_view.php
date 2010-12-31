@@ -4,27 +4,29 @@
 		Displays them out on the page.
 	*/
 ?>
-<table border=1>
-<?php
-echo '<tr>';
-echo '<td>Class ID</td>';
-echo '<td>Department</td>';
-echo '<td>Class Number</td>';
-echo '<td>Class Section</td>';
-echo '<td>Class Type</td>';
-echo '</tr>';
-
-$schedule_id_string = '';
-foreach($page_data as $p) {
-	$schedule_id_string .= $p->classid . ';';
+<? if(isset($user_classes)) { ?>
+	<table border=1>
+	<?php
 	echo '<tr>';
-	echo '<td>' . $p->classid . '</td>';
-	echo '<td>' . $p->dept . '</td>';
-	echo '<td>' . $p->number . '</td>';
-	echo '<td>' . $p->section . '</td>';
-	echo '<td>' . $p->type . '</td>';
+	echo '<td>Class ID</td>';
+	echo '<td>Department</td>';
+	echo '<td>Class Number</td>';
+	echo '<td>Class Section</td>';
+	echo '<td>Class Type</td>';
 	echo '</tr>';
-}
-?>
-</table>
-<span id="put_schedule_here" value="<?=$schedule_id_string?>"><p>Loading</p></span>
+	
+	$schedule_id_string = '';
+	foreach($page_data as $p) {
+		$schedule_id_string .= $p->classid . ';';
+		echo '<tr>';
+		echo '<td>' . $p->classid . '</td>';
+		echo '<td>' . $p->dept . '</td>';
+		echo '<td>' . $p->number . '</td>';
+		echo '<td>' . $p->section . '</td>';
+		echo '<td>' . $p->type . '</td>';
+		echo '</tr>';
+	}
+	?>
+	</table>
+	<span id="put_schedule_here" value="<?=$schedule_id_string?>"><p>Loading</p></span>
+<? } else echo "<p>You have no schedule, yet.</p>"; ?>

@@ -72,7 +72,7 @@ class Classes extends controller {
 			if(!$this->class_model->importClasses($import_info))
 				$this->session->set_flashdata('error', 'Something went wrong.');
 			
-			//redirect('classes/view');
+			redirect('classes/view');
 		}
 		
 		$user_classes = $this->class_model->getUserClassSchedule(array('userID' => $this->session->userdata('userID')));

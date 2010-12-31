@@ -8,7 +8,7 @@ $('document').ready(function () {
 	
 		var json = jQuery.parseJSON(data);
 		
-		console.log(json);
+		//console.log(json);
 		
 		createWeekSchedule(json, 0, $("#put_schedule_here"), "../");
 	
