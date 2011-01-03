@@ -38,9 +38,19 @@ class Classes extends controller {
 				$this->form_validation->set_rules('class' . $i, 'Class ' . $i, 'trim|callback__check_duplicates|callback__check_valid_class|callback__check_inDB');
 		}
 		
+		// See if user prefs is in the database - this should be required.
+		$this->db->from('user_prefs')->where('userID', $this->session->userdata('userID'));
+		$q = $this->db->get();
+		if($q->num_rows() == '0') {
+			// Then the user doesn't have a record in user_prefs and needs one
+			$this->db->insert('user_prefs', array('userID' => $this->session->userdata('userID')));
+		}
+	
+		
 		if($this->form_validation->run()) {
 		
 			$data = array();
+			
 			$schedule_id = $this->class_model->getUserCurrSchedulePref(array('userID' => $this->session->userdata('userID')));
 			if(!$schedule_id) {
 				// Then the user doesn't have a record in user_prefs and needs one
@@ -164,8 +174,6 @@ class Classes extends controller {
 	function view() {
 	
 		$classes = $this->class_model->getUserClassSchedule(array('userID' => $this->session->userdata('userID')));
-		
-		echo 'sup: '; print_r($classes); 
 		
 		$data = array(
 			'view_name'	=> 'class/class_view',
