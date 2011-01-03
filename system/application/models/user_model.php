@@ -213,7 +213,7 @@ class user_model extends Model {
 		$q = $this->db->get();
 		if($q->num_rows() == '0') {
 			// Then the user doesn't have a record in user_prefs and needs one
-			$this->db->insert('user_prefs', array('userID' => $user->userID));
+			$this->createPrefs($user->userID);
 		}
 		
 		return true;
