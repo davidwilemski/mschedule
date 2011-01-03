@@ -165,6 +165,8 @@ class Classes extends controller {
 	
 		$classes = $this->class_model->getUserClassSchedule(array('userID' => $this->session->userdata('userID')));
 		
+		echo 'sup: '; print_r($classes); 
+		
 		$data = array(
 			'view_name'	=> 'class/class_view',
 			'ad'		=> 'static/ads/google_ad_120_234.php',

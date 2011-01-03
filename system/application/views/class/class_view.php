@@ -4,7 +4,8 @@
 		Displays them out on the page.
 	*/
 ?>
-<? if(isset($user_classes)) { ?>
+<?
+ if(isset($user_classes) && $user_classes != null) { ?>
 	<table border=1>
 	<?php
 	echo '<tr>';
