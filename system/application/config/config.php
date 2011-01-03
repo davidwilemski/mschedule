@@ -15,6 +15,25 @@ $config['current_term'] = 'winter11';
 
 /*
 |--------------------------------------------------------------------------
+| Twitter
+|--------------------------------------------------------------------------
+|
+| Twitter credentials! These are rather important...
+|
+*/
+$config['twitter_keys'] = array(
+	'consumer_key' => '8BzImmJY2FFEhgG1B8J5w',
+	'consumer_secret' => 'Wv4ws2D8H2kTuWiIVzsOXMY14cH9XV2AloAXTPW0SU'
+);
+
+$config['twitter_urls'] = array(
+	'request' => 'http://twitter.com/oauth/request_token',
+	'access' => 'http://twitter.com/oauth/access_token',
+	'authorize' => 'http://twitter.com/oauth/authorize'
+);
+
+/*
+|--------------------------------------------------------------------------
 | Base Site URL
 |--------------------------------------------------------------------------
 |
