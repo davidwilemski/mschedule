@@ -90,14 +90,6 @@ class class_model extends Model {
 	function saveSchedule($options = array()) {
 		$uid = $this->session->userdata('userID');
 		
-		// See if user prefs is in the database - this should be required.
-		$this->db->from('user_prefs')->where('userID', $uid);
-		$q = $this->db->get();
-		if($q->num_rows() == '0') {
-			// Then the user doesn't have a record in user_prefs and needs one
-			$this->db->insert('user_prefs', array('userID' => $uid));
-		}
-		
 		$scheduleID = sha1($uid + $options);
 		$this->db->where('scheduleID', $scheduleID);
 		$this->db->from('user_class');

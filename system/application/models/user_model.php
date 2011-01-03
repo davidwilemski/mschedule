@@ -207,6 +207,15 @@ class user_model extends Model {
 		$this->session->set_userdata('username', $user->username);
 		$this->session->set_userdata('userID', $user->userID);
 		
+		// Some housekeeping:
+		// See if user prefs is in the database - this IS required.
+		$this->db->from('user_prefs')->where('userID', $user->userID);
+		$q = $this->db->get();
+		if($q->num_rows() == '0') {
+			// Then the user doesn't have a record in user_prefs and needs one
+			$this->db->insert('user_prefs', array('userID' => $user->userID));
+		}
+		
 		return true;
 		
 	}
