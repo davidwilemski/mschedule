@@ -40,12 +40,10 @@ class dashboard extends Controller {
 			'view_name'	=> 'dashboard_view',
 			'ad'		=> 'static/ads/google_ad_120_234.php',
 			'navigation'=> "navigation",
-			'css'		=> includeCSSFile("style"),
+			'css'		=> includeCSSFile("style") . includeCSSFile("custom-theme/jquery-ui-1.8.7.custom"),
 			'nav_data'	=> $this->nav_links_model->getNavBarLinks(),
+			'javascript'=> includeJSFile('jquery') . includeJSFile("jquery-ui-1.8.7.min") . includeJSFile('dashboard_view')
 		);
-		
-		$data['javascript'] = includeJSFile('jquery');
-		$data['javascript'] .= includeJSFile('dashboard_view');
 		
 		$this->load->view('include/template', $data);
 	}

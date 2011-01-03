@@ -27,6 +27,8 @@
 ?>
 <?php
 $data['css'] = $css;
+if(isset($extra_head))
+	$data['extra_head'] = $extra_head;
 
 $this->load->view('include/header', $data);
 $this->load->view('include/' . $navigation, $nav_data);
