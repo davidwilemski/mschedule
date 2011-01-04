@@ -1,8 +1,5 @@
-$('document').ready(function() {
-
-	$("#tabs").tabs();
-
-	/*var password = $("#password_form");
+/*$('document').ready(function() {
+	var password = $("#password_form");
 	var info = $("#personal_info_form");
 	
 	$("#password_label").click(function() {
@@ -17,5 +14,5 @@ $('document').ready(function() {
 			info.slideDown("slow");
 		else
 			info.slideUp("slow");
-	});*/
-});
+	});
+});*/

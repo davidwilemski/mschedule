@@ -11,7 +11,7 @@
 <head>
 <title>MSchedule</title>
 <?php echo $css; ?>
-<?php if(isset($extra_head)) echo $extra_head; ?>
+
 <meta charset="UTF-8">
 </head>
 
