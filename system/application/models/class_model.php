@@ -719,53 +719,55 @@ class class_model extends Model {
 	function _check_times($s = array()) {
 		//echo count($s) . '<br />';
 		for($i = 0; $i < count($s) - 1; $i++) {
-			//echo $i . ': ';
-			//print_r($s[$i]['days']);
-			$d1 = explode(',', $s[$i]['days'][0]);
-			$d2 = explode(',', $s[$i+1]['days'][0]);
-			//echo count($s[$i]['days']);
-			//print_r(count($d1)); print_r($d1); echo ":"; print_r($s[$i]['time']); echo ' -- ';
-			//print_r(count($d2)); print_r($d2); echo ":"; print_r($s[$i+1]['time']); echo '<br />';
-			if(count($d1) == 1) {
-				// if this true, we only have one day for the first class
-				if(count($d2) == 1) {
-					// if this is true, the second class only has one day
-					if($d1[0] == $d2[0]) {
-						// if the days are the same, we need to check the time.
-						if($this->class_model->_check_times_helper($s[$i]['time'], $s[$i+1]['time'], 0, 0)) {
-							return false;
-						} 
-					}
-				} else {
-					// we have multiple days to check against
-					for($z = 0; $z < count($d2); $z++) {
-						if($d1[0] == $d2[$z]) {
-							// then the second only has one time
-							if(!$this->class_model->_check_times_helper($s[$i]['time'], $s[$i+1]['time'], 0, $z)) {
+			for($j = $i + 1; $j < count($s); $j++) {
+				//echo $i . ': ';
+				//print_r($s[$i]['days']);
+				$d1 = explode(',', $s[$i]['days'][0]);
+				$d2 = explode(',', $s[$j]['days'][0]);
+				//echo count($s[$i]['days']);
+				//print_r(count($d1)); print_r($d1); echo ":"; print_r($s[$i]['time']); echo ' -- ';
+				//print_r(count($d2)); print_r($d2); echo ":"; print_r($s[$j]['time']); echo '<br />';
+				if(count($d1) == 1) {
+					// if this true, we only have one day for the first class
+					if(count($d2) == 1) {
+						// if this is true, the second class only has one day
+						if($d1[0] == $d2[0]) {
+							// if the days are the same, we need to check the time.
+							if(!$this->class_model->_check_times_helper($s[$i]['time'], $s[$j]['time'], 0, 0)) {
 								return false;
-							}
+							} 
 						}
-					}
-				}
-			} else {
-				// we have multiple days for the first class
-				if(count($d2) == 1) {
-					// we only have one day to check against for the second one
-					for($z = 0; $z < count($d1); $z++) {
-						if($d1[$z] == $d2[0]) {
-							if(!$this->class_model->_check_times_helper($s[$i]['time'], $s[$i+1]['time'], $z, 0)) {
-								return false;
-							}
-						}
-					}
-				} else {
-					// both have multiple days! fun stuff
-					for($y = 0; $y < count($d1); $y++) {
+					} else {
+						// we have multiple days to check against
 						for($z = 0; $z < count($d2); $z++) {
-							if($d1[$y] == $d2[$z]) {
-								if(!$this->class_model->_check_times_helper($s[$i]['time'], $s[$i+1]['time'], $y, $z)) {
+							if($d1[0] == $d2[$z]) {
+								// then the second only has one time
+								if(!$this->class_model->_check_times_helper($s[$i]['time'], $s[$j]['time'], 0, $z)) {
 									return false;
-								} 
+								}
+							}
+						}
+					}
+				} else {
+					// we have multiple days for the first class
+					if(count($d2) == 1) {
+						// we only have one day to check against for the second one
+						for($z = 0; $z < count($d1); $z++) {
+							if($d1[$z] == $d2[0]) {
+								if(!$this->class_model->_check_times_helper($s[$i]['time'], $s[$j]['time'], $z, 0)) {
+									return false;
+								}
+							}
+						}
+					} else {
+						// both have multiple days! fun stuff
+						for($y = 0; $y < count($d1); $y++) {
+							for($z = 0; $z < count($d2); $z++) {
+								if($d1[$y] == $d2[$z]) {
+									if(!$this->class_model->_check_times_helper($s[$i]['time'], $s[$j]['time'], $y, $z)) {
+										return false;
+									} 
+								}
 							}
 						}
 					}
@@ -808,7 +810,7 @@ class class_model extends Model {
 				return false;
 			}
 		} else if($c1[0] > $c2[0]) {
-			if($c2[1] <= $c1[0]) {
+			if($c1[1] <= $c2[0]) {
 				return true;
 			} else {
 				return false;
