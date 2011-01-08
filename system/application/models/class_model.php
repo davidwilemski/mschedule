@@ -678,7 +678,7 @@ class class_model extends Model {
 	
 	function _fix_schedules_and_go($schedules) {
 	
-		$this->_sort_schedules(&$schedules);
+		$this->_sort_schedules($schedules);
 	
 		foreach($schedules as &$s) {
 			//echo $s['full_score'] . '<br />';
