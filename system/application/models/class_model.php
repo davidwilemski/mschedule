@@ -810,7 +810,7 @@ class class_model extends Model {
 				return false;
 			}
 		} else if($c1[0] > $c2[0]) {
-			if($c1[1] <= $c2[0]) {
+			if($c1[0] >= $c2[1]) {
 				return true;
 			} else {
 				return false;

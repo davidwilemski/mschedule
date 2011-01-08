@@ -86,8 +86,8 @@ class Api extends Controller {
 		$this->load->model('class_model');
 		$data = $this->class_model->createSchedules(
 			array(
-				'10765',
-				//'10766',
+				//'10765',
+				'10766',
 				'19835',
 				//'10767',
 				//'10768',
@@ -95,9 +95,9 @@ class Api extends Controller {
 				//'18119',
 				//'26922',
 				'10799',
-				'10800',
+				//'10800',
 				//'20545',
-				//'20544',
+				'20544',
 				'22915',
 				'12818'
 				//'21892'
