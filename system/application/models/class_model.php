@@ -609,6 +609,7 @@ class class_model extends Model {
 			if($tests)
 				$tests = $this->class_model->_check_times($s);
 			
+			$full_score = 0;
 			if($tests) {
 				foreach($s as &$time_check) {
 					//print_r($time_check);
@@ -620,8 +621,17 @@ class class_model extends Model {
 						)
 					);
 					$time_check['score'] = $score;
+					$full_score += $score;
 				}
-				$schedules[] = $s;
+				
+				$s['full_score'] = $full_score;
+				//print_r($s);
+				if(count($schedules) < 50) {
+					$schedules[] = $s;
+				} else {
+					if($schedules[49]['full_score'] < $full_score)
+						$schedules[49] = $s;
+				}
 			}
 			//print_r($s);	
 			//echo 'count: ' . count($schedules) . '<br />';
@@ -642,13 +652,39 @@ class class_model extends Model {
 				//}
 			}
 			
-			if(count($schedules) == 500)
-				return $schedules;
+			if(count($schedules) == 50)
+				return $this->class_model->_fix_schedules_and_go($schedules);
 			//echo count($schedules) . '<br />';
 		}
 		
 		//echo $schedules_count . ' ' . count($schedules);
 		
+		return $this->class_model->_fix_schedules_and_go($schedules);
+	
+	}
+	
+	
+	
+	function _sort_schedules($schedules) {
+	
+		function my_sort($a, $b) {
+			if($a['full_score'] == $b['full_score']) return 0;
+			return ($a['full_score'] > $b['full_score']) ? -1 : 1;
+		}
+	
+		usort($schedules, "my_sort");
+	
+	}
+	
+	function _fix_schedules_and_go($schedules) {
+	
+		$this->_sort_schedules(&$schedules);
+	
+		foreach($schedules as &$s) {
+			//echo $s['full_score'] . '<br />';
+			unset($s['full_score']);
+		}
+			
 		return $schedules;
 	
 	}

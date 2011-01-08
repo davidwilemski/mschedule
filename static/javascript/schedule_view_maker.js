@@ -99,9 +99,10 @@ function createWeekSchedule(schedule, myIndex, location, path_fix) {
 				day_of_week = 6;
 				
 			var begin = false;
+			//console.log(schedule[c]);
 			var CELL_CONTENTS = schedule[c].dept + " " + schedule[c].number + "." + schedule[c].section;
 			var BUBBLE_CONTENTS = "<strong>" + CELL_CONTENTS + "</strong><br />"
-				+ "Class ID: " + schedule[c].classid;
+				+ "Class ID: " + schedule[c].classid + "<br />Instructor: " + schedule[c].instructor;
 			var CELL_DATA = new Array();
 			CELL_DATA.push(CELL_CONTENTS);
 			CELL_DATA.push(BUBBLE_CONTENTS);
@@ -199,6 +200,7 @@ function createWeekSchedule(schedule, myIndex, location, path_fix) {
 			innerHtml: TD_CONTENT[z], 
 			themePath: path_fix + 'static/css/bubble-themes', 
 			themeName: 'blue',
+			selectable: true,
 			openingSpeed: 100,
 			closingSpeed: 100
 		});
