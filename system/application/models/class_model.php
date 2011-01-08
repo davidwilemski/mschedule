@@ -604,7 +604,7 @@ class class_model extends Model {
 			}
 			
 			// do some checking of the schedule we just created ($s)
-			print_r($s); echo '<br />';
+			//print_r($s); echo '<br />';
 			$tests = true;
 			$tests = $this->class_model->_check_section_assoc($s);
 			if($tests)
@@ -724,8 +724,8 @@ class class_model extends Model {
 			$d1 = explode(',', $s[$i]['days'][0]);
 			$d2 = explode(',', $s[$i+1]['days'][0]);
 			//echo count($s[$i]['days']);
-			print_r(count($d1)); print_r($d1); echo ":"; print_r($s[$i]['time']); echo ' -- ';
-			print_r(count($d2)); print_r($d2); echo ":"; print_r($s[$i+1]['time']); echo '<br />';
+			//print_r(count($d1)); print_r($d1); echo ":"; print_r($s[$i]['time']); echo ' -- ';
+			//print_r(count($d2)); print_r($d2); echo ":"; print_r($s[$i+1]['time']); echo '<br />';
 			if(count($d1) == 1) {
 				// if this true, we only have one day for the first class
 				if(count($d2) == 1) {
@@ -734,11 +734,11 @@ class class_model extends Model {
 						// if the days are the same, we need to check the time.
 						if($this->class_model->_check_times_helper($s[$i]['time'], $s[$i+1]['time'], 0, 0)) {
 							return false;
-						}
+						} 
 					}
 				} else {
 					// we have multiple days to check against
-					for($z = 0; $z < count($d1); $i++) {
+					for($z = 0; $z < count($d2); $z++) {
 						if($d1[0] == $d2[$z]) {
 							// then the second only has one time
 							if(!$this->class_model->_check_times_helper($s[$i]['time'], $s[$i+1]['time'], 0, $z)) {
