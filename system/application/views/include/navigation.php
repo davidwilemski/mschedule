@@ -6,23 +6,23 @@
 		This is loaded by include/template.
 	*/
 ?>
+<?php if($this->session->userdata('userID')) {?>
 <div id="navigation_pane">
 	<ul id="nav_bar">
 		<?php
-		
+			
+			$first = true;
 			foreach($nav_data as $nav_item)
 			{
-				echo '<li class="nav_item">'. anchor($nav_item['url'] , $nav_item['name']) . '</li>';
+				if($first) {
+					$first = false;
+					echo '<li class="nav_item" style="border:none;">'. anchor($nav_item['url'] , $nav_item['name']) . '</li>';
+				} else {
+					echo '<li class="nav_item">'. anchor($nav_item['url'] , $nav_item['name']) . '</li>';
+				}
+				
 			}
 		?>
-		<?php if($this->session->userdata('userID')) {?>
-			<li class="nav_item"><?=anchor('dashboard', 'User Dashboard')?></li>
-			<li class="nav_item"><?=anchor('classes/import', 'Import Classes')?></li>
-			<li class="nav_item"><?=anchor('classes/view', 'View Classes')?></li>
-			<li class="nav_item nav_item_end"><?=anchor('login/logout', 'Logout')?></li>
-		<?php } else { ?>
-			<li class="nav_item"><?=anchor('login', 'Login')?></li>
-			<li class="nav_item nav_item_end"><?=anchor('login/register', 'Register')?></li>
-		<?php } ?>
 	</ul>
 </div>
+<?php } ?>

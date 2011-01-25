@@ -22,6 +22,11 @@ class Home extends Controller {
 		);
 		
 		$data['css'] = includeCSSFile("style");
+		$data['css'] .= includeCSSFile('tipsy');
+		$data['javascript'] = includeJSFile('jquery');
+		$data['javascript'] .= includeJSFile('jquery.pop');
+		$data['javascript'] .= includeJSFile('jquery.tipsy');
+		$data['javascript'] .= includeJSFile('signin');
 		$data['nav_data'] = $this->nav_links_model->getNavBarLinks();
 		$data['page_data'] = $this->static_pages_model->getPageContent($page);	
 		

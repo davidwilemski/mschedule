@@ -47,7 +47,7 @@ if(isset($ad))
 
 if(isset($view_name)) 
 {
-	echo '<div id="body">';
+	echo '<div id="body" class="rounded_bottom_corners">';
 	echo '<div id="content">';
 	if(isset($page_data))
 		$this->load->view($view_name, $page_data);
