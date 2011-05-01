@@ -326,3 +326,7 @@ li.nav_item a {
 #personal_info {
 	float:right;
 }
+
+#password_reset {
+	float: left;
+}

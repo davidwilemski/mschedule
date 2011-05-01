@@ -179,7 +179,7 @@ class login extends Controller {
 	
 		$this->session->sess_destroy();
 		
-		redirect('login');
+		redirect('home');
 	
 	}
 	
