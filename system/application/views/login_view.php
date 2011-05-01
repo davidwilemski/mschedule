@@ -72,7 +72,7 @@ echo anchor($url, $text, 'id="signin_button" class="gradient_button rounded_corn
 			<?=form_submit($button_data)?>
 		</fieldset>
 	</form>
-	<p class="forgot"> <?=anchor('login/forgot', 'Forgot Your Password?', 'id="resend_password_link"')?>></p>
+	<p class="forgot"> <?=anchor('login/forgot', 'Forgot Your Password?', 'id="resend_password_link"')?></p>
 	<p class="forgot-username"> <?=anchor('login/forgot', 'Forgot Your Username?', 'id="forgot_username_link" title="If you remember your password, try logging in with your uniqname"')?></p>
 	<div class="error"><?php echo validation_errors(); ?></div>
 </div>

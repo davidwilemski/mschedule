@@ -28,8 +28,6 @@ class login extends Controller {
 	}
 	
 	function index() {
-		
-		
 		$this->form_validation->set_rules('username', 'Username', 'trim|required|callback__check_login');
 		$this->form_validation->set_rules('password', 'Password', 'trim|required');
 
@@ -41,16 +39,7 @@ class login extends Controller {
 			
 		}
 		
-		$data = array(
-			'view_name'	=> 'login_view',
-			'ad'		=> 'static/ads/google_ad_120_234.php',
-			'navigation'=> "navigation",
-			'css'		=> includeCSSFile("style"),
-			'nav_data'	=> $this->nav_links_model->getNavBarLinks()
-		);
-		
-		$this->load->view('include/template', $data);
-		
+		redirect('home');
 	}
 	
 	function _check_login($username) {
