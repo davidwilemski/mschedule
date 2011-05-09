@@ -330,3 +330,72 @@ li.nav_item a {
 #password_reset {
 	float: left;
 }
+
+
+
+/* Schedule List View */
+
+ul#schedule_master {
+	float: left;
+    list-style: none outside none;
+    margin: 0;
+}
+ul#schedule_master li {
+	padding: 15px 0;
+    width: 135px;
+}
+ul#schedule_master li a {
+	background-color: blue;
+    height: 100%;
+    padding: 15px 8px;
+}
+ul#schedule_master li a.hidden {
+	background-color: red;
+    height: 100%;
+    padding: 15px 8px;
+}
+
+div#schedule_detail {
+	float: right;
+	width:600px;
+}
+
+div.schedule {
+	float:left;
+}
+
+ul.schedule_week {
+	list-style: none;
+	padding: 0;
+	width: 600px;
+	margin: 0;
+}
+
+ul.schedule_week li {
+	float: left;
+	width: 120px;
+}
+
+ul.schedule_day {
+	list-style: none;
+	margin: 0;
+	padding: 0;
+}
+
+ul.schedule_day li {
+	background-color: lime;
+	padding: 5px;
+	width: 110px;
+	border: solid 1px #AAA;
+}
+
+ul.schedule_day li.day_empty {
+	background: none;
+	border: none;
+}
+
+ul.schedule_day li.day_break {
+	background: none;
+	border: none;
+}
+
