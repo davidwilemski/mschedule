@@ -42,7 +42,7 @@ class scheduler extends Controller {
 			'ad'		=> 'static/ads/google_ad_120_234.php',
 			'navigation'=> "navigation",
 			'css'		=> includeCSSFile("style") . includeCSSFile("scheduler") . includeCSSFile("jquery.bubblepopup.v2.3.1"),
-			'javascript'=> includeJSFile("jquery") . includeJSFile("schedule_view_maker") . includeJSFile("mschedule") . includeJSFile("jquery.bubblepopup.v2.3.1.min"),
+			'javascript'=> includeJSFile("jquery") . includeJSFile('jquery.effects') . includeJSFile("schedule_view_maker") . includeJSFile("mschedule") . includeJSFile("jquery.bubblepopup.v2.3.1.min"),
 			'nav_data'	=> $this->nav_links_model->getNavBarLinks(),
 			'nav_location' => 'scheduler'
 		);
