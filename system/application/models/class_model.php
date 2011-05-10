@@ -292,17 +292,29 @@ class class_model extends Model {
 		
 		//$this->db->where('dept', 'AERO');
 		//$this->db->where('number', '101');
-		$this->db->where('dept', $options[0]);
-		$this->db->where('number', $options[1]);
+		//return print_r($options);
+
+		if(sizeof($options) % 2 != 0)
+			return array("error" => "mismatched number of arguments passed");
+
+
+		$result = array();
+
+		$resultcount = 0;
+		for($i=0; $i < sizeof($options[0]); $i+= 2){ 
+			$this->db->where('dept', $options[$i]);
+			$this->db->where('number', $options[$i+1]);
 	
-		//$this->db->order_by('section', 'asc');
+			//$this->db->order_by('section', 'asc');
 		
-		$this->db->from('classes_' . $this->config->item('current_term'));
-		
-		$q = $this->db->get();
-		
-		return $q->result_array();
-	
+			$this->db->from('classes_' . $this->config->item('current_term'));
+			
+			$q = $this->db->get();
+			
+			$result[$resultcount++] = $q->result_array();
+		}
+
+		return $result;
 	}
 	
 	function createCalendarWeek($data = array()) {
