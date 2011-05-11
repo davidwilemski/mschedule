@@ -181,6 +181,7 @@ $('document').ready(function () {
 				
 				$.post("api/json/class_model/getClassSections", { 'data[]': [dept, num]}, function(data) {
 					var json = jQuery.parseJSON(data);
+					json = json[0];
 					for(var item in json) {
 						var a = json[item].dept;
 						var b = json[item].number;
