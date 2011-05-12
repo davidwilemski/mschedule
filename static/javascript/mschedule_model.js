@@ -59,7 +59,7 @@ function CourseSchedule(courseSections) {
 	var i;
 	for(i = 0; i < courseSections.length; i++) {
 		section = courseSections[i];
-		this.scheduleId += section.classid;
+		this.scheduleId += section.classid + ';';
 		weekDays = section.days.split(',');	
 		var j;
 		for(j = 0; j < weekDays.length; j++) {
