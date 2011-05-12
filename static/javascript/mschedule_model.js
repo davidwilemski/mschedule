@@ -1,42 +1,15 @@
 /* Requires JQuery */
 
-function Course(anyObj) {
-	if(anyObj !== undefined) {
-		var prop;
-		for(prop in anyObj) {
-			if(anyObj.hasOwnProperty(prop)) {
-				this[prop] = anyObj[prop];
-			}
+function Course(jsonObj) {
+	var prop;
+	for(prop in jsonObj) {
+		if(jsonObj.hasOwnProperty(prop)) {
+			this[prop] = jsonObj[prop];
 		}
-	} else {
-		this.class_name = '';
-		this.classid = '';
-		this.dept = '';
-		this.number = '';
 	}
 }
 
-function CourseSection(anyObj) {
-	if(anyObj !== undefined) {
-		var prop;
-		for(prop in anyObj) {
-			if(anyObj.hasOwnProperty(prop)) {
-				this[prop] = anyObj[prop];
-			}
-		}
-	} else {
-		this.class_name = '';
-		this.classid = '';
-		this.code = '';
-		this.days = '';
-		this.dept = '';
-		this.instructor = '';
-		this.location = '';
-		this.number = '';
-		this.section = '';
-		this.time = '';
-		this.type = '';
-	}
+function CourseSection(jsonObj) {
 	this.sortTimeKey = function() {
 		var key = 0;
 		var times = this.time.split('-');
@@ -45,6 +18,13 @@ function CourseSection(anyObj) {
 		}
 		return key;
 	};
+	
+	var prop;
+	for(prop in jsonObj) {
+		if(jsonObj.hasOwnProperty(prop)) {
+			this[prop] = jsonObj[prop];
+		}
+	}
 }
 
 //section1 and section2 must be of type CourseSection
@@ -68,8 +48,9 @@ function CourseScheduleWeek() {
 	this.F = [];
 }
 
-//courseSections should be a sequential array
+//courseSections should be a sequential array of CourseSection objects
 function CourseSchedule(courseSections) {
+	this.scheduleId = '';
 	this.week = new CourseScheduleWeek();
 	var weekDays;
 	var section;
@@ -78,6 +59,7 @@ function CourseSchedule(courseSections) {
 	var i;
 	for(i = 0; i < courseSections.length; i++) {
 		section = courseSections[i];
+		this.scheduleId += section.classid;
 		weekDays = section.days.split(',');	
 		var j;
 		for(j = 0; j < weekDays.length; j++) {
@@ -104,6 +86,65 @@ function CourseSchedule(courseSections) {
 		}
 	}
 	this.baseHour = minHour;
+}
+
+//courseSchedules should be a sequential array of CourseSchedule objects
+function CourseScheduleList(courseSchedules) {
+	this.arrList = courseSchedules;
+	this.courseScheduleMap = {};
+	this.size = function() {
+		return this.arrList.length;
+	};
+	var curSchedule = 0;
+	
+	this.getSchedule = function(key) {
+		if(typeof key === 'string') {
+			if(this.courseScheduleMap.hasOwnProperty(key)) {
+				return this.courseScheduleMap[key];
+			} else {
+				return null;
+			}
+		} else if (typeof key === 'number') {
+			if(key >= 0 && key < this.arrList.length) {
+				return this.arrList[key];
+			} else {
+				return null;
+			}
+		} else {
+			return null;
+		}
+	};
+	
+	this.getNextSchedule = function() {
+		if(curSchedule + 1 < this.arrList.length) {
+			curSchedule++;
+			return this.arrList[curSchedule];
+		} else {
+			return null;
+		}
+	};
+	
+	this.getCurrentSchedule = function() {
+		if(this.arrList.length) {
+			return this.arrList[curSchedule];
+		} else {
+			return null;
+		}
+	};
+	
+	this.getPrevSchedule = function() {
+		if(curSchedule - 1 >= 0) {
+			curSchedule--;
+			return this.arrList[curSchedule];
+		} else {
+			return null;
+		}
+	};
+	
+	var i;
+	for(i = 0; i < courseSchedules.length; i++) {
+		this.courseScheduleMap[courseSchedules[i].scheduleId] = courseSchedules[i];
+	}
 }
 
 //this constructor should never be called explicitly
@@ -153,7 +194,7 @@ function CourseSectionListFactory() {
 				var keyString;
 				for(i = 0; i < deptsNums[dept].length; i++) {
 					keyString = dept + deptsNums[dept][i];
-					retList.concat(this.courseSectionListMap[keyString]);
+					retList = retList.concat(this.courseSectionListMap[keyString]);
 				}
 			}
 		}
@@ -222,4 +263,78 @@ function getCourseSectionListFactory() {
 		theWindow.courseSectionListFactory = new CourseSectionListFactory();
 	}
 	return theWindow.courseSectionListFactory;
+}
+
+
+//this constructor should never be called explicitly
+function CourseScheduleListFactory() {
+	var curScheduleListKey = '';
+	this.courseScheduleListMap = {};
+	
+	//courseSections is a sequential array of CourseSection objects
+	this.getCourseSchedules = function(courseSections, callback) {
+		var classIds = [];
+		var i;
+		for(i = 0; i < courseSections.length; i++) {
+			if(courseSections[i].classid.length > 1) {
+				classIds.push(courseSections[i].classid);
+			}
+		}
+		var curSheduleKey = classIds.sort().join('');
+		if(this.courseSheduleMap.hasOwnProperty(curSheduleKey)) {
+			callback(this.courseScheduleListMap[curSheduleKey]);
+		} else {
+			var localCallback = callback;
+			var localCourseScheduleListMap = this.courseScheduleListMap;
+			$.post('api/json/class_model/createSchedules', { 'data[]': classIds }, function(data) {
+				var prop;
+				var schedules = [];
+				for(prop in data) {
+					if(data.hasOwnProperty(prop)) {
+						var sections = [];
+						var sectionObjs = data[prop];
+						for(i = 0; i < sectionObjs.length; i++) {
+							sections.push(new CourseSection(sectionObjs[i]));
+						}
+						schedules.push(new CourseSchedule(sections));
+					}
+				}
+				var scheduleList = new CourseScheduleList(schedules);
+				localCourseScheduleListMap[curSheduleKey] = scheduleList;
+				localCallback(scheduleList);
+			}, 'json');
+		}
+	};
+	
+	this.getCurrentScheduleList = function() {
+		if(!curScheduleListKey.length || !this.courseScheduleListMap.hasOwnProperty(curScheduleListKey)) {
+			return null;
+		}
+		return this.courseScheduleListMap[curScheduleListKey];
+	};
+	
+	this.saveCourseSchedule = function(key, callback) {
+		var scheduleList = this.getCurrentScheduleList();
+		if(scheduleList === null) {
+			callback(false);
+		} else {
+			var schedule = scheduleList.getSchedule(key);
+			if(schedule === null) {
+				callback(false);
+			} else {
+				var localCallback = callback;
+				$.post('api/json/class_model/saveSchedule', { 'data': schedule.scheduleId }, function(data){
+					localCallback(data === 'true');
+				});
+			}
+		}
+	};
+}
+
+function getCourseScheduleListFactory() {
+	var theWindow = document.window;
+	if(typeof theWindow.courseScheduleListFactory === 'undefined') {
+		theWindow.courseScheduleListFactory = new CourseScheduleListFactory();
+	}
+	return theWindow.courseScheduleListFactory;
 }
