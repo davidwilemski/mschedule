@@ -1,4 +1,4 @@
-/* Requires JQuery */
+/* Requires jQuery */
 
 function Course(jsonObj) {
 	var prop;
@@ -12,9 +12,8 @@ function Course(jsonObj) {
 function CourseSection(jsonObj) {
 	this.sortTimeKey = function() {
 		var key = 0;
-		var times = this.time.split('-');
-		if(times[0].length) {
-			key = parseInt(times[0], 10);
+		if(this.startTime.length) {
+			key = parseInt(this.startTime, 10);
 		}
 		return key;
 	};
@@ -24,6 +23,15 @@ function CourseSection(jsonObj) {
 		if(jsonObj.hasOwnProperty(prop)) {
 			this[prop] = jsonObj[prop];
 		}
+	}
+	
+	var times = this.time.split('-');
+	
+	this.startTime = this.times[0];
+	
+	this.endTime = '';
+	if(times.length > 1) {
+		this.endTime = times[1];
 	}
 }
 
@@ -104,13 +112,15 @@ function CourseScheduleList(courseSchedules) {
 			} else {
 				return null;
 			}
-		} else if (typeof key === 'number') {
+		}
+		else if (typeof key === 'number') {
 			if(key >= 0 && key < this.arrList.length) {
 				return this.arrList[key];
 			} else {
 				return null;
 			}
-		} else {
+		}
+		else {
 			return null;
 		}
 	};
@@ -119,7 +129,8 @@ function CourseScheduleList(courseSchedules) {
 		if(curSchedule + 1 < this.arrList.length) {
 			curSchedule++;
 			return this.arrList[curSchedule];
-		} else {
+		}
+		else {
 			return null;
 		}
 	};
@@ -127,7 +138,8 @@ function CourseScheduleList(courseSchedules) {
 	this.getCurrentSchedule = function() {
 		if(this.arrList.length) {
 			return this.arrList[curSchedule];
-		} else {
+		}
+		else {
 			return null;
 		}
 	};
@@ -136,7 +148,8 @@ function CourseScheduleList(courseSchedules) {
 		if(curSchedule - 1 >= 0) {
 			curSchedule--;
 			return this.arrList[curSchedule];
-		} else {
+		}
+		else {
 			return null;
 		}
 	};
@@ -153,9 +166,11 @@ function CourseListFactory() {
 	this.getCourseList = function(deptId, callback) {
 		if(this.courseListMap.hasOwnProperty(deptId)) {
 			callback(this.courseListMap[deptId]);
-		} else {
+		}
+		else {
 			var listMap = this.courseListMap;
 			var localCallback = callback;
+			
 			$.post('api/json/class_model/getDeptClassList',{ 'data[]': [deptId]}, function(data) {
 				var objKey;
 				var courseList = listMap[deptId] = [];
@@ -234,10 +249,12 @@ function CourseSectionListFactory() {
 			var sectionListMap = this.courseSectionListMap;
 			var localCallback = callback;
 			var finishSectionListGet = getCachedCourseSectionLists;
+			
 			$.post('api/json/class_model/getClassSections', { 'data[]': sendData }, function(data) {
 				var sectionKey;
 				var sectionObj;
 				var keyString;
+				
 				for(sectionKey in data) {
 					if(data.hasOwnProperty(sectionKey)) {
 						sectionObj = new CourseSection(data[sectionKey]);
@@ -248,9 +265,11 @@ function CourseSectionListFactory() {
 						sectionListMap[keyString].push(sectionObj);
 					}
 				}
+				
 				finishSectionListGet(localDeptsNums, localCallback);
 			}, 'json');
-		} else {
+		}
+		else {
 			getCachedCourseSectionLists(deptsNums, callback);
 		}
 	};
@@ -283,7 +302,8 @@ function CourseScheduleListFactory() {
 		var curSheduleKey = classIds.sort().join('');
 		if(this.courseSheduleMap.hasOwnProperty(curSheduleKey)) {
 			callback(this.courseScheduleListMap[curSheduleKey]);
-		} else {
+		}
+		else {
 			var localCallback = callback;
 			var localCourseScheduleListMap = this.courseScheduleListMap;
 			$.post('api/json/class_model/createSchedules', { 'data[]': classIds }, function(data) {
@@ -293,14 +313,18 @@ function CourseScheduleListFactory() {
 					if(data.hasOwnProperty(prop)) {
 						var sections = [];
 						var sectionObjs = data[prop];
+						
 						for(i = 0; i < sectionObjs.length; i++) {
 							sections.push(new CourseSection(sectionObjs[i]));
 						}
+						
 						schedules.push(new CourseSchedule(sections));
 					}
 				}
+				
 				var scheduleList = new CourseScheduleList(schedules);
 				localCourseScheduleListMap[curSheduleKey] = scheduleList;
+				
 				localCallback(scheduleList);
 			}, 'json');
 		}
@@ -317,11 +341,13 @@ function CourseScheduleListFactory() {
 		var scheduleList = this.getCurrentScheduleList();
 		if(scheduleList === null) {
 			callback(false);
-		} else {
+		}
+		else {
 			var schedule = scheduleList.getSchedule(key);
 			if(schedule === null) {
 				callback(false);
-			} else {
+			}
+			else {
 				var localCallback = callback;
 				$.post('api/json/class_model/saveSchedule', { 'data': schedule.scheduleId }, function(data){
 					localCallback(data === 'true');
