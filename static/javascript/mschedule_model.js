@@ -1,6 +1,56 @@
 /* Requires jQuery */
 
+function FlexiStack() {
+	var arr = [];
+	this.push = function(obj) {
+		if(obj === undefined) {
+			$.error('FlexiStack: Attempt to push undefined obj!');
+			return;
+		}
+		arr.push(obj);
+	};
+	
+	this.pop = function(index) {
+		if(!arr.length) {
+			$.error('FlexiStack: Attempt to pop empty stack!');
+			return;
+		}
+		if(index !== undefined) {
+			var elem = arr[index];
+			arr.length = index;
+			return elem;
+		}
+		else {
+			return arr.pop();
+		}
+	};
+	
+	this.top = function() {
+		if(!arr.length) {
+			$.error('FlexiStack: Attempt to look at empty stack!');
+			return;
+		}
+		return arr[this.arr.length - 1];
+	};
+	
+	this.size = function() {
+		return arr.length;
+	};
+	
+	this.clear = function () {
+		arr.length = 0;
+	};
+}
+
 function Course(jsonObj) {
+	this.getHeader = function() {
+		return this.dept + ' ' + this.number;
+	};
+	
+	this.getDetail = function() {
+		return this.class_name;
+	};
+	
 	var prop;
 	for(prop in jsonObj) {
 		if(jsonObj.hasOwnProperty(prop)) {
@@ -10,6 +60,14 @@ function Course(jsonObj) {
 }
 
 function CourseSection(jsonObj) {
+	this.getHeader = function() {
+		return this.dept + ' ' + this.number + '-' + this.section;
+	};
+	
+	this.getDetail = function() {
+		return this.class_name;
+	};
+	
 	this.sortTimeKey = function() {
 		var key = 0;
 		if(this.startTime.length) {
