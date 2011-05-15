@@ -24,12 +24,13 @@ function diffTimes(greater, lesser) {
 //courseSchedule should be a CourseSchedule object
 function CourseScheduleView(courseSchedule) {
 	this.courseSchedule = courseSchedule;
-	var scheduleElement = $('<div/>', { 'class' : 'schedule', 'id' : courseSchedule.scheduleId });
+	
+	//create the scheduleElement, which can just be injected into the page
+	var scheduleElement = $('<div/>', { 'class' : 'schedule', 'id' : '#' + courseSchedule.scheduleId });
 	this.getElement = function() {
 		return scheduleElement;
 	};
 	
-	//create the scheduleElement, which can just be injected into the page
 	var weekList = $('<ul/>', {'class' : 'schedule_week'});
 	var day;
 	for(day in this.courseSchedule.week) {
@@ -73,6 +74,45 @@ function CourseScheduleView(courseSchedule) {
 		}
 	}
 	scheduleElement.append(weekList);
+}
+
+//courseScheduleList should be a CourseScheduleList object
+function CourseScheduleViewManager(courseScheduleList) {
+	this.courseScheduleViewMap = {};
+	this.courseScheduleList = courseScheduleList;
+	
+	function getCourseScheduleViewCached(schedule) {
+		if(schedule === null) {
+			return null;
+		}
+		if(this.courseScheduleViewMap.hasOwnProperty(schedule.scheduleId)) {
+			return this.courseScheduleViewMap[schedule.scheduleId];
+		} else {
+			var scheduleView = new CourseScheduleView(schedule);
+			this.courseScheduleViewMap[schedule.scheduleId] = scheduleView;
+			return scheduleView;
+		}
+	}
+	
+	this.size = function() {
+		return this.courseScheduleList.size();
+	};
+	
+	this.getScheduleView = function(key) {
+		return getCourseScheduleViewCached(this.courseScheduleList.getSchedule(key));
+	};
+	
+	this.getNextScheduleView = function() {
+		return getCourseScheduleViewCached(this.courseScheduleList.getNextSchedule());
+	};
+	
+	this.getCurrentScheduleView = function() {
+		return getCourseScheduleViewCached(this.courseScheduleList.getCurrentSchedule());
+	};
+	
+	this.getPrevScheduleView = function() {
+		return getCourseScheduleViewCached(this.courseScheduleList.getPrevSchedule());
+	};
 }
 
 //course should be a sequential array of objects that support getHeader(), getDetail()
@@ -129,6 +169,7 @@ function ScheduleItemListView(items, breadCrumbText) {
 				this.append(data.onScreen);
 				this.append(data.offScreen);
 				
+				return this;
 			});
 		},
 		
@@ -196,11 +237,13 @@ function ScheduleItemListView(items, breadCrumbText) {
 		bindItem : function(type, callback) {
 			$(this.attr('id') + ' ul.schedule_item_list li a').unbind(type);
 			$(this.attr('id') + ' ul.schedule_item_list li a').live(type, callback);
+			return this;
 		},
 		
 		bindBreadCrumb : function(type, callback) {
 			$(this.attr('id') + ' ul.schedule_item_list_breadcrumbs li a').unbind(type);
 			$(this.attr('id') + ' ul.schedule_item_list_breadcrumbs li a').live(type, callback);
+			return this;
 		}
 	};
 		
@@ -217,6 +260,111 @@ function ScheduleItemListView(items, breadCrumbText) {
 		}
 		else {
 			$.error('ScheduleItemPicker: Method ' +  method + ' does not exist on jQuery.ScheduleItemPicker');
+			return this;
+		}
+	};
+}(jQuery));
+
+
+(function( $ ){
+	var methods = {
+		//scheduleList should be a CourseScheduleList object
+		init : function(scheduleList) {
+			return this.each(function() {
+				if(scheduleList === undefined || !scheduleList.size()) {
+					$.error('ScheduleListViewer: jQuery.ScheduleListViewer requires a valid scheduleList argument');
+					return this;
+				}
+				
+				var data = $(this).data('ScheduleListViewer');
+				if(data === undefined) {
+					data = $(this).data('ScheduleListViewer', {
+						scheduleViewManager : (new CourseScheduleViewManager(scheduleList)),
+						scheduleDetailContainer : $('<div/>', {'id' : '#schedule_master'}),
+						scheduleMasterContainer : $('<ul/>', {'id' : '#schedule_detail'})
+					});
+				}
+				
+				var i;
+				var scheduleListSize = scheduleList.size();
+				var schedule;
+				for(i = 0; i < scheduleListSize; i++) {
+					schedule = scheduleList.getSchedule(i);
+					data.scheduleMasterContainer.append($('<li><a href-"#' + schedule.scheduleId + '"></a>Schedule ' + i + '</li>'));
+				}
+				
+				var superContainerId = this.attr('id');
+				$('#schedule_detail li a').click(function() {
+					$(this).toggleClass('hidden');
+					$(superContainerId).ScheduleListViewer('toggleScheduleView', $(this).attr('href'));
+					return false;
+				});
+				
+				return this;
+			});
+		},
+		
+		toggleScheduleView : function(id) {
+			var data = $(this).data('ScheduleListViewer');
+			if(data === undefined) {
+				$.error('ScheduleListViewer: jQuery.ScheduleListViewer was not initialized');
+				return this;
+			}
+			var schedule = $(id);
+			if(schedule.length) {
+				schedule.remove();
+			}
+			else {
+				schedule = data.scheduleViewManager.getScheduleView(schedule.attr('id').replace('#',''));
+				if(schedule === null) {
+					$.error('ScheduleListViewer: jQuery.ScheduleListViewer could not toggle id' + id);
+				} else {
+					data.scheduleDetailContainer.append(schedule);
+				}
+			}
+			return this;
+		},
+		
+		showNextScheduleView : function() {
+			var data = $(this).data('ScheduleListViewer');
+			if(data === undefined) {
+				$.error('ScheduleListViewer: jQuery.ScheduleListViewer was not initialized');
+				return this;
+			}
+			var newScheduleView = data.scheduleViewManager.getNextScheduleView();
+			if(newScheduleView !== null) {
+				data.scheduleDetailContainer.html('');
+				data.scheduleDetailContainer.append(newScheduleView);
+			}
+		},
+		
+		showPrevScheduleView : function() {
+			var data = $(this).data('ScheduleListViewer');
+			if(data === undefined) {
+				$.error('ScheduleListViewer: jQuery.ScheduleListViewer was not initialized');
+				return this;
+			}
+			var newScheduleView = data.scheduleViewManager.getPrevScheduleView();
+			if(newScheduleView !== null) {
+				data.scheduleDetailContainer.html('');
+				data.scheduleDetailContainer.append(newScheduleView);
+			}
+		}
+	};
+		
+	$.fn.ScheduleListViewer = function(method) {
+	    if(!this.attr('id')) {
+			$.error('ScheduleListViewer: jQuery.ScheduleListViewer requires a container with a valid id attribute');
+			return this;
+	    }
+		if (methods.hasOwnProperty(method)) {
+			return methods[method].apply(this, Array.prototype.slice.call(arguments, 1));
+		}
+		else if ( typeof method === 'object' || ! method ) {
+			return methods.init.apply(this, arguments);
+		}
+		else {
+			$.error('ScheduleListViewer: Method ' +  method + ' does not exist on jQuery.ScheduleListViewer');
 			return this;
 		}
 	};

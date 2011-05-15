@@ -179,7 +179,7 @@ function CourseScheduleList(courseSchedules) {
 			}
 		}
 		else {
-			return null;
+			return this.getCurrentSchedule();
 		}
 	};
 	
