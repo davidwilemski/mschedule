@@ -30,7 +30,7 @@ function FlexiStack() {
 			$.error('FlexiStack: Attempt to look at empty stack!');
 			return;
 		}
-		return arr[this.arr.length - 1];
+		return arr[arr.length - 1];
 	};
 	
 	this.size = function() {
@@ -42,6 +42,27 @@ function FlexiStack() {
 	};
 }
 
+function Dept(jsonObj) {
+	this.getHeader = function() {
+		return this.dept;
+	};
+	
+	this.getDetail = function() {
+		return this.full_name;
+	};
+	
+	this.getAction = function() {
+		return this.dept.trim();
+	};
+	
+	var prop;
+	for(prop in jsonObj) {
+		if(jsonObj.hasOwnProperty(prop)) {
+			this[prop] = jsonObj[prop];
+		}
+	}
+}
+
 function Course(jsonObj) {
 	this.getHeader = function() {
 		return this.dept + ' ' + this.number;
@@ -49,6 +70,10 @@ function Course(jsonObj) {
 	
 	this.getDetail = function() {
 		return this.class_name;
+	};
+	
+	this.getAction = function() {
+		return (this.dept + ',' + this.number).trim();
 	};
 	
 	var prop;
@@ -68,6 +93,10 @@ function CourseSection(jsonObj) {
 		return this.class_name;
 	};
 	
+	this.getAction = function() {
+		return this.classid.trim();
+	};
+	
 	this.sortTimeKey = function() {
 		var key = 0;
 		if(this.startTime.length) {
@@ -76,16 +105,18 @@ function CourseSection(jsonObj) {
 		return key;
 	};
 	
+	this.time = '';
+	
 	var prop;
 	for(prop in jsonObj) {
 		if(jsonObj.hasOwnProperty(prop)) {
 			this[prop] = jsonObj[prop];
 		}
-	}
+	}	
 	
 	var times = this.time.split('-');
 	
-	this.startTime = this.times[0];
+	this.startTime = times[0];
 	
 	this.endTime = '';
 	if(times.length > 1) {
@@ -219,9 +250,43 @@ function CourseScheduleList(courseSchedules) {
 }
 
 //this constructor should never be called explicitly
+function DeptListFactory() {
+	this.deptList = [];
+	this.getDeptList = function(callback) {
+		if(this.deptList.length) {
+			callback(this.deptList);
+		}
+		else {
+			var localDeptList = this.deptList;
+			var localCallback = callback;
+			
+			$.post('api/json/class_model/getMasterDepartmentList', function(data) {
+				var objKey;
+				for(objKey in data) {
+					if(data.hasOwnProperty(objKey)) {
+						localDeptList.push(new Dept(data[objKey]));
+					}
+				}
+				localCallback(localDeptList);
+			}, 'json');
+		}
+	};
+}
+
+//use this to get the singleton
+function getDeptListFactory() {
+	var theWindow = window;
+	if(typeof theWindow.deptListFactory === 'undefined') {
+		theWindow.deptListFactory = new DeptListFactory();
+	}
+	return theWindow.deptListFactory;
+}
+
+//this constructor should never be called explicitly
 function CourseListFactory() {
 	this.courseListMap = {};
 	this.getCourseList = function(deptId, callback) {
+		console.log(deptId);
 		if(this.courseListMap.hasOwnProperty(deptId)) {
 			callback(this.courseListMap[deptId]);
 		}
@@ -245,8 +310,8 @@ function CourseListFactory() {
 
 //use this to get the singleton
 function getCourseListFactory() {
-	var theWindow = document.window;
-	if(typeof theWindow.courseSectionFactory === 'undefined') {
+	var theWindow = window;
+	if(typeof theWindow.courseListFactory === 'undefined') {
 		theWindow.courseListFactory = new CourseListFactory();
 	}
 	return theWindow.courseListFactory;
@@ -258,7 +323,7 @@ function CourseSectionListFactory() {
 	this.courseSectionListMap = {};
 	
 	//this function assumed all needed sections have already been cached
-	function getCachedCourseSectionLists(deptsNums, callback) {
+	function getCachedCourseSectionLists(courseSectionListMap, deptsNums, callback) {
 		var retList = [];
 		var dept;
 		for(dept in deptsNums) {
@@ -267,7 +332,7 @@ function CourseSectionListFactory() {
 				var keyString;
 				for(i = 0; i < deptsNums[dept].length; i++) {
 					keyString = dept + deptsNums[dept][i];
-					retList = retList.concat(this.courseSectionListMap[keyString]);
+					retList = retList.concat(courseSectionListMap[keyString]);
 				}
 			}
 		}
@@ -313,29 +378,33 @@ function CourseSectionListFactory() {
 				var sectionObj;
 				var keyString;
 				
-				for(sectionKey in data) {
-					if(data.hasOwnProperty(sectionKey)) {
-						sectionObj = new CourseSection(data[sectionKey]);
-						keyString = sectionObj.dept + sectionObj.number;
-						if(!sectionListMap.hasOwnProperty(keyString)) {
-							sectionListMap[keyString] = [];
+				for(sectionArrayKey in data) {
+					if(data.hasOwnProperty(sectionArrayKey)) {
+						var sectionArr = data[sectionArrayKey];
+						var i;
+						for(i = 0; i < sectionArr.length; i++) {
+							sectionObj = new CourseSection(sectionArr[i]);
+							keyString = sectionObj.dept + sectionObj.number;
+							if(!sectionListMap.hasOwnProperty(keyString)) {
+								sectionListMap[keyString] = [];
+							}
+							sectionListMap[keyString].push(sectionObj);
 						}
-						sectionListMap[keyString].push(sectionObj);
 					}
 				}
 				
-				finishSectionListGet(localDeptsNums, localCallback);
+				finishSectionListGet(sectionListMap, localDeptsNums, localCallback);
 			}, 'json');
 		}
 		else {
-			getCachedCourseSectionLists(deptsNums, callback);
+			getCachedCourseSectionLists(this.courseSectionListMap, deptsNums, callback);
 		}
 	};
 }
 
 //use this to get the singleton
 function getCourseSectionListFactory() {
-	var theWindow = document.window;
+	var theWindow = window;
 	if(typeof theWindow.courseSectionListFactory === 'undefined') {
 		theWindow.courseSectionListFactory = new CourseSectionListFactory();
 	}
@@ -416,7 +485,7 @@ function CourseScheduleListFactory() {
 }
 
 function getCourseScheduleListFactory() {
-	var theWindow = document.window;
+	var theWindow = window;
 	if(typeof theWindow.courseScheduleListFactory === 'undefined') {
 		theWindow.courseScheduleListFactory = new CourseScheduleListFactory();
 	}

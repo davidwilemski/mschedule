@@ -1,20 +1,26 @@
-/* Requires jQuery and mschedule_model.js */
+/* Requires jQuery, jQueryUI Effects Core, and mschedule_model.js */
 
 var pixelsPerHour = 40;
 
 function diffTimes(greater, lesser) {
 	if(typeof greater === 'string') {
 		greater = parseInt(greater, 10);
+		if(isNaN(greater)) {
+			greater = 0;
+		}
 	}
 	if(typeof lesser === 'string') {
 		lesser = parseInt(lesser, 10);
+		if(isNaN(lesser)) {
+			lesser = 0;
+		}
 	}
 	greater /= 100.0;
 	lesser /= 100.0;
-	if(greater % 1 < 1) {
+	if(greater % 1.0 < 1.0) {
 		greater = Math.ceil(greater) + 0.5;
 	}
-	if(lesser % 1 < 1) {
+	if(lesser % 1.0 < 1.0) {
 		lesser = Math.ceil(lesser) + 0.5;
 	}
 	
@@ -115,7 +121,7 @@ function CourseScheduleViewManager(courseScheduleList) {
 	};
 }
 
-//course should be a sequential array of objects that support getHeader(), getDetail()
+//course should be a sequential array of objects that support getHeader(), getDetail(), getAction()
 function ScheduleItemListView(items, breadCrumbText) {
 	this.items = items;
 	this.breadCrumbText = breadCrumbText;
@@ -125,11 +131,13 @@ function ScheduleItemListView(items, breadCrumbText) {
 	};
 	
 	var item;
+	var obj;
 	for(item = 0; item < items.length; item++) {
+		obj = items[item];
 		var listItem = $('<li/>');
-		listItem.append($('<a/>'));
-		listItem.append($('<h1/>', {text:item.getHeader()}));
-		listItem.append($('<p/>', {text:item.getDetail()}));
+		listItem.append($('<a/>', {'href' : '#' + obj.getAction()}));
+		listItem.append($('<h1/>', {text:obj.getHeader()}));
+		listItem.append($('<p/>', {text:obj.getDetail()}));
 		listElement.append(listItem);
 	}
 }
@@ -137,113 +145,173 @@ function ScheduleItemListView(items, breadCrumbText) {
 (function( $ ){
 	var methods = {
 		init : function(options) {
-			return this.each(function() {
+			var $this = $(this);
+			return $this.each(function() {
 				var settings = {
 					width : '400px',
-					height : '400px'
+					height : '400px',
+					breadCrumbsHeight: '20px'
 				};
 				
 				if (options !== undefined) { 
 					$.extend( settings, options );
 				}
-				
-				var data = $(this).data('ScheduleItemPicker');
-				if(data === undefined) {
-					data = $(this).data('ScheduleItemPicker', {
+				var data = $this.data('ScheduleItemPicker');
+				if($.isEmptyObject(data)) {
+					data = {
+						slideContainer : $('<div/>', {'style' : 'position:absolute; top:20px;'}),
 						onScreen : $('<div/>', {'style' : 'position:absolute; top:0;'}),
 						offScreen : $('<div/>', {'style' : 'position:absolute; top:0;'}),
-						breadCrumbs : $('<ul/>', {'class' : 'schedule_item_list_breadcrumbs', 'style' : 'position:absolute; top:-20px;'}),
+						breadCrumbs : $('<ul/>', {'class' : 'schedule_item_list_breadcrumbs', 'style' : 'position:absolute; top:0px;'}),
 						listStack : (new FlexiStack()),
 						settings : settings
-					});
-				}					
+					};
+					$this.data('ScheduleItemPicker', data);
+				}
 				
-				data.onScreen.css('width',settings.width);
-				data.offScreen.css('width',settings.width);
-				data.onScreen.css('height',settings.height);
-				data.offScreen.css('height',settings.height);
+				
+				var fullHeight = parseInt(settings.breadCrumbsHeight, 10) + parseInt(settings.height, 10) + 'px';
+				$this.css('height', fullHeight);
+				$this.css('width', settings.width);
+				$this.css('position', 'relative');
+				
+				data.slideContainer.css('overflow-x', 'hidden');
+				data.slideContainer.css('overflow-y', 'scroll');
+				data.slideContainer.css('overflow-y', 'scroll');
+				data.slideContainer.css('height', settings.height);
+				data.slideContainer.css('width', settings.width);
+				
+				data.onScreen.css('width', settings.width);
+				data.onScreen.css('height', settings.height);
 				data.onScreen.css('left', 0);
+				
+				
+				data.offScreen.css('width', settings.width);
+				data.offScreen.css('height', settings.height);
 				data.offScreen.css('left', settings.width);
+				
 				data.breadCrumbs.css('left', 0);
 				
-				this.append(data.onScreen);
-				this.append(data.offScreen);
+				$this.append(data.breadCrumbs);
+				$this.append(data.slideContainer);
+				data.slideContainer.append(data.onScreen);
+				data.slideContainer.append(data.offScreen);
 				
-				return this;
+				return $this;
 			});
 		},
 		
-		push : function(listView, reverse) {
-			var data = $(this).data('ScheduleItemPicker');
-			if(data === undefined) {
+		push : function(listView, reverse, breadCrumbsManaged) {
+			var $this = $(this);
+			var data = $this.data('ScheduleItemPicker');
+			if($.isEmptyObject(data)) {
 				$.error('ScheduleItemPicker: jQuery.ScheduleItemPicker was not initialized');
-				return this;
+				return $this;
+			}
+			
+			function resetOffScreen() {
+				var temp = data.offScreen;
+				data.offScreen = data.onScreen;
+				data.onScreen = temp;
+				data.offScreen.html('');
 			}
 			
 			data.offScreen.html('').append(listView.getElement());
 			
 			if(reverse === undefined || reverse === false) {
-				data.offScreen.attr('left', data.settings.width);
+				data.offScreen.css('left', data.settings.width);
+				data.onScreen.animate({left:'-' + data.settings.width}, 750, 'easeOutQuart', resetOffScreen);
 			} else {
-				data.offScreen.attr('left', '-' + data.settings.width);
+				data.offScreen.css('left', '-' + data.settings.width);
+				data.onScreen.animate({left:data.settings.width}, 750, 'easeOutQuart', resetOffScreen);
 			}
 			
 			data.offScreen.animate({left:'0'}, 750, 'easeOutQuart');
-			data.onScreen.animate({left:'-' + data.settings.width +'px'}, 750, 'easeOutQuart');
 			
-			var temp = data.offScreen;
-			data.offScreen = data.onScreen;
-			data.onScreen = temp;
-			data.offScreen.html('');
-			
-			if(data.listStack.size()) {
-				data.breadCrumbs.append('<li><a href="">' + data.listStack.top().breadCrumbText + '</a></li>');
+			if(breadCrumbsManaged === undefined || breadCrumbsManaged === false) {
+				if(data.listStack.size()) {
+					data.breadCrumbs.append('<li> > <a href="#' + (data.listStack.size() - 1) + '">' + data.listStack.top().breadCrumbText + '</a></li>');
+				}
 			}
+			
 			data.listStack.push(listView);
-			return this;
+			return $this;
 		},
 		
 		goto : function(index) {
-			var data = $(this).data('ScheduleItemPicker');
-			if(data === undefined) {
+			var $this = $(this);
+			var data = $this.data('ScheduleItemPicker');
+			if($.isEmptyObject(data)) {
 				$.error('ScheduleItemPicker: jQuery.ScheduleItemPicker was not initialized');
-				return this;
+				return $this;
+			}
+			
+			if(typeof index === 'string') {
+				index = parseInt(index, 10);
 			}
 			
 			if(index >= data.listStack.size() - 1 || index < 0) {
 				$.error('ScheduleItemPicker: Bad stack location');
-				return this;
+				return $this;
 			}
 			if(index === 0) {
-				return $(this).ScheduleItemPicker('reset');
+				return $this.ScheduleItemPicker('reset');
 			} else {
-				$(this.attr('id') + ' ul.schedule_item_list_breadcrumbs li').remove(':gt(' + index + ')');
+				$('#' + $this.attr('id') + ' ul.schedule_item_list_breadcrumbs li').slice(index).remove();
 				var newTop = data.listStack.pop(index);
-				return $(this).ScheduleItemPicker('push', newTop, true);
+				return $this.ScheduleItemPicker('push', newTop, true, true);
 			}
 		},
 		
 		reset : function() {
-			var data = $(this).data('ScheduleItemPicker');
-			if(data === undefined) {
+			var $this = $(this);
+			var data = $this.data('ScheduleItemPicker');
+			if($.isEmptyObject(data)) {
 				$.error('ScheduleItemPicker: jQuery.ScheduleItemPicker was not initialized');
-				return this;
+				return $this;
 			}
 			data.breadCrumbs.html('');
 			var first = data.listStack.pop(0);
-			return $(this).ScheduleItemPicker('push', first, true);
+			return $this.ScheduleItemPicker('push', first, true);
 		},
 		
 		bindItem : function(type, callback) {
-			$(this.attr('id') + ' ul.schedule_item_list li a').unbind(type);
-			$(this.attr('id') + ' ul.schedule_item_list li a').live(type, callback);
-			return this;
+			var $this = $(this);
+			var data = $this.data('ScheduleItemPicker');
+			if($.isEmptyObject(data)) {
+				$.error('ScheduleItemPicker: jQuery.ScheduleItemPicker was not initialized');
+				return $this;
+			}
+			
+			$('#' + $this.attr('id') + ' ul.schedule_item_list li a').die(type);
+			$('#' + $this.attr('id') + ' ul.schedule_item_list li a').live(type, callback);
+			
+			return $this;
 		},
 		
 		bindBreadCrumb : function(type, callback) {
-			$(this.attr('id') + ' ul.schedule_item_list_breadcrumbs li a').unbind(type);
-			$(this.attr('id') + ' ul.schedule_item_list_breadcrumbs li a').live(type, callback);
-			return this;
+			var $this = $(this);
+			var data = $this.data('ScheduleItemPicker');
+			if($.isEmptyObject(data)) {
+				$.error('ScheduleItemPicker: jQuery.ScheduleItemPicker was not initialized');
+				return $this;
+			}
+			
+			$('#' + $this.attr('id') + ' ul.schedule_item_list_breadcrumbs li a').die(type);
+			$('#' + $this.attr('id') + ' ul.schedule_item_list_breadcrumbs li a').live(type, callback);
+			
+			return $this;
+		},
+		
+		stackSize : function() {
+			var $this = $(this);
+			var data = $this.data('ScheduleItemPicker');
+			if($.isEmptyObject(data)) {
+				$.error('ScheduleItemPicker: jQuery.ScheduleItemPicker was not initialized');
+				return $this;
+			}
+			
+			return data.listStack.size();
 		}
 	};
 		
@@ -255,7 +323,7 @@ function ScheduleItemListView(items, breadCrumbText) {
 		if (methods.hasOwnProperty(method)) {
 			return methods[method].apply(this, Array.prototype.slice.call(arguments, 1));
 		}
-		else if ( typeof method === 'object' || ! method ) {
+		else if ( typeof method === 'object' || !method ) {
 			return methods.init.apply(this, arguments);
 		}
 		else {
@@ -270,19 +338,21 @@ function ScheduleItemListView(items, breadCrumbText) {
 	var methods = {
 		//scheduleList should be a CourseScheduleList object
 		init : function(scheduleList) {
-			return this.each(function() {
+			var $this = $(this);
+			return $this.each(function() {
 				if(scheduleList === undefined || !scheduleList.size()) {
 					$.error('ScheduleListViewer: jQuery.ScheduleListViewer requires a valid scheduleList argument');
-					return this;
+					return $this;
 				}
 				
-				var data = $(this).data('ScheduleListViewer');
-				if(data === undefined) {
-					data = $(this).data('ScheduleListViewer', {
+				var data = $this.data('ScheduleListViewer');
+				if($.isEmptyObject(data)) {
+					data = {
 						scheduleViewManager : (new CourseScheduleViewManager(scheduleList)),
 						scheduleDetailContainer : $('<div/>', {'id' : '#schedule_master'}),
 						scheduleMasterContainer : $('<ul/>', {'id' : '#schedule_detail'})
-					});
+					};
+					$this.data('ScheduleListViewer', data);
 				}
 				
 				var i;
@@ -293,43 +363,45 @@ function ScheduleItemListView(items, breadCrumbText) {
 					data.scheduleMasterContainer.append($('<li><a href-"#' + schedule.scheduleId + '"></a>Schedule ' + i + '</li>'));
 				}
 				
-				var superContainerId = this.attr('id');
+				var superContainerId = $this.attr('id');
 				$('#schedule_detail li a').click(function() {
-					$(this).toggleClass('hidden');
-					$(superContainerId).ScheduleListViewer('toggleScheduleView', $(this).attr('href'));
+					$this.toggleClass('hidden');
+					$(superContainerId).ScheduleListViewer('toggleScheduleView', $this.attr('href'));
 					return false;
 				});
 				
-				return this;
+				return $this;
 			});
 		},
 		
 		toggleScheduleView : function(id) {
-			var data = $(this).data('ScheduleListViewer');
-			if(data === undefined) {
+			var $this = $(this);
+			var data = $this.data('ScheduleListViewer');
+			if($.isEmptyObject(data)) {
 				$.error('ScheduleListViewer: jQuery.ScheduleListViewer was not initialized');
-				return this;
+				return $this;
 			}
 			var schedule = $(id);
 			if(schedule.length) {
 				schedule.remove();
 			}
 			else {
-				schedule = data.scheduleViewManager.getScheduleView(schedule.attr('id').replace('#',''));
+				schedule = data.scheduleViewManager.getScheduleView(schedule.attr('id'));
 				if(schedule === null) {
 					$.error('ScheduleListViewer: jQuery.ScheduleListViewer could not toggle id' + id);
 				} else {
 					data.scheduleDetailContainer.append(schedule);
 				}
 			}
-			return this;
+			return $this;
 		},
 		
 		showNextScheduleView : function() {
-			var data = $(this).data('ScheduleListViewer');
-			if(data === undefined) {
+			var $this = $(this);
+			var data = $this.data('ScheduleListViewer');
+			if($.isEmptyObject(data)) {
 				$.error('ScheduleListViewer: jQuery.ScheduleListViewer was not initialized');
-				return this;
+				return $this;
 			}
 			var newScheduleView = data.scheduleViewManager.getNextScheduleView();
 			if(newScheduleView !== null) {
@@ -339,10 +411,11 @@ function ScheduleItemListView(items, breadCrumbText) {
 		},
 		
 		showPrevScheduleView : function() {
+			var $this = $(this);
 			var data = $(this).data('ScheduleListViewer');
-			if(data === undefined) {
+			if($.isEmptyObject(data)) {
 				$.error('ScheduleListViewer: jQuery.ScheduleListViewer was not initialized');
-				return this;
+				return $this;
 			}
 			var newScheduleView = data.scheduleViewManager.getPrevScheduleView();
 			if(newScheduleView !== null) {
