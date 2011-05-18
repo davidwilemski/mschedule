@@ -250,7 +250,7 @@ class class_model extends Model {
 		$junk = array();
 		foreach($list as $l) {
 			if(!isset($junk[$l['dept']])) {
-				$table[] = array($l['dept'], $l['full_name']);
+				$table[] = array("dept" => $l['dept'], "full_name" => $l['full_name']);
 				$junk[$l['dept']] = 1;
 			}
 		}
