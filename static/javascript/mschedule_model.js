@@ -286,7 +286,6 @@ function getDeptListFactory() {
 function CourseListFactory() {
 	this.courseListMap = {};
 	this.getCourseList = function(deptId, callback) {
-		console.log(deptId);
 		if(this.courseListMap.hasOwnProperty(deptId)) {
 			callback(this.courseListMap[deptId]);
 		}
@@ -374,7 +373,7 @@ function CourseSectionListFactory() {
 			var finishSectionListGet = getCachedCourseSectionLists;
 			
 			$.post('api/json/class_model/getClassSections', { 'data[]': sendData }, function(data) {
-				var sectionKey;
+				var sectionArrayKey;
 				var sectionObj;
 				var keyString;
 				
