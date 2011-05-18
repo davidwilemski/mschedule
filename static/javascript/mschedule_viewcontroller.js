@@ -174,6 +174,8 @@ function ScheduleItemListView(items, breadCrumbText) {
 				$this.css('height', fullHeight);
 				$this.css('width', settings.width);
 				$this.css('position', 'relative');
+				$this.css('overflow', 'hidden');
+
 				
 				data.slideContainer.css('overflow-x', 'hidden');
 				data.slideContainer.css('overflow-y', 'scroll');
@@ -209,10 +211,7 @@ function ScheduleItemListView(items, breadCrumbText) {
 				return $this;
 			}
 			
-			function resetOffScreen() {
-				var temp = data.offScreen;
-				data.offScreen = data.onScreen;
-				data.onScreen = temp;
+			function clearOffScreen() {
 				data.offScreen.html('');
 			}
 			
@@ -220,13 +219,18 @@ function ScheduleItemListView(items, breadCrumbText) {
 			
 			if(reverse === undefined || reverse === false) {
 				data.offScreen.css('left', data.settings.width);
-				data.onScreen.animate({left:'-' + data.settings.width}, 750, 'easeOutQuart', resetOffScreen);
+				data.onScreen.animate({left:'-' + data.settings.width}, 750, 'easeOutQuart', clearOffScreen);
 			} else {
 				data.offScreen.css('left', '-' + data.settings.width);
-				data.onScreen.animate({left:data.settings.width}, 750, 'easeOutQuart', resetOffScreen);
+				data.onScreen.animate({left:data.settings.width}, 750, 'easeOutQuart', clearOffScreen);
 			}
 			
 			data.offScreen.animate({left:'0'}, 750, 'easeOutQuart');
+			
+			var temp = data.offScreen;
+			data.offScreen = data.onScreen;
+			data.onScreen = temp;
+			data.slideContainer.scrollTop(0);
 			
 			if(breadCrumbsManaged === undefined || breadCrumbsManaged === false) {
 				if(data.listStack.size()) {
@@ -283,8 +287,8 @@ function ScheduleItemListView(items, breadCrumbText) {
 				return $this;
 			}
 			
-			$('#' + $this.attr('id') + ' ul.schedule_item_list li a').die(type);
-			$('#' + $this.attr('id') + ' ul.schedule_item_list li a').live(type, callback);
+			$('#' + $this.attr('id') + ' ul.schedule_item_list li a').undelegate(type);
+			$('#' + $this.attr('id')).delegate('ul.schedule_item_list li a', type, callback);
 			
 			return $this;
 		},
@@ -297,8 +301,8 @@ function ScheduleItemListView(items, breadCrumbText) {
 				return $this;
 			}
 			
-			$('#' + $this.attr('id') + ' ul.schedule_item_list_breadcrumbs li a').die(type);
-			$('#' + $this.attr('id') + ' ul.schedule_item_list_breadcrumbs li a').live(type, callback);
+			$('#' + $this.attr('id') + ' ul.schedule_item_list_breadcrumbs li a').undelegate(type);
+			$('#' + $this.attr('id')).delegate('ul.schedule_item_list_breadcrumbs li a', type, callback);
 			
 			return $this;
 		},
