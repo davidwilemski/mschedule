@@ -159,7 +159,7 @@ function ScheduleItemListView(items, breadCrumbText) {
 			return $this.each(function() {
 				var settings = {
 					width : '400px',
-					height : '355px',
+					height : '400px',
 					breadCrumbsHeight: '20px',
 					scrollListWidth: '15px',
 					easing: 'easeInOutQuint',
@@ -254,7 +254,7 @@ function ScheduleItemListView(items, breadCrumbText) {
 			
 			if(breadCrumbsManaged === undefined || breadCrumbsManaged === false) {
 				if(data.listStack.size()) {
-					data.breadCrumbs.append('<li> > <a href="#' + (data.listStack.size() - 1) + '">' + data.listStack.top().breadCrumbText + '</a></li>');
+					data.breadCrumbs.append('<li> &gt; <a href="#' + (data.listStack.size() - 1) + '">' + data.listStack.top().breadCrumbText + '</a></li>');
 				}
 			}
 			

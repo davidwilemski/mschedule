@@ -7,8 +7,10 @@ $(document).ready(function(event) {
 	var deptListFactory = getDeptListFactory();
 	var pickerDiv = $('#schedule_picker_div');
 	var courseList = $('#course_list_container ul');
+	var nextButton = $('#nextButton');
 	var courseListMap = {};
 	var deleteSymbolEntity = '&#10761;';
+	var curStep = 0;
 	
 	deptListFactory.getDeptList(function(list) {	
 		var listView = new ScheduleItemListView(list, 'Departments');
@@ -37,8 +39,10 @@ $(document).ready(function(event) {
 						var listItem = $('<li/>');
 						listItem.append($('<a/>', {'href' : '#' + courseObj.getAction()}).html(deleteSymbolEntity));
 						listItem.append($('<h1/>', {text:courseObj.getHeader()}));
-						listItem.append($('<p/>', {text:courseObj.getDetail()}));
 						courseList.append(listItem);
+						if(nextButton.hasClass('button_disabled')) {
+							nextButton.removeClass('button_disabled');
+						}
 					}
 					break;
 				default:
@@ -58,7 +62,6 @@ $(document).ready(function(event) {
 	
 	/* End Schedule Picker */
 	
-	
 	/* Start Course List */
 	
 	courseList.delegate('li a', 'click', function(event) {
@@ -66,11 +69,48 @@ $(document).ready(function(event) {
 		var action = $this.attr('href').replace('#','');
 		$this.parent().remove();
 		delete courseListMap[action];
+		if($.isEmptyObject(courseListMap) && !nextButton.hasClass('button_disabled')) {
+			nextButton.addClass('button_disabled');
+		}
 		return false;
 	});
 	
 	/* End Course List  */
 	
+	
+	/* Start Scheduler Flow */
+	
+	nextButton.click(function(event) {
+		var $this = $(this);
+		if(!$this.hasClass('button_disabled')) {
+		
+			switch (curStep) {
+				case 0:
+					var deptsNums = {};
+					courseList.children('li').each(function() {
+						var action = $(this).children('a').first().attr('href').replace('#','').split(',');
+						
+						if(!deptsNums.hasOwnProperty(action[0])) {
+							deptsNums[action[0]] = [action[1]];
+						}
+						else {
+							deptsNums[action[0]].push(action[1]);
+						}
+					});
+					
+					var sectionListFactory = getCourseSectionListFactory();
+					sectionListFactory.getCourseSectionList(deptsNums, function(list) {
+						console.log(list);
+					});
+					break;
+				default:
+					break;
+			}
+		}
+		return false;
+	});
+	
+	/* End Scheduler Flow */
 	
 });
 

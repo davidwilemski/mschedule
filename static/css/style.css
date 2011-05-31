@@ -99,9 +99,6 @@ bottom: #FFCE34;
 
 a.gradient_button {
 	display: block;
-	position: absolute;
-	top: 20px;
-	right: 20px;
 	font-size: 18px;
 	font-weight: lighter;
 	text-align: center;
@@ -124,6 +121,12 @@ a.gradient_button:active {
 }
 
 /* Start Sign In Menu */
+
+a#signin_button {
+	position: absolute;
+	top: 20px;
+	right: 20px;
+}
 
 #signin_menu {
 	-moz-border-radius: 5px 0px 5px 5px;
@@ -267,9 +270,10 @@ li.nav_item a {
 	width:775px;
 	min-width:675px;
 	margin:0 auto;
-	min-height:440px;
+	min-height:550px;
 	padding:5px 0;
 	position: relative;
+	overflow: hidden;
 }
 
 #vertical_ad {
@@ -414,7 +418,7 @@ ul.schedule_day li.day_break {
 /* Schedule Item Picker */
 
 div#schedule_picker_container {
-	height: 420px;
+	height: 465px;
 	width: 415px;
 	position: absolute;
 	left: 20px;
@@ -546,12 +550,12 @@ div#course_list_container ul {
 	margin: 0;
 	overflow-y: auto;
 	overflow-x: hidden;
-	height: 375px;
+	height: 420px;
 }
 
 div#course_list_container ul li {
-	height: 50px;
-    margin: 7px 7px 7px 15px;
+	height: 16px;
+    margin: 10px 10px 10px 15px;
     padding: 0;
     position: relative;
     width: 100%;
@@ -564,20 +568,38 @@ div#course_list_container ul li h1 {
     text-align: left;
 }
 
-div#course_list_container ul li p {
-	margin: 5px 10px;
-    padding: 0;
-    font-size: 16px;
-}
-
 div#course_list_container ul li a {
 	display: block;
     font-size: 16px;
     left: -15px;
-	top: 10px;
+	top: -2px;
     margin: 0;
     padding: 0;
     position: absolute;
     color: red;
     text-decoration: none;
+}
+
+/* Scheduler Misc */
+
+a#nextButton {
+	position: absolute;
+	bottom: 15px;
+	right: 5px;
+}
+
+a.button_disabled {
+	color:#333 !important;
+	background: #AAA !important;
+	cursor: default;
+}
+
+a.button_disabled:hover {
+	color:#333 !important;
+	background: #AAA !important;
+}
+
+a.button_disabled:active {
+	color:#333 !important;
+	background: #AAA !important;
 }

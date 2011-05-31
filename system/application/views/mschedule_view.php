@@ -31,8 +31,10 @@ echo form_dropdown('times', $times, 'free_morning');
 -->
 <div id="course_list_container">
 <h1 class="heading">Course List</h1>
-<ul>
-</ul>
+<ul></ul>
 </div>
+
+<a id="nextButton" class="gradient_button button_disabled" href="#">Continue &gt;</a>
+
 <?php
 //echo form_close();
