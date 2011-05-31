@@ -21,7 +21,13 @@
 <div id="title_pane">
 		<?php $this->load->view('login_view'); ?>
 		<div id="<?php if(!$this->session->userdata('userID')) echo "title_name"; else echo "title_name_small";?>">
-			<?php if($this->session->userdata('userID')) echo anchor('dashboard', img('static/images/mschedule_small.png')); else echo anchor('home', img('static/images/mschedule_large.png')); ?>
+			<?php if($this->session->userdata('userID')) {
+				echo anchor('dashboard', img(array('src' => 'static/images/mschedule_small.png', 'alt' => 'mschedule_logo')));
+			} 
+			else {
+				echo anchor('home', img(array('src' => 'static/images/mschedule_large.png', 'alt' => 'mschedule_logo')));
+			}
+			?>
 		</div>
 		<?php if($this->session->userdata('userID')) { ?>
 			<div id="nav_location">

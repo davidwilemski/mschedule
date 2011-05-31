@@ -53,9 +53,7 @@ echo anchor($url, $text, 'id="signin_button" class="gradient_button rounded_corn
 <?php /* Setup Login Form (if we're not logged in) */ ?>
 <?php if(!$this->session->userdata('userID')) { ?>
 <div id="signin_menu">
-	<?php
-	echo form_open('login');
-	?>
+	<?=form_open('login')?>
 		<fieldset>
 			<label for="username">Username or email</label>
 			<?=form_input($username_data)?>
@@ -71,11 +69,9 @@ echo anchor($url, $text, 'id="signin_button" class="gradient_button rounded_corn
 			?>
 			<?=form_submit($button_data)?>
 		</fieldset>
-	</form>
+	<?=form_close()?>
 	<p class="forgot"> <?=anchor('login/forgot', 'Forgot Your Password?', 'id="resend_password_link"')?></p>
 	<p class="forgot-username"> <?=anchor('login/forgot', 'Forgot Your Username?', 'id="forgot_username_link" title="If you remember your password, try logging in with your uniqname"')?></p>
 	<div class="error"><?php echo validation_errors(); ?></div>
 </div>
-<?php }
-echo form_close(); 
-?>
+<?php } ?>
