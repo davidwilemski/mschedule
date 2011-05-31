@@ -301,7 +301,7 @@ class class_model extends Model {
 		$result = array();
 
 		$resultcount = 0;
-		for($i=0; $i < sizeof($options[0]); $i+= 2){ 
+		for($i=0; $i < sizeof($options); $i+= 2){ 
 			$this->db->where('dept', $options[$i]);
 			$this->db->where('number', $options[$i+1]);
 	

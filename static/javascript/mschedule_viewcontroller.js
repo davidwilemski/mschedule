@@ -317,11 +317,10 @@ function ScheduleItemListView(items, breadCrumbText) {
 				return $this;
 			}
 			
-			var localCallback = callback;
-			$('#' + $this.attr('id') + ' ul.schedule_item_list li a').undelegate(type);
+			$('#' + $this.attr('id')).undelegate('ul.schedule_item_list li a', type);
 			$('#' + $this.attr('id')).delegate('ul.schedule_item_list li a', type, function(event) {
 				var courseObj = data.listStack.top().items[$(this).parent().index()];
-				localCallback.apply(this, [event, courseObj]);
+				callback.apply(this, [event, courseObj]);
 				return false;
 			});
 			
@@ -336,7 +335,7 @@ function ScheduleItemListView(items, breadCrumbText) {
 				return $this;
 			}
 			
-			$('#' + $this.attr('id') + ' ul.schedule_item_list_breadcrumbs li a').undelegate(type);
+			$('#' + $this.attr('id')).undelegate('ul.schedule_item_list_breadcrumbs li a', type);
 			$('#' + $this.attr('id')).delegate('ul.schedule_item_list_breadcrumbs li a', type, callback);
 			
 			return $this;

@@ -258,7 +258,6 @@ function DeptListFactory() {
 		}
 		else {
 			var localDeptList = this.deptList;
-			var localCallback = callback;
 			
 			$.post('api/json/class_model/getMasterDepartmentList', function(data) {
 				var objKey;
@@ -267,7 +266,7 @@ function DeptListFactory() {
 						localDeptList.push(new Dept(data[objKey]));
 					}
 				}
-				localCallback(localDeptList);
+				callback(localDeptList);
 			}, 'json');
 		}
 	};
@@ -291,7 +290,6 @@ function CourseListFactory() {
 		}
 		else {
 			var listMap = this.courseListMap;
-			var localCallback = callback;
 			
 			$.post('api/json/class_model/getDeptClassList',{ 'data[]': [deptId]}, function(data) {
 				var objKey;
@@ -301,7 +299,7 @@ function CourseListFactory() {
 						courseList.push(new Course(data[objKey]));
 					}
 				}
-				localCallback(courseList);
+				callback(courseList);
 			}, 'json');
 		}
 	};
@@ -322,20 +320,37 @@ function CourseSectionListFactory() {
 	this.courseSectionListMap = {};
 	
 	//this function assumed all needed sections have already been cached
-	function getCachedCourseSectionLists(courseSectionListMap, deptsNums, callback) {
-		var retList = [];
+	function getCachedCourseSectionLists(courseSectionListMap, deptsNums, callback, returnMap) {
+		var retObj;
 		var dept;
-		for(dept in deptsNums) {
-			if(deptsNums.hasOwnProperty(dept)) {
-				var i;
-				var keyString;
-				for(i = 0; i < deptsNums[dept].length; i++) {
-					keyString = dept + deptsNums[dept][i];
-					retList = retList.concat(courseSectionListMap[keyString]);
+		if(returnMap) {
+			retObj = {};
+			for(dept in deptsNums) {
+				if(deptsNums.hasOwnProperty(dept)) {
+					var i;
+					var keyString;
+					for(i = 0; i < deptsNums[dept].length; i++) {
+						keyString = dept + deptsNums[dept][i];
+						retObj[keyString] = courseSectionListMap[keyString];
+					}
 				}
 			}
 		}
-		callback(retList);
+		else {
+			var retObj = [];
+			for(dept in deptsNums) {
+				if(deptsNums.hasOwnProperty(dept)) {
+					var i;
+					var keyString;
+					for(i = 0; i < deptsNums[dept].length; i++) {
+						keyString = dept + deptsNums[dept][i];
+						retObj = retObj.concat(courseSectionListMap[keyString]);
+					}
+				}
+			}
+		}
+		
+		callback(retObj);
 	}
 	
 	/*
@@ -345,10 +360,16 @@ function CourseSectionListFactory() {
 	dept2:[num1, num2, num3],
 	...
 	}
+	
+	returnMap === true ? return map of course to its array of sections : list
 	*/ 
-	this.getCourseSectionList = function(deptsNums, callback) {
+	this.getCourseSectionList = function(deptsNums, callback, returnMap) {
 		var sendData = [];
 		var dept;
+		
+		if(returnMap === undefined) {
+			returnMap = false;
+		}
 		
 		//check to see if there are some sections that we need to fetch
 		for(dept in deptsNums) {
@@ -367,36 +388,32 @@ function CourseSectionListFactory() {
 		
 		//if there are some that need to be fetched, fetch em
 		if(sendData.length) {
-			var localDeptsNums = deptsNums;
 			var sectionListMap = this.courseSectionListMap;
-			var localCallback = callback;
 			var finishSectionListGet = getCachedCourseSectionLists;
 			
 			$.post('api/json/class_model/getClassSections', { 'data[]': sendData }, function(data) {
-				var sectionArrayKey;
 				var sectionObj;
 				var keyString;
 				
-				for(sectionArrayKey in data) {
-					if(data.hasOwnProperty(sectionArrayKey)) {
-						var sectionArr = data[sectionArrayKey];
-						var i;
-						for(i = 0; i < sectionArr.length; i++) {
-							sectionObj = new CourseSection(sectionArr[i]);
-							keyString = sectionObj.dept + sectionObj.number;
-							if(!sectionListMap.hasOwnProperty(keyString)) {
-								sectionListMap[keyString] = [];
-							}
-							sectionListMap[keyString].push(sectionObj);
+				var i;
+				for(i = 0; i < data.length; i++) {
+					var sectionArr = data[i];
+					var j;
+					for(j = 0; j < sectionArr.length; j++) {
+						sectionObj = new CourseSection(sectionArr[j]);
+						keyString = sectionObj.dept + sectionObj.number;
+						if(!sectionListMap.hasOwnProperty(keyString)) {
+							sectionListMap[keyString] = [];
 						}
+						sectionListMap[keyString].push(sectionObj);
 					}
 				}
 				
-				finishSectionListGet(sectionListMap, localDeptsNums, localCallback);
+				finishSectionListGet(sectionListMap, deptsNums, callback, returnMap);
 			}, 'json');
 		}
 		else {
-			getCachedCourseSectionLists(this.courseSectionListMap, deptsNums, callback);
+			getCachedCourseSectionLists(this.courseSectionListMap, deptsNums, callback, returnMap);
 		}
 	};
 }
@@ -430,7 +447,6 @@ function CourseScheduleListFactory() {
 			callback(this.courseScheduleListMap[curSheduleKey]);
 		}
 		else {
-			var localCallback = callback;
 			var localCourseScheduleListMap = this.courseScheduleListMap;
 			$.post('api/json/class_model/createSchedules', { 'data[]': classIds }, function(data) {
 				var prop;
@@ -451,7 +467,7 @@ function CourseScheduleListFactory() {
 				var scheduleList = new CourseScheduleList(schedules);
 				localCourseScheduleListMap[curSheduleKey] = scheduleList;
 				
-				localCallback(scheduleList);
+				callback(scheduleList);
 			}, 'json');
 		}
 	};
@@ -474,9 +490,8 @@ function CourseScheduleListFactory() {
 				callback(false);
 			}
 			else {
-				var localCallback = callback;
 				$.post('api/json/class_model/saveSchedule', { 'data': schedule.scheduleId }, function(data){
-					localCallback(data === 'true');
+					callback(data === 'true');
 				});
 			}
 		}

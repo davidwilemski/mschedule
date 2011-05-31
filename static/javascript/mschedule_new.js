@@ -9,8 +9,10 @@ $(document).ready(function(event) {
 	var courseList = $('#course_list_container ul');
 	var nextButton = $('#nextButton');
 	var courseListMap = {};
+	
 	var deleteSymbolEntity = '&#10761;';
-	var curStep = 0;
+	var spinnerImage = new Image();
+	spinnerImage.src = 'http://localhost/mschedule/static/images/spinner.gif';
 	
 	deptListFactory.getDeptList(function(list) {	
 		var listView = new ScheduleItemListView(list, 'Departments');
@@ -64,7 +66,7 @@ $(document).ready(function(event) {
 	
 	/* Start Course List */
 	
-	courseList.delegate('li a', 'click', function(event) {
+	function courseListDeleteItem() {
 		var $this = $(this);
 		var action = $this.attr('href').replace('#','');
 		$this.parent().remove();
@@ -73,17 +75,27 @@ $(document).ready(function(event) {
 			nextButton.addClass('button_disabled');
 		}
 		return false;
-	});
+	}
+	
+	courseList.delegate('li a', 'click', courseListDeleteItem);
 	
 	/* End Course List  */
 	
 	
 	/* Start Scheduler Flow */
 	
+	var curStep = 0;
+	var flowEasing = 'easeInOutQuint';
+	var flowDuration = 750;
+	
 	nextButton.click(function(event) {
 		var $this = $(this);
 		if(!$this.hasClass('button_disabled')) {
-		
+			$this.addClass('button_disabled');
+			
+			var oldInnerHTML = $this.html();
+			$this.html('').append($('<img/>', {'src' : spinnerImage.src, 'alt' : 'spinner_image', style : 'margin:5px 0 0;padding:0;'}));
+			
 			switch (curStep) {
 				case 0:
 					var deptsNums = {};
@@ -97,12 +109,33 @@ $(document).ready(function(event) {
 							deptsNums[action[0]].push(action[1]);
 						}
 					});
+					courseList.find('li a').remove();
 					
 					var sectionListFactory = getCourseSectionListFactory();
-					sectionListFactory.getCourseSectionList(deptsNums, function(list) {
-						console.log(list);
-					});
+					sectionListFactory.getCourseSectionList(deptsNums, function(map) {
+						
+						pickerDiv.parent().animate({left : '-' + pickerDiv.parent().css('width')}, flowDuration, flowEasing);
+						courseList.parent().animate({left : '20px'}, flowDuration, flowEasing, function() {
+							
+							var sectionListKey;
+							for(sectionListKey in map) {
+								if(map.hasOwnProperty(sectionListKey)) {
+									map[sectionListKey] = new ScheduleItemListView(map[sectionListKey]);
+								}
+							}
+							
+							courseList.children('li').each(function() {
+								sectionListKey = $(this).children('h1').first().html().replace(' ','');
+								$(this).append(map[sectionListKey].getElement().removeAttr('class'));
+							});
+							
+							$this.html(oldInnerHTML);
+							$this.removeClass('button_disabled');
+							curStep++;
+						});
+					}, true);
 					break;
+				case 1:
 				default:
 					break;
 			}
