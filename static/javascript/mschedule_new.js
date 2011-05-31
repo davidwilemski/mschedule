@@ -1,15 +1,22 @@
 /* Requires jQuery, jQueryUI Effects Core, mschedule_viewcontroller.js, and mschedule_model.js */
 
 $(document).ready(function(event) {
+	
+	/* Start Schedule Picker */
+	
 	var deptListFactory = getDeptListFactory();
-	deptListFactory.getDeptList(function(list) {
-		var pickerDiv = $('#class_div');
+	var pickerDiv = $('#schedule_picker_div');
+	var courseList = $('#course_list');
+	var courseListMap = {};
+	var deleteSymbolEntity = '&#10761;';
+	
+	deptListFactory.getDeptList(function(list) {	
 		var listView = new ScheduleItemListView(list, 'Departments');
 		
 		pickerDiv.ScheduleItemPicker();
 		pickerDiv.ScheduleItemPicker('push', listView);
 		
-		pickerDiv.ScheduleItemPicker('bindItem', 'click', function(event) {
+		pickerDiv.ScheduleItemPicker('bindItem', 'click', function(event, courseObj) {
 			var index = pickerDiv.ScheduleItemPicker('stackSize') - 1;
 			
 			var action = $(this).attr('href').replace('#','');
@@ -25,17 +32,14 @@ $(document).ready(function(event) {
 					});
 					break;
 				case 1:
-					var actionArr = action.split(',');
-					var actionObj = {};
-					actionObj[actionArr[0]] = [actionArr[1]];
-					
-					var courseSectionListFactory = getCourseSectionListFactory();
-					courseSectionListFactory.getCourseSectionList(actionObj, function(newList) {
-						var newListView = new ScheduleItemListView(newList, breadCrumbText);
-						pickerDiv.ScheduleItemPicker('push', newListView);
-					});
-					break;
-				case 2:
+					if(!courseListMap.hasOwnProperty(courseObj.getAction())) {
+						courseListMap[courseObj.getAction()] = courseObj;
+						var listItem = $('<li/>');
+						listItem.append($('<a/>', {'href' : '#' + courseObj.getAction()}).html(deleteSymbolEntity));
+						listItem.append($('<h1/>', {text:courseObj.getHeader()}));
+						listItem.append($('<p/>', {text:courseObj.getDetail()}));
+						courseList.append(listItem);
+					}
 					break;
 				default:
 					pickerDiv.ScheduleItemPicker('reset');
@@ -49,6 +53,25 @@ $(document).ready(function(event) {
 			pickerDiv.ScheduleItemPicker('goto', $(this).attr('href').replace('#',''));
 			return false;
 		});
+		
 	});
+	
+	/* End Schedule Picker */
+	
+	$('#' + courseList.attr('id')).delegate('li a', 'click', function(event) {
+		var $this = $(this);
+		var action = $this.attr('href').replace('#','');
+		$this.parent().remove();
+		delete courseListMap[action];
+		return false;
+	});
+	
+	/* Start Course List */
+	
+	
+	
+	/* End Course List  */
+	
+	
 });
 

@@ -1,4 +1,4 @@
-/* Requires jQuery, jQueryUI Effects Core, and mschedule_model.js */
+/* Requires jQuery, jQueryUI Effects Core, jQuery.ScrollTo, and mschedule_model.js */
 
 var pixelsPerHour = 40;
 
@@ -124,6 +124,7 @@ function CourseScheduleViewManager(courseScheduleList) {
 //course should be a sequential array of objects that support getHeader(), getDetail(), getAction()
 function ScheduleItemListView(items, breadCrumbText) {
 	this.items = items;
+	this.anchors = [];
 	this.breadCrumbText = breadCrumbText;
 	var listElement = $('<ul/>', {'class' : 'schedule_item_list'});
 	this.getElement	= function() {
@@ -132,13 +133,22 @@ function ScheduleItemListView(items, breadCrumbText) {
 	
 	var item;
 	var obj;
+	var curLetter = '';
 	for(item = 0; item < items.length; item++) {
 		obj = items[item];
 		var listItem = $('<li/>');
+		if(curLetter !== obj.getHeader().toUpperCase().charAt(0)) {
+			curLetter = obj.getHeader().toUpperCase().charAt(0);
+			this.anchors.push([item, curLetter]);
+		}
 		listItem.append($('<a/>', {'href' : '#' + obj.getAction()}));
 		listItem.append($('<h1/>', {text:obj.getHeader()}));
 		listItem.append($('<p/>', {text:obj.getDetail()}));
 		listElement.append(listItem);
+	}
+	
+	if(this.anchors.length === 1) {
+		this.anchors[0][1] = 'Top';
 	}
 }
 
@@ -150,7 +160,10 @@ function ScheduleItemListView(items, breadCrumbText) {
 				var settings = {
 					width : '400px',
 					height : '400px',
-					breadCrumbsHeight: '20px'
+					breadCrumbsHeight: '20px',
+					scrollListWidth: '15px',
+					easing: 'easeInOutQuint',
+					duration: 750
 				};
 				
 				if (options !== undefined) { 
@@ -159,10 +172,11 @@ function ScheduleItemListView(items, breadCrumbText) {
 				var data = $this.data('ScheduleItemPicker');
 				if($.isEmptyObject(data)) {
 					data = {
-						slideContainer : $('<div/>', {'style' : 'position:absolute; top:20px;'}),
+						slideContainer : $('<div/>', {'style' : 'position:absolute; top:' + settings.breadCrumbsHeight + '; left:' + settings.scrollListWidth + ';'}),
 						onScreen : $('<div/>', {'style' : 'position:absolute; top:0;'}),
 						offScreen : $('<div/>', {'style' : 'position:absolute; top:0;'}),
-						breadCrumbs : $('<ul/>', {'class' : 'schedule_item_list_breadcrumbs', 'style' : 'position:absolute; top:0px;'}),
+						breadCrumbs : $('<ul/>', {'class' : 'schedule_item_list_breadcrumbs', 'style' : 'position:absolute; top:0; left:' + settings.scrollListWidth + ';'}),
+						scrollList : $('<ul/>', {'class' : 'schedule_item_list_scrollList', 'style' : 'position:absolute; top:' + settings.breadCrumbsHeight + '; left:0;'}),
 						listStack : (new FlexiStack()),
 						settings : settings
 					};
@@ -171,14 +185,13 @@ function ScheduleItemListView(items, breadCrumbText) {
 				
 				
 				var fullHeight = parseInt(settings.breadCrumbsHeight, 10) + parseInt(settings.height, 10) + 'px';
+				var fullWidth = parseInt(settings.scrollListWidth, 10) + parseInt(settings.width, 10) + 'px';
 				$this.css('height', fullHeight);
-				$this.css('width', settings.width);
-				$this.css('position', 'relative');
+				$this.css('width', fullWidth);
 				$this.css('overflow', 'hidden');
 
 				
 				data.slideContainer.css('overflow-x', 'hidden');
-				data.slideContainer.css('overflow-y', 'scroll');
 				data.slideContainer.css('overflow-y', 'scroll');
 				data.slideContainer.css('height', settings.height);
 				data.slideContainer.css('width', settings.width);
@@ -195,9 +208,16 @@ function ScheduleItemListView(items, breadCrumbText) {
 				data.breadCrumbs.css('left', 0);
 				
 				$this.append(data.breadCrumbs);
+				$this.append(data.scrollList);
 				$this.append(data.slideContainer);
 				data.slideContainer.append(data.onScreen);
 				data.slideContainer.append(data.offScreen);
+				
+				var scrollToOptions = {duration : data.settings.duration, easing : data.settings.easing};
+				$('#' + $this.attr('id')).delegate('ul.schedule_item_list_scrollList li a', 'click', function() {
+					data.slideContainer.scrollTo('li:eq(' + $(this).attr('href').replace('#','') + ')', scrollToOptions);
+					return false;
+				});
 				
 				return $this;
 			});
@@ -219,13 +239,13 @@ function ScheduleItemListView(items, breadCrumbText) {
 			
 			if(reverse === undefined || reverse === false) {
 				data.offScreen.css('left', data.settings.width);
-				data.onScreen.animate({left:'-' + data.settings.width}, 750, 'easeOutQuart', clearOffScreen);
+				data.onScreen.animate({left:'-' + data.settings.width}, data.settings.duration, data.settings.easing, clearOffScreen);
 			} else {
 				data.offScreen.css('left', '-' + data.settings.width);
-				data.onScreen.animate({left:data.settings.width}, 750, 'easeOutQuart', clearOffScreen);
+				data.onScreen.animate({left:data.settings.width}, data.settings.duration, data.settings.easing, clearOffScreen);
 			}
 			
-			data.offScreen.animate({left:'0'}, 750, 'easeOutQuart');
+			data.offScreen.animate({left: data.settings.scrollListWidth}, data.settings.duration, data.settings.easing);
 			
 			var temp = data.offScreen;
 			data.offScreen = data.onScreen;
@@ -237,6 +257,16 @@ function ScheduleItemListView(items, breadCrumbText) {
 					data.breadCrumbs.append('<li> > <a href="#' + (data.listStack.size() - 1) + '">' + data.listStack.top().breadCrumbText + '</a></li>');
 				}
 			}
+			
+			var i;
+			var anchors = listView.anchors;
+			var tempList = $('<ul/>');
+			for(i = 0; i < anchors.length; i++) {
+				var listItem = $('<li/>');
+				listItem.append($('<a/>', {href : '#' + anchors[i][0], text : anchors[i][1]}));
+				tempList.append(listItem);
+			}
+			data.scrollList.html(tempList.html());
 			
 			data.listStack.push(listView);
 			return $this;
@@ -287,8 +317,13 @@ function ScheduleItemListView(items, breadCrumbText) {
 				return $this;
 			}
 			
+			var localCallback = callback;
 			$('#' + $this.attr('id') + ' ul.schedule_item_list li a').undelegate(type);
-			$('#' + $this.attr('id')).delegate('ul.schedule_item_list li a', type, callback);
+			$('#' + $this.attr('id')).delegate('ul.schedule_item_list li a', type, function(event) {
+				var courseObj = data.listStack.top().items[$(this).parent().index()];
+				localCallback.apply(this, [event, courseObj]);
+				return false;
+			});
 			
 			return $this;
 		},

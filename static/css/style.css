@@ -1,3 +1,13 @@
+/* 'a' pseudo class order matters! 
+
+a:link
+a:visited
+a:hover
+a:active
+
+*/
+
+
 body {
 	background:none repeat scroll 0 0 #fff;
 	font-family:arial;
@@ -257,8 +267,9 @@ li.nav_item a {
 	width:675px;
 	min-width:675px;
 	margin:0 auto;
-	min-height:400px;
+	min-height:440px;
 	padding:5px 0;
+	position: relative;
 }
 
 #vertical_ad {
@@ -399,6 +410,15 @@ ul.schedule_day li.day_break {
 	border: none;
 }
 
+
+/* Schedule Item Picker */
+
+div#schedule_picker_div {
+	position: absolute;
+	left: 20px;
+	top: 20px;
+}
+
 ul.schedule_item_list {
 	list-style: none;
 	padding: 0;
@@ -452,4 +472,83 @@ ul.schedule_item_list_breadcrumbs li {
 
 ul.schedule_item_list_breadcrumbs li a {
 	
+}
+
+ul.schedule_item_list_scrollList {
+	list-style: none;
+	margin: 5px 0 0 0;
+	padding: 0;
+}
+
+ul.schedule_item_list_scrollList li {
+	margin: 0;
+	padding: 0;
+}
+
+ul.schedule_item_list_scrollList li a {
+	margin: 0;
+	padding: 0;
+	font-size: 14px;
+	color: black;
+}
+
+ul.schedule_item_list_scrollList li a:link {
+	color: black;
+}
+
+ul.schedule_item_list_scrollList li a:visited {
+	color: black;
+}
+
+ul.schedule_item_list_scrollList li a:hover {
+	color: black;
+}
+
+ul.schedule_item_list_scrollList li a:active {
+	color: black;
+}
+
+
+/* Course List */
+
+ul#course_list {
+	position: absolute;
+	right: 20px;
+	top: 20px;
+	list-style: none;
+	padding: 0;
+	margin: 0;
+}
+
+ul#course_list li {
+	height: 50px;
+    margin: 0;
+    padding: 0;
+    position: relative;
+    width: 100%;
+}
+
+ul#course_list li h1 {
+	font-size: 18px;
+    margin: 5px 10px;
+    padding: 0;
+    text-align: left;
+}
+
+ul#course_list li p {
+	margin: 5px 10px;
+    padding: 0;
+    font-size: 16px;
+}
+
+ul#course_list li a {
+	display: block;
+    font-size: 16px;
+    left: -15px;
+	top: 10px;
+    margin: 0;
+    padding: 0;
+    position: absolute;
+    color: red;
+    text-decoration: none;
 }
