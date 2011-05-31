@@ -11,7 +11,10 @@
 $this->load->helper('form');
 
 ?>
+<div id="schedule_picker_container">
+<h1 class="heading">Course Picker</h1>
 <div id="schedule_picker_div"></div>
+</div>
 
 <!-- <div id="time_div">
 <?
@@ -26,8 +29,10 @@ echo form_dropdown('times', $times, 'free_morning');
 ?>
 </div>
 -->
-
-<ul id="course_list">
+<div id="course_list_container">
+<h1 class="heading">Course List</h1>
+<ul>
 </ul>
+</div>
 <?php
 //echo form_close();

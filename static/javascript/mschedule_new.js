@@ -6,7 +6,7 @@ $(document).ready(function(event) {
 	
 	var deptListFactory = getDeptListFactory();
 	var pickerDiv = $('#schedule_picker_div');
-	var courseList = $('#course_list');
+	var courseList = $('#course_list_container ul');
 	var courseListMap = {};
 	var deleteSymbolEntity = '&#10761;';
 	

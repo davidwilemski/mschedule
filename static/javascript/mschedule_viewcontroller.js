@@ -159,7 +159,7 @@ function ScheduleItemListView(items, breadCrumbText) {
 			return $this.each(function() {
 				var settings = {
 					width : '400px',
-					height : '400px',
+					height : '355px',
 					breadCrumbsHeight: '20px',
 					scrollListWidth: '15px',
 					easing: 'easeInOutQuint',
@@ -192,7 +192,7 @@ function ScheduleItemListView(items, breadCrumbText) {
 
 				
 				data.slideContainer.css('overflow-x', 'hidden');
-				data.slideContainer.css('overflow-y', 'scroll');
+				data.slideContainer.css('overflow-y', 'auto');
 				data.slideContainer.css('height', settings.height);
 				data.slideContainer.css('width', settings.width);
 				

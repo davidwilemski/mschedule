@@ -264,7 +264,7 @@ li.nav_item a {
 }
 
 #content {
-	width:675px;
+	width:775px;
 	min-width:675px;
 	margin:0 auto;
 	min-height:440px;
@@ -413,10 +413,23 @@ ul.schedule_day li.day_break {
 
 /* Schedule Item Picker */
 
-div#schedule_picker_div {
+div#schedule_picker_container {
+	height: 420px;
+	width: 415px;
 	position: absolute;
 	left: 20px;
 	top: 20px;
+}
+
+div#schedule_picker_container h1.heading {
+	text-align: center;
+	font-size: 24px;
+	border-bottom: solid 1px #333;
+	margin: 0 0 20px;
+}
+
+div#schedule_picker_div {
+	position: relative;
 }
 
 ul.schedule_item_list {
@@ -428,7 +441,7 @@ ul.schedule_item_list {
 
 ul.schedule_item_list li {
 	height: 50px;
-    margin: 0;
+    margin: 7px;
     padding: 0;
     position: relative;
     width: 100%;
@@ -511,37 +524,53 @@ ul.schedule_item_list_scrollList li a:active {
 
 /* Course List */
 
-ul#course_list {
+div#course_list_container {
 	position: absolute;
 	right: 20px;
 	top: 20px;
+	margin: 0;
+	padding: 0;
+	width: 250px;
+}
+
+div#course_list_container h1.heading {
+	text-align: center;
+	font-size: 24px;
+	border-bottom: solid 1px #333;
+	margin: 0 0 20px;
+}
+
+div#course_list_container ul {
 	list-style: none;
 	padding: 0;
 	margin: 0;
+	overflow-y: auto;
+	overflow-x: hidden;
+	height: 375px;
 }
 
-ul#course_list li {
+div#course_list_container ul li {
 	height: 50px;
-    margin: 0;
+    margin: 7px 7px 7px 15px;
     padding: 0;
     position: relative;
     width: 100%;
 }
 
-ul#course_list li h1 {
+div#course_list_container ul li h1 {
 	font-size: 18px;
     margin: 5px 10px;
     padding: 0;
     text-align: left;
 }
 
-ul#course_list li p {
+div#course_list_container ul li p {
 	margin: 5px 10px;
     padding: 0;
     font-size: 16px;
 }
 
-ul#course_list li a {
+div#course_list_container ul li a {
 	display: block;
     font-size: 16px;
     left: -15px;
