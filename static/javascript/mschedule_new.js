@@ -58,7 +58,7 @@ $(document).ready(function(event) {
 	
 	/* End Schedule Picker */
 	
-	$('#' + courseList.attr('id')).delegate('li a', 'click', function(event) {
+	courseList.delegate('li a', 'click', function(event) {
 		var $this = $(this);
 		var action = $this.attr('href').replace('#','');
 		$this.parent().remove();
