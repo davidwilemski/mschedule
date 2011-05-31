@@ -65,7 +65,13 @@ else
 */
 
 
-$config['index_page'] = "";
+if($_SERVER['SERVER_NAME'] == 'localhost') {
+	$config['index_page'] = "index.php";
+}
+else {
+	$config['index_page'] = "";
+
+}
 
 /*
 |--------------------------------------------------------------------------
