@@ -58,6 +58,9 @@ $(document).ready(function(event) {
 	
 	/* End Schedule Picker */
 	
+	
+	/* Start Course List */
+	
 	courseList.delegate('li a', 'click', function(event) {
 		var $this = $(this);
 		var action = $this.attr('href').replace('#','');
@@ -65,10 +68,6 @@ $(document).ready(function(event) {
 		delete courseListMap[action];
 		return false;
 	});
-	
-	/* Start Course List */
-	
-	
 	
 	/* End Course List  */
 	

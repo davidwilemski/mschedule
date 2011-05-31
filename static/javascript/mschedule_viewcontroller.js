@@ -213,7 +213,7 @@ function ScheduleItemListView(items, breadCrumbText) {
 				data.slideContainer.append(data.onScreen);
 				data.slideContainer.append(data.offScreen);
 				
-				var scrollToOptions = {duration : data.settings.duration, easing : data.settings.easing};
+				var scrollToOptions = {duration : data.settings.duration, easing : data.settings.easing, axis : 'y'};
 				$('#' + $this.attr('id')).delegate('ul.schedule_item_list_scrollList li a', 'click', function() {
 					data.slideContainer.scrollTo('li:eq(' + $(this).attr('href').replace('#','') + ')', scrollToOptions);
 					return false;
