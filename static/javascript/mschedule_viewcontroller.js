@@ -2,6 +2,17 @@
 
 var pixelsPerHour = 40;
 
+//Source: http://jdsharp.us/jQuery/minute/calculate-scrollbar-width.php
+function scrollbarWidth() {
+    var div = $('<div style="width:50px;height:50px;overflow:hidden;position:absolute;top:-200px;left:-200px;"><div style="height:100px;"></div>');
+    $('body').append(div);
+    var w1 = $('div', div).innerWidth();
+    div.css('overflow-y', 'scroll');
+    var w2 = $('div', div).innerWidth();
+    $(div).remove();
+    return (w1 - w2);
+}
+
 function diffTimes(greater, lesser) {
 	if(typeof greater === 'string') {
 		greater = parseInt(greater, 10);
@@ -190,20 +201,23 @@ function ScheduleItemListView(items, breadCrumbText) {
 				$this.css('width', fullWidth);
 				$this.css('overflow', 'hidden');
 
-				
-				data.slideContainer.css('overflow-x', 'hidden');
-				data.slideContainer.css('overflow-y', 'auto');
+				data.slideContainer.css('overflow', 'hidden');
 				data.slideContainer.css('height', settings.height);
 				data.slideContainer.css('width', settings.width);
 				
-				data.onScreen.css('width', settings.width);
+				var widthWithScrollBars = (parseInt(settings.width, 10) - scrollbarWidth()) + 'px';
+				
+				data.onScreen.css('width', widthWithScrollBars);
 				data.onScreen.css('height', settings.height);
 				data.onScreen.css('left', 0);
+				data.onScreen.css('overflow-x', 'hidden');
+				data.onScreen.css('overflow-y', 'auto');
 				
-				
-				data.offScreen.css('width', settings.width);
+				data.offScreen.css('width', widthWithScrollBars);
 				data.offScreen.css('height', settings.height);
 				data.offScreen.css('left', settings.width);
+				data.offScreen.css('overflow-x', 'hidden');
+				data.offScreen.css('overflow-y', 'auto');
 				
 				data.breadCrumbs.css('left', 0);
 				
@@ -215,7 +229,7 @@ function ScheduleItemListView(items, breadCrumbText) {
 				
 				var scrollToOptions = {duration : data.settings.duration, easing : data.settings.easing, axis : 'y'};
 				$('#' + $this.attr('id')).delegate('ul.schedule_item_list_scrollList li a', 'click', function() {
-					data.slideContainer.scrollTo('li:eq(' + $(this).attr('href').replace('#','') + ')', scrollToOptions);
+					data.onScreen.scrollTo('li:eq(' + $(this).attr('href').replace('#','') + ')', scrollToOptions);
 					return false;
 				});
 				
@@ -231,18 +245,19 @@ function ScheduleItemListView(items, breadCrumbText) {
 				return $this;
 			}
 			
-			function clearOffScreen() {
+			function resetOffScreen() {
 				data.offScreen.html('');
+				data.offScreen.scrollTop(0);
 			}
 			
 			data.offScreen.html('').append(listView.getElement());
 			
 			if(reverse === undefined || reverse === false) {
 				data.offScreen.css('left', data.settings.width);
-				data.onScreen.animate({left:'-' + data.settings.width}, data.settings.duration, data.settings.easing, clearOffScreen);
+				data.onScreen.animate({left:'-' + data.settings.width}, data.settings.duration, data.settings.easing, resetOffScreen);
 			} else {
 				data.offScreen.css('left', '-' + data.settings.width);
-				data.onScreen.animate({left:data.settings.width}, data.settings.duration, data.settings.easing, clearOffScreen);
+				data.onScreen.animate({left:data.settings.width}, data.settings.duration, data.settings.easing, resetOffScreen);
 			}
 			
 			data.offScreen.animate({left: data.settings.scrollListWidth}, data.settings.duration, data.settings.easing);
