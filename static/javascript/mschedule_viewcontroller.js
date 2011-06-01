@@ -43,11 +43,12 @@ function CourseScheduleView(courseSchedule) {
 	this.courseSchedule = courseSchedule;
 	
 	//create the scheduleElement, which can just be injected into the page
-	var scheduleElement = $('<div/>', { 'class' : 'schedule', 'id' : '#' + courseSchedule.scheduleId });
+	var scheduleElement = $('<div/>', { 'class' : 'schedule', 'id' : 'schedule_view_' + courseSchedule.scheduleId });
 	this.getElement = function() {
 		return scheduleElement;
 	};
 	
+	scheduleElement.append($('<h1/>', {text : courseSchedule.title}));
 	var weekList = $('<ul/>', {'class' : 'schedule_week'});
 	var day;
 	for(day in this.courseSchedule.week) {
@@ -62,7 +63,7 @@ function CourseScheduleView(courseSchedule) {
 				for(section = 0; section < dayArr.length; section++) {
 					var prevHourDiff;
 					if(courseSection !== null) {
-						prevHourDiff = diffTimes(courseSection.endTime, dayArr[section].startTime);
+						prevHourDiff = diffTimes(dayArr[section].startTime, courseSection.endTime);
 						if(prevHourDiff) {
 							numPixels = Math.ceil(pixelsPerHour * prevHourDiff);
 							dayListElement.append($('<li/>', { 'class' : 'day_break', 'style' : 'height:' + numPixels + 'px;' }));
@@ -98,15 +99,15 @@ function CourseScheduleViewManager(courseScheduleList) {
 	this.courseScheduleViewMap = {};
 	this.courseScheduleList = courseScheduleList;
 	
-	function getCourseScheduleViewCached(schedule) {
+	function getCourseScheduleViewCached(localCourseScheduleViewMap, schedule) {
 		if(schedule === null) {
 			return null;
 		}
-		if(this.courseScheduleViewMap.hasOwnProperty(schedule.scheduleId)) {
-			return this.courseScheduleViewMap[schedule.scheduleId];
+		if(localCourseScheduleViewMap.hasOwnProperty(schedule.scheduleId)) {
+			return localCourseScheduleViewMap[schedule.scheduleId];
 		} else {
 			var scheduleView = new CourseScheduleView(schedule);
-			this.courseScheduleViewMap[schedule.scheduleId] = scheduleView;
+			localCourseScheduleViewMap[schedule.scheduleId] = scheduleView;
 			return scheduleView;
 		}
 	}
@@ -116,19 +117,19 @@ function CourseScheduleViewManager(courseScheduleList) {
 	};
 	
 	this.getScheduleView = function(key) {
-		return getCourseScheduleViewCached(this.courseScheduleList.getSchedule(key));
+		return getCourseScheduleViewCached(this.courseScheduleViewMap, this.courseScheduleList.getSchedule(key));
 	};
 	
 	this.getNextScheduleView = function() {
-		return getCourseScheduleViewCached(this.courseScheduleList.getNextSchedule());
+		return getCourseScheduleViewCached(this.courseScheduleViewMap, this.courseScheduleList.getNextSchedule());
 	};
 	
 	this.getCurrentScheduleView = function() {
-		return getCourseScheduleViewCached(this.courseScheduleList.getCurrentSchedule());
+		return getCourseScheduleViewCached(this.courseScheduleViewMap, this.courseScheduleList.getCurrentSchedule());
 	};
 	
 	this.getPrevScheduleView = function() {
-		return getCourseScheduleViewCached(this.courseScheduleList.getPrevSchedule());
+		return getCourseScheduleViewCached(this.courseScheduleViewMap, this.courseScheduleList.getPrevSchedule());
 	};
 }
 
@@ -395,6 +396,7 @@ function ScheduleItemListView(items, breadCrumbText, aClass, aHTML) {
 	};
 }(jQuery));
 
+var checkMarkSymbolEntity = '&#10004;';
 
 (function( $ ){
 	var methods = {
@@ -411,8 +413,8 @@ function ScheduleItemListView(items, breadCrumbText, aClass, aHTML) {
 				if($.isEmptyObject(data)) {
 					data = {
 						scheduleViewManager : (new CourseScheduleViewManager(scheduleList)),
-						scheduleDetailContainer : $('<div/>', {'id' : '#schedule_master'}),
-						scheduleMasterContainer : $('<ul/>', {'id' : '#schedule_detail'})
+						scheduleDetailContainer : $('<div/>', {'id' : 'schedule_detail'}),
+						scheduleMasterContainer : $('<ul/>', {'id' : 'schedule_master'})
 					};
 					$this.data('ScheduleListViewer', data);
 				}
@@ -422,17 +424,27 @@ function ScheduleItemListView(items, breadCrumbText, aClass, aHTML) {
 				var schedule;
 				for(i = 0; i < scheduleListSize; i++) {
 					schedule = scheduleList.getSchedule(i);
-					data.scheduleMasterContainer.append($('<li><a href-"#' + schedule.scheduleId + '"></a>Schedule ' + i + '</li>'));
+					data.scheduleMasterContainer.append($('<li/>', {text : 'Schedule ' + i}).prepend($('<a/>', {'href' : '#' + schedule.scheduleId})));
 				}
 				
 				var superContainerId = $this.attr('id');
-				$('#schedule_detail li a').click(function() {
-					$this.toggleClass('hidden');
-					$(superContainerId).ScheduleListViewer('toggleScheduleView', $this.attr('href'));
+				data.scheduleMasterContainer.find('li a').click(function() {
+					if($(this).html().trim()) {
+						$(this).html('');
+					}
+					else {
+						$(this).html(checkMarkSymbolEntity);
+					}
+					$(this).toggleClass('schedule_on');
+					$this.ScheduleListViewer('toggleScheduleView', $(this).attr('href').replace('#',''));
 					return false;
 				});
 				
-				return $this;
+				$this.append(data.scheduleDetailContainer);
+				$this.append(data.scheduleMasterContainer);
+				
+				data.scheduleMasterContainer.find('li a:first').toggleClass('schedule_on').html(checkMarkSymbolEntity);
+				return $this.ScheduleListViewer('toggleScheduleView', scheduleList.getSchedule(0).scheduleId);
 			});
 		},
 		
@@ -443,16 +455,17 @@ function ScheduleItemListView(items, breadCrumbText, aClass, aHTML) {
 				$.error('ScheduleListViewer: jQuery.ScheduleListViewer was not initialized');
 				return $this;
 			}
-			var schedule = $(id);
+			var fullId = '#schedule_view_' + id;
+			var schedule = $(fullId);
 			if(schedule.length) {
 				schedule.remove();
 			}
 			else {
-				schedule = data.scheduleViewManager.getScheduleView(schedule.attr('id'));
+				schedule = data.scheduleViewManager.getScheduleView(id);
 				if(schedule === null) {
 					$.error('ScheduleListViewer: jQuery.ScheduleListViewer could not toggle id' + id);
 				} else {
-					data.scheduleDetailContainer.append(schedule);
+					data.scheduleDetailContainer.append(schedule.getElement());
 				}
 			}
 			return $this;
@@ -468,7 +481,7 @@ function ScheduleItemListView(items, breadCrumbText, aClass, aHTML) {
 			var newScheduleView = data.scheduleViewManager.getNextScheduleView();
 			if(newScheduleView !== null) {
 				data.scheduleDetailContainer.html('');
-				data.scheduleDetailContainer.append(newScheduleView);
+				data.scheduleDetailContainer.append(newScheduleView.getElement());
 			}
 		},
 		
@@ -482,7 +495,7 @@ function ScheduleItemListView(items, breadCrumbText, aClass, aHTML) {
 			var newScheduleView = data.scheduleViewManager.getPrevScheduleView();
 			if(newScheduleView !== null) {
 				data.scheduleDetailContainer.html('');
-				data.scheduleDetailContainer.append(newScheduleView);
+				data.scheduleDetailContainer.append(newScheduleView.getElement());
 			}
 		}
 	};

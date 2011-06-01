@@ -191,24 +191,19 @@ echo form_dropdown('times', $times, 'free_morning');
 					optionsDiv.animate({left : '-=800px'}, flowDuration, flowEasing);
 						pickerDiv.parent().animate({left : '-=800px' + pickerDiv.parent().css('width')}, flowDuration, flowEasing);
 						courseList.parent().animate({left : '-=800px'}, flowDuration, flowEasing, function() {
+							var scheduleViewerDiv = $('<div/>', {'id' : 'schedule_viewer_div'});
 							
-							var sectionListKey;
-							for(sectionListKey in map) {
-								if(map.hasOwnProperty(sectionListKey)) {
-									map[sectionListKey] = new ScheduleItemListView(map[sectionListKey], undefined, 'section_on', checkMarkSymbolEntity);
-								}
-							}
+							scheduleViewerDiv.ScheduleListViewer(list);
+							scheduleViewerDiv.css('display','none');
 							
-							courseList.children('li').each(function() {
-								sectionListKey = $(this).children('h1').first().html().replace(' ','');
-								$(this).append(map[sectionListKey].getElement().removeAttr('class'));
-							});
+							$('#content').append(scheduleViewerDiv);
+							scheduleViewerDiv.show('bounce', {}, flowDuration);
+							
+							
 							
 							$this.html(oldInnerHTML);
 							$this.removeClass('button_disabled');
 							curStep++;
-							
-							console.log(list);
 						});
 					});
 					break;

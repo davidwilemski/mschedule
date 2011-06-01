@@ -106,6 +106,7 @@ function CourseSection(jsonObj) {
 	};
 	
 	this.time = '';
+	this.days = '';
 	
 	var prop;
 	for(prop in jsonObj) {
@@ -113,6 +114,10 @@ function CourseSection(jsonObj) {
 			this[prop] = jsonObj[prop];
 		}
 	}	
+	
+	//implicit string conversion to fix corner cases
+	this.time += '';
+	this.days += '';
 	
 	var times = this.time.split('-');
 	
@@ -148,21 +153,27 @@ function CourseScheduleWeek() {
 //courseSections should be a sequential array of CourseSection objects
 function CourseSchedule(courseSections) {
 	this.scheduleId = '';
+	this.title = '';
 	this.week = new CourseScheduleWeek();
-	var weekDays;
+	var weekdays;
 	var section;
 	
 	//put a section where it belongs in each day of the week
 	var i;
+	var classIds = [];
 	for(i = 0; i < courseSections.length; i++) {
 		section = courseSections[i];
-		this.scheduleId += section.classid + ';';
-		weekDays = section.days.split(',');	
-		var j;
-		for(j = 0; j < weekDays.length; j++) {
-			this.week[weekDays[j]].push(section);
+		classIds.push(section.classid);
+		if(section.days.length) {
+			weekdays = section.days.split(',');	
+			var j;
+			for(j = 0; j < weekdays.length; j++) {
+				this.week[weekdays[j]].push(section);
+			}
 		}
 	}
+	
+	this.scheduleId = classIds.join('_');
 	
 	//sort each day of the week
 	var prop;
@@ -173,7 +184,7 @@ function CourseSchedule(courseSections) {
 	}
 	
 	//find the baseHour (earliest course's start time) for use when generating schedule html
-	var minHour = 0;
+	var minHour = 2400;
 	var curHour;
 	for(prop in this.week) {
 		if(this.week.hasOwnProperty(prop)) {
@@ -181,6 +192,11 @@ function CourseSchedule(courseSections) {
 				minHour = curHour;
 			}
 		}
+	}
+	
+	//if it didn't work, reset to 0
+	if(minHour === 2400) {
+		minHour = 0;
 	}
 	this.baseHour = minHour;
 }
@@ -452,8 +468,9 @@ function CourseScheduleListFactory() {
 						for(i = 0; i < sectionObjs.length; i++) {
 							sections.push(new CourseSection(sectionObjs[i]));
 						}
-						
-						schedules.push(new CourseSchedule(sections));
+						var schedule = new CourseSchedule(sections);
+						schedule.title = 'Schedule ' + schedules.length;
+						schedules.push(schedule);
 					}
 				}
 				

@@ -350,24 +350,39 @@ li.nav_item a {
 
 /* Schedule List View */
 
+div#schedule_viewer_div {
+    margin: 20px auto;
+    padding: 0;
+    width: 100%;
+}
+
 ul#schedule_master {
 	float: left;
     list-style: none outside none;
     margin: 0;
+    padding: 0;
 }
 ul#schedule_master li {
-	padding: 15px 0;
+	margin: 0 0 0 10px;
+    padding: 9px 10px;
     width: 135px;
+    position: relative;
 }
 ul#schedule_master li a {
-	background-color: blue;
-    height: 100%;
-    padding: 15px 8px;
-}
-ul#schedule_master li a.hidden {
-	background-color: red;
-    height: 100%;
-    padding: 15px 8px;
+	display: block;
+    height: 10px;
+    left: -10px;
+    margin: 0;
+    padding: 0;
+    position: absolute;
+    text-decoration: none;
+    top: 10px;
+    width: 10px;
+    border: 1px solid #000;
+    text-align: center;
+    font-size: 20px;
+    line-height: 9px;
+    color: green;
 }
 
 div#schedule_detail {
@@ -377,6 +392,17 @@ div#schedule_detail {
 
 div.schedule {
 	float:left;
+	margin: 0 0 25px;
+	padding: 0;
+}
+
+div.schedule h1 {
+	border-top: 1px solid #333333;
+    font-size: 24px;
+    margin: 0;
+    padding: 10px 0 5px;
+    text-align: left;
+    text-decoration: underline;
 }
 
 ul.schedule_week {
