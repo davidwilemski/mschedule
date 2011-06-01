@@ -433,22 +433,15 @@ function CourseScheduleListFactory() {
 	var curScheduleListKey = '';
 	this.courseScheduleListMap = {};
 	
-	//courseSections is a sequential array of CourseSection objects
-	this.getCourseSchedules = function(courseSections, callback) {
-		var classIds = [];
-		var i;
-		for(i = 0; i < courseSections.length; i++) {
-			if(courseSections[i].classid.length > 1) {
-				classIds.push(courseSections[i].classid);
-			}
-		}
-		var curSheduleKey = classIds.sort().join('');
-		if(this.courseSheduleMap.hasOwnProperty(curSheduleKey)) {
+	//classIds is a sequential array of classid strings
+	this.getCourseSchedules = function(classIds, timesOption, callback) {
+		var curSheduleKey = classIds.sort().join(';');
+		if(this.courseScheduleListMap.hasOwnProperty(curSheduleKey)) {
 			callback(this.courseScheduleListMap[curSheduleKey]);
 		}
 		else {
 			var localCourseScheduleListMap = this.courseScheduleListMap;
-			$.post('api/json/class_model/createSchedules', { 'data[]': classIds }, function(data) {
+			$.post('api/json/class_model/createSchedules', { 'data[]': [timesOption].concat(classIds) }, function(data) {
 				var prop;
 				var schedules = [];
 				for(prop in data) {

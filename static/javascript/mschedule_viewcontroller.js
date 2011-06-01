@@ -133,10 +133,12 @@ function CourseScheduleViewManager(courseScheduleList) {
 }
 
 //course should be a sequential array of objects that support getHeader(), getDetail(), getAction()
-function ScheduleItemListView(items, breadCrumbText) {
+function ScheduleItemListView(items, breadCrumbText, aClass, aHTML) {
 	this.items = items;
 	this.anchors = [];
-	this.breadCrumbText = breadCrumbText;
+	if(breadCrumbText !== undefined) {
+		this.breadCrumbText = breadCrumbText;
+	}
 	var listElement = $('<ul/>', {'class' : 'schedule_item_list'});
 	this.getElement	= function() {
 		return listElement;
@@ -152,7 +154,14 @@ function ScheduleItemListView(items, breadCrumbText) {
 			curLetter = obj.getHeader().toUpperCase().charAt(0);
 			this.anchors.push([item, curLetter]);
 		}
-		listItem.append($('<a/>', {'href' : '#' + obj.getAction()}));
+		var aTag = $('<a/>', {'href' : '#' + obj.getAction()})
+		if(aClass !== undefined) {
+			aTag.addClass(aClass);
+		}
+		if(aHTML !== undefined) {
+			aTag.html(aHTML);
+		}
+		listItem.append(aTag);
 		listItem.append($('<h1/>', {text:obj.getHeader()}));
 		listItem.append($('<p/>', {text:obj.getDetail()}));
 		listElement.append(listItem);
