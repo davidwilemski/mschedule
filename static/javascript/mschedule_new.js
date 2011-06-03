@@ -129,14 +129,6 @@ $(document).ready(function() {
 					sectionListFactory.getCourseSectionList(deptsNums, function(map) {
 						
 						if(optionsDiv === undefined) {
-						/*
-$times = array(
-	'0' => 'Early Riser',
-	'1' => 'Sleep In',
-	'2' => 'Friday Off!'
-);
-echo form_dropdown('times', $times, 'free_morning');
-*/
 							optionsDiv = $('<div/>', {'id' : 'schedule_options'});
 							optionsDiv.append($('<h1/>', {text : 'Scheduler Options'}));
 							optionsDiv.append($('<h2/>', {text : 'Get up early, or stay out late?'}));
@@ -157,9 +149,9 @@ echo form_dropdown('times', $times, 'free_morning');
 							
 						});
 						
-						optionsDiv.animate({left : '355px'}, flowDuration, flowEasing);
 						pickerDiv.parent().animate({left : '-' + pickerDiv.parent().css('width')}, flowDuration, flowEasing);
-						courseList.parent().animate({left : '20px'}, flowDuration, flowEasing, function() {
+						courseList.parent().animate({left : '20px'}, flowDuration, flowEasing);
+						optionsDiv.animate({left : '355px'}, flowDuration, flowEasing, function() {
 							
 							var sectionListKey;
 							for(sectionListKey in map) {

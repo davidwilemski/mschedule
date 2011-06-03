@@ -598,7 +598,7 @@ ul.schedule_item_list_scrollList li a:active {
 
 div#course_list_container {
 	position: absolute;
-	right: 20px;
+	left: 580px;
 	top: 20px;
 	margin: 0;
 	padding: 0;
