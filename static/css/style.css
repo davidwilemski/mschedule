@@ -167,8 +167,8 @@ a#signin_button {
 
 #signin_menu fieldset {
 	border: none;
-	padding: none;
-	margin: none;
+	padding: 5px 8px;
+	margin: 0;
 }
 
 #signin_menu input[type=text], #signin_menu input[type=password] {
