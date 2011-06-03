@@ -26,6 +26,8 @@
 	*/
 ?>
 <?php
+
+$css = includeCSSFile('reset') . $css;
 $data['css'] = $css;
 
 $this->load->view('include/header', $data);

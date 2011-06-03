@@ -18,7 +18,7 @@
 
 class account extends Controller {
 	
-	function dashboard() {
+	function account() {
 		
 		parent::controller();
 		
