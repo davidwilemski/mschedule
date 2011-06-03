@@ -1,13 +1,13 @@
 /* Requires jQuery, jQueryUI Effects Core, mschedule_viewcontroller.js, and mschedule_model.js */
 
-$(document).ready(function(event) {
+$(document).ready(function() {
 	
 	/* Start Schedule Picker */
 	
 	var deptListFactory = getDeptListFactory();
 	var pickerDiv = $('#schedule_picker_div');
 	var courseList = $('#course_list_container ul');
-	var optionsDiv = undefined;
+	var optionsDiv;
 	var nextButton = $('#nextButton');
 	var courseListMap = {};
 	
@@ -22,7 +22,7 @@ $(document).ready(function(event) {
 		pickerDiv.ScheduleItemPicker();
 		pickerDiv.ScheduleItemPicker('push', listView);
 		
-		pickerDiv.ScheduleItemPicker('bindItem', 'click', function(event, courseObj) {
+		pickerDiv.ScheduleItemPicker('bindItem', 'click', function(courseObj) {
 			var index = pickerDiv.ScheduleItemPicker('stackSize') - 1;
 			
 			var action = $(this).attr('href').replace('#','');
@@ -57,7 +57,7 @@ $(document).ready(function(event) {
 			return false;
 		});
 		
-		pickerDiv.ScheduleItemPicker('bindBreadCrumb', 'click', function(event) {
+		pickerDiv.ScheduleItemPicker('bindBreadCrumb', 'click', function() {
 			pickerDiv.ScheduleItemPicker('goto', $(this).attr('href').replace('#',''));
 			return false;
 		});
@@ -102,7 +102,7 @@ $(document).ready(function(event) {
 	var flowEasing = 'easeInOutQuint';
 	var flowDuration = 750;
 	
-	nextButton.click(function(event) {
+	nextButton.click(function() {
 		var $this = $(this);
 		if(!$this.hasClass('button_disabled')) {
 			$this.addClass('button_disabled');
@@ -180,31 +180,29 @@ echo form_dropdown('times', $times, 'free_morning');
 					}, true);
 					break;
 				case 1:
-					timesOption = parseInt(optionsDiv.find('ul li a.option_on').first().attr('href').replace('#',''), 10);
-					classIds = [];
+					var timesOption = parseInt(optionsDiv.find('ul li a.option_on').first().attr('href').replace('#',''), 10);
+					var classIds = [];
 					courseList.find('li a.section_on').each(function() {
 						classIds.push($(this).attr('href').replace('#',''));
 					});
 					
 					var scheduleListFactory = getCourseScheduleListFactory();
 					scheduleListFactory.getCourseSchedules(classIds, timesOption, function(list) {
-					optionsDiv.animate({left : '-=800px'}, flowDuration, flowEasing);
+					
+						var scheduleViewerDiv = $('<div/>', {'id' : 'schedule_viewer_div'});
+						scheduleViewerDiv.ScheduleListViewer(list);
+						scheduleViewerDiv.css('display','none');
+						$('#content').append(scheduleViewerDiv);
+						
+						optionsDiv.animate({left : '-=800px'}, flowDuration, flowEasing);
 						pickerDiv.parent().animate({left : '-=800px' + pickerDiv.parent().css('width')}, flowDuration, flowEasing);
 						courseList.parent().animate({left : '-=800px'}, flowDuration, flowEasing, function() {
-							var scheduleViewerDiv = $('<div/>', {'id' : 'schedule_viewer_div'});
-							
-							scheduleViewerDiv.ScheduleListViewer(list);
-							scheduleViewerDiv.css('display','none');
-							
-							$('#content').append(scheduleViewerDiv);
-							scheduleViewerDiv.show('bounce', {}, flowDuration);
-							
-							
-							
-							$this.html(oldInnerHTML);
-							$this.removeClass('button_disabled');
-							curStep++;
-						});
+							scheduleViewerDiv.show(flowDuration, flowEasing, function() {
+								$this.html(oldInnerHTML);
+								$this.removeClass('button_disabled');
+								curStep++;
+							});
+						});						
 					});
 					break;
 				default:

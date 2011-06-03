@@ -97,6 +97,66 @@ function CourseSection(jsonObj) {
 		return this.classid.trim();
 	};
 	
+	this.getPlace = function() {
+		if(typeof this.location !== 'undefined') {
+			if(this.location.length) {
+				return this.location.join(', ');
+			}
+			else {
+				return '';
+			}
+		}
+		else {
+			return '';
+		}
+	};
+	
+	function formatTime(time) {
+		var hours = parseInt(time, 10);
+		var minutes = hours % 100;
+		hours /= 100;
+		var minuteStr = minutes.toString();
+		if(minutes < 10) {
+			minuteStr += '0';
+		}
+		
+		var ampm = 'a';
+		if(hours > 11) {
+			ampm = 'p';
+		}
+		
+		return hours.toString() + ':' + minuteStr + ampm;
+	}
+	
+	var cachedTimeStr = '';
+	
+	this.getTimes = function() {
+		if(!cachedTimeStr) {
+			var timeStr = '';
+			if(!this.startTime && !this.endTime) {
+				timeStr = 'TBD';
+			}
+			else {
+				if(this.startTime) {
+					timeStr += formatTime(this.startTime);
+				}
+				else {
+					timeStr += 'TBD';
+				}
+				timeStr += '-';
+				
+				if(this.endTime) {
+					timeStr += formatTime(this.endTime);
+				}
+				else {
+					timeStr += 'TBD';
+				}
+			}
+			cachedTimeStr = timeStr;
+		}
+		return cachedTimeStr;
+	};
+	
 	this.sortTimeKey = function() {
 		var key = 0;
 		if(this.startTime.length) {
@@ -337,36 +397,33 @@ function CourseSectionListFactory() {
 	
 	//this function assumed all needed sections have already been cached
 	function getCachedCourseSectionLists(courseSectionListMap, deptsNums, callback, returnMap) {
-		var retObj;
 		var dept;
+		var i;
+		var keyString;
 		if(returnMap) {
-			retObj = {};
+			var retMap = {};
 			for(dept in deptsNums) {
 				if(deptsNums.hasOwnProperty(dept)) {
-					var i;
-					var keyString;
 					for(i = 0; i < deptsNums[dept].length; i++) {
 						keyString = dept + deptsNums[dept][i];
-						retObj[keyString] = courseSectionListMap[keyString];
+						retMap[keyString] = courseSectionListMap[keyString];
 					}
 				}
 			}
+			callback(retMap);
 		}
 		else {
-			var retObj = [];
+			var retArr = [];
 			for(dept in deptsNums) {
 				if(deptsNums.hasOwnProperty(dept)) {
-					var i;
-					var keyString;
 					for(i = 0; i < deptsNums[dept].length; i++) {
 						keyString = dept + deptsNums[dept][i];
-						retObj = retObj.concat(courseSectionListMap[keyString]);
+						retArr = retArr.concat(courseSectionListMap[keyString]);
 					}
 				}
 			}
+			callback(retArr);
 		}
-		
-		callback(retObj);
 	}
 	
 	/*
@@ -464,7 +521,7 @@ function CourseScheduleListFactory() {
 					if(data.hasOwnProperty(prop)) {
 						var sections = [];
 						var sectionObjs = data[prop];
-						
+						var i;
 						for(i = 0; i < sectionObjs.length; i++) {
 							sections.push(new CourseSection(sectionObjs[i]));
 						}

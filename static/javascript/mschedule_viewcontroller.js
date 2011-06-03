@@ -1,6 +1,6 @@
 /* Requires jQuery, jQueryUI Effects Core, jQuery.ScrollTo, and mschedule_model.js */
 
-var pixelsPerHour = 40;
+var pixelsPerHour = 60;
 
 //Source: http://jdsharp.us/jQuery/minute/calculate-scrollbar-width.php
 function scrollbarWidth() {
@@ -75,11 +75,12 @@ function CourseScheduleView(courseSchedule) {
 					}
 					
 					courseSection = dayArr[section];
+					
 					numPixels = Math.ceil(pixelsPerHour * diffTimes(courseSection.endTime,courseSection.startTime));
-					dayListElement.append($('<li/>', {
-											'style' : 'height:' + numPixels + 'px;', 
-											text : courseSection.dept + ' ' + courseSection.number + '-' + section
-											}));
+					var courseTitle = $('<h1/>', {text : courseSection.dept + ' ' + courseSection.number + '-' + courseSection.section});
+					var coursePlace = $('<h2/>', {text : courseSection.getPlace()});
+					var courseTime = $('<h3/>', {text : courseSection.getTimes()});
+					dayListElement.append($('<li/>', {'style' : 'height:' + numPixels + 'px;'}).append(courseTitle).append(coursePlace).append(courseTime));
 				}
 			}
 			else {
@@ -155,7 +156,7 @@ function ScheduleItemListView(items, breadCrumbText, aClass, aHTML) {
 			curLetter = obj.getHeader().toUpperCase().charAt(0);
 			this.anchors.push([item, curLetter]);
 		}
-		var aTag = $('<a/>', {'href' : '#' + obj.getAction()})
+		var aTag = $('<a/>', {'href' : '#' + obj.getAction()});
 		if(aClass !== undefined) {
 			aTag.addClass(aClass);
 		}
@@ -215,7 +216,7 @@ function ScheduleItemListView(items, breadCrumbText, aClass, aHTML) {
 				data.slideContainer.css('height', settings.height);
 				data.slideContainer.css('width', settings.width);
 				
-				var widthWithScrollBars = (parseInt(settings.width, 10) - scrollbarWidth()) + 'px';
+				var widthWithScrollBars = (parseInt(settings.width, 10) - scrollbarWidth()).toString() + 'px';
 				
 				data.onScreen.css('width', widthWithScrollBars);
 				data.onScreen.css('height', settings.height);
@@ -279,7 +280,7 @@ function ScheduleItemListView(items, breadCrumbText, aClass, aHTML) {
 			
 			if(breadCrumbsManaged === undefined || breadCrumbsManaged === false) {
 				if(data.listStack.size()) {
-					data.breadCrumbs.append('<li> &gt; <a href="#' + (data.listStack.size() - 1) + '">' + data.listStack.top().breadCrumbText + '</a></li>');
+					data.breadCrumbs.append('<li> &gt; <a href="#' + (data.listStack.size() - 1).toString() + '">' + data.listStack.top().breadCrumbText + '</a></li>');
 				}
 			}
 			
@@ -343,9 +344,9 @@ function ScheduleItemListView(items, breadCrumbText, aClass, aHTML) {
 			}
 			
 			$('#' + $this.attr('id')).undelegate('ul.schedule_item_list li a', type);
-			$('#' + $this.attr('id')).delegate('ul.schedule_item_list li a', type, function(event) {
+			$('#' + $this.attr('id')).delegate('ul.schedule_item_list li a', type, function() {
 				var courseObj = data.listStack.top().items[$(this).parent().index()];
-				callback.apply(this, [event, courseObj]);
+				callback.apply(this, [courseObj]);
 				return false;
 			});
 			
@@ -424,10 +425,9 @@ var checkMarkSymbolEntity = '&#10004;';
 				var schedule;
 				for(i = 0; i < scheduleListSize; i++) {
 					schedule = scheduleList.getSchedule(i);
-					data.scheduleMasterContainer.append($('<li/>', {text : 'Schedule ' + i}).prepend($('<a/>', {'href' : '#' + schedule.scheduleId})));
+					data.scheduleMasterContainer.append($('<li/>', {text : 'Schedule ' + i.toString()}).prepend($('<a/>', {'href' : '#' + schedule.scheduleId})));
 				}
 				
-				var superContainerId = $this.attr('id');
 				data.scheduleMasterContainer.find('li a').click(function() {
 					if($(this).html().trim()) {
 						$(this).html('');
