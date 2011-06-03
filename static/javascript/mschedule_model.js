@@ -124,6 +124,9 @@ function CourseSection(jsonObj) {
 		if(hours > 11) {
 			ampm = 'p';
 		}
+		if(hours > 12) {
+			hours -= 12;
+		}
 		
 		return hours.toString() + ':' + minuteStr + ampm;
 	}
