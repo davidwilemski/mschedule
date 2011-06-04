@@ -12,8 +12,11 @@ $(document).ready(function() {
 	var backButton = $('#backButton');
 	var courseListMap = {};
 	
+	
 	var deleteSymbolEntity = '&#10761;';
 	var checkMarkSymbolEntity = '&#10004;';
+	var forwardUnicodeEntity = '<span class="unicode_direction">&nbsp;&#8594;</span>';
+	var backwardUnicodeEntity = '<span class="unicode_direction">&#8592;&nbsp;</span>';
 	var spinnerImage = new Image();
 	spinnerImage.src = 'http://localhost/mschedule/static/images/spinner.gif';
 	
@@ -214,7 +217,7 @@ $(document).ready(function() {
 								$(this).append(map[sectionListKey].getElement().removeAttr('class'));
 							});
 							
-							$this.html('Continue &gt;');
+							$this.html('Continue ' + forwardUnicodeEntity);
 							$this.removeClass('button_disabled');
 							curStep++;
 						});
@@ -247,7 +250,7 @@ $(document).ready(function() {
 								$this.html('Save Selected Schedules');
 								$this.removeClass('button_disabled');
 								
-								backButton.html('&lt; Back');
+								backButton.html(backwardUnicodeEntity + ' Back');
 								backButton.removeClass('button_disabled');
 								curStep++;
 							});
@@ -281,12 +284,12 @@ $(document).ready(function() {
 		optionsDiv.animate({left : flowShift['optionsDiv']}, flowDuration, flowEasing, function() {
 			backButton.animate({bottom : flowShift['backButton']}, buttonDuration, flowEasing);
 			
-			backButton.html('&lt; Back');
+			backButton.html(backwardUnicodeEntity + ' Back');
 			if(step > 1) {
 				backButton.removeClass('button_disabled');
 			}
 			
-			nextButton.html('Continue &gt;');
+			nextButton.html('Continue ' + forwardUnicodeEntity);
 			nextButton.removeClass('button_disabled');
 		});
 	}

@@ -797,3 +797,8 @@ a.button_disabled:active {
 .strikethrough {
 	text-decoration: line-through;
 }
+
+span.unicode_direction {
+	font-size: 26px;
+    line-height: 18px;
+}

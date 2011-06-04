@@ -20,8 +20,8 @@ $this->load->helper('form');
 <ul></ul>
 </div>
 
-<a id="backButton" class="gradient_button button_disabled" href="#">&lt; Back</a>
-<a id="nextButton" class="gradient_button button_disabled" href="#">Continue &gt;</a>
+<a id="backButton" class="gradient_button button_disabled" href="#"><span class="unicode_direction">&#8592;&nbsp;</span> Back</a>
+<a id="nextButton" class="gradient_button button_disabled" href="#">Continue <span class="unicode_direction">&nbsp;&#8594;</span></a>
 
 <?php
 //echo form_close();
