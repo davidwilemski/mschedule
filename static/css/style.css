@@ -353,14 +353,25 @@ li.nav_item a {
 	color: #fff;
 }
 
-#personal_info {
-	float:right;
+div#account_forms {
+	margin: 0 auto;
+	width: 400px;
 }
 
-#password_reset {
-	float: left;
+div#account_forms fieldset {
+	border: none;
 }
 
+div#account_forms legend {
+	margin: 0;
+	padding: 5px 0;
+	border-bottom: solid 1px #000;
+	width: 100%;
+}
+
+div.account_form_container {
+	margin: 20px auto;
+}
 
 
 /* Schedule List View */
@@ -756,6 +767,12 @@ a#nextButton {
 	position: absolute;
 	bottom: 15px;
 	right: 5px;
+}
+
+a#backButton {
+	position: absolute;
+	bottom: -40px;
+	left: 5px;
 }
 
 a.button_disabled {

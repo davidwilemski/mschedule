@@ -9,6 +9,7 @@ $(document).ready(function() {
 	var courseList = $('#course_list_container ul');
 	var optionsDiv;
 	var nextButton = $('#nextButton');
+	var backButton = $('#backButton');
 	var courseListMap = {};
 	
 	var deleteSymbolEntity = '&#10761;';
@@ -101,14 +102,69 @@ $(document).ready(function() {
 	var curStep = 0;
 	var flowEasing = 'easeInOutQuint';
 	var flowDuration = 750;
+	var buttonDuration = 500;
+	var flowShiftMap = [
+	{
+		'pickerDiv' : '20px',
+		'courseList' : '580px',
+		'optionsDiv' : '900px',
+		'backButton' : '-40px'
+	},
+	{
+		'pickerDiv' : '-415px',
+		'courseList' : '20px',
+		'optionsDiv' : '355px',
+		'backButton' : '15px'
+	},
+	{
+		'pickerDiv' : '-1170px',
+		'courseList' : '-735px',
+		'optionsDiv' : '-400px',
+		'backButton' : '15px'
+	}];
+	
+	function createOptionsDiv() {
+		var optionsDiv = $('<div/>', {'id' : 'schedule_options'});
+		optionsDiv.append($('<h1/>', {text : 'Scheduler Options'}));
+		optionsDiv.append($('<h2/>', {text : 'Get up early, or stay out late?'}));
+		var optionList = $('<ul/>', {'class' : 'option_list'});
+		optionList.append($('<li/>', {text : 'Early Riser'}).append($('<a/>', {'href' : '#0', 'class' : 'option_on'}).html(checkMarkSymbolEntity)));
+		optionList.append($('<li/>', {text : 'Sleep In'}).append($('<a/>', {'href' : '#1'})));
+		optionList.append($('<li/>', {text : 'Friday Off'}).append($('<a/>', {'href' : '#2'})));
+		optionsDiv.append(optionList);
+		return optionsDiv;
+	}
+	
+	function animateForwardShift(step, callback) {
+		var flowShift = flowShiftMap[step + 1];
+		
+		pickerDiv.parent().animate({left : flowShift['pickerDiv']}, flowDuration, flowEasing);
+		courseList.parent().animate({left : flowShift['courseList']}, flowDuration, flowEasing);
+		
+		if(callback !== undefined) {
+			optionsDiv.animate({left : flowShift['optionsDiv']}, flowDuration, flowEasing, callback);
+		}
+		else {
+			optionsDiv.animate({left : flowShift['optionsDiv']}, flowDuration, flowEasing);
+		}
+	}
+	
+	function getSpinnerElem() {
+		return $('<img/>', {'src' : spinnerImage.src, 'alt' : 'spinner_image', style : 'margin:5px 0 0;padding:0;'});
+	}
 	
 	nextButton.click(function() {
 		var $this = $(this);
 		if(!$this.hasClass('button_disabled')) {
 			$this.addClass('button_disabled');
+			if(!backButton.hasClass('button_disabled')) {
+				backButton.addClass('button_disabled');
+			}
 			
-			var oldInnerHTML = $this.html();
-			$this.html('').append($('<img/>', {'src' : spinnerImage.src, 'alt' : 'spinner_image', style : 'margin:5px 0 0;padding:0;'}));
+			$this.html('').append(getSpinnerElem());
+			if(curStep > 0) {
+				backButton.html('').append(getSpinnerElem());
+			}
 			
 			switch (curStep) {
 				case 0:
@@ -123,21 +179,14 @@ $(document).ready(function() {
 							deptsNums[action[0]].push(action[1]);
 						}
 					});
-					courseList.find('li a').remove();
+					courseList.find('li a').css('display','none');
 					
 					var sectionListFactory = getCourseSectionListFactory();
 					sectionListFactory.getCourseSectionList(deptsNums, function(map) {
 						
 						if(optionsDiv === undefined) {
-							optionsDiv = $('<div/>', {'id' : 'schedule_options'});
-							optionsDiv.append($('<h1/>', {text : 'Scheduler Options'}));
-							optionsDiv.append($('<h2/>', {text : 'Get up early, or stay out late?'}));
-							var optionList = $('<ul/>', {'class' : 'option_list'});
-							optionList.append($('<li/>', {text : 'Early Riser'}).append($('<a/>', {'href' : '#0', 'class' : 'option_on'}).html(checkMarkSymbolEntity)));
-							optionList.append($('<li/>', {text : 'Sleep In'}).append($('<a/>', {'href' : '#1'})));
-							optionList.append($('<li/>', {text : 'Friday Off'}).append($('<a/>', {'href' : '#2'})));
-							optionsDiv.append(optionList);
-							optionsDiv.css('left','800px');
+							optionsDiv = createOptionsDiv();
+							optionsDiv.css('left','900px');
 							$('#content').append(optionsDiv);
 						}
 						
@@ -149,9 +198,9 @@ $(document).ready(function() {
 							
 						});
 						
-						pickerDiv.parent().animate({left : '-' + pickerDiv.parent().css('width')}, flowDuration, flowEasing);
-						courseList.parent().animate({left : '20px'}, flowDuration, flowEasing);
-						optionsDiv.animate({left : '355px'}, flowDuration, flowEasing, function() {
+						animateForwardShift(curStep, function() {
+							backButton.removeClass('button_disabled');
+							backButton.animate({bottom : '15px'}, buttonDuration, flowEasing);
 							
 							var sectionListKey;
 							for(sectionListKey in map) {
@@ -165,7 +214,7 @@ $(document).ready(function() {
 								$(this).append(map[sectionListKey].getElement().removeAttr('class'));
 							});
 							
-							$this.html(oldInnerHTML);
+							$this.html('Continue &gt;');
 							$this.removeClass('button_disabled');
 							curStep++;
 						});
@@ -181,26 +230,92 @@ $(document).ready(function() {
 					var scheduleListFactory = getCourseScheduleListFactory();
 					scheduleListFactory.getCourseSchedules(classIds, timesOption, function(list) {
 					
-						var scheduleViewerDiv = $('<div/>', {'id' : 'schedule_viewer_div'});
-						scheduleViewerDiv.ScheduleListViewer(list);
-						scheduleViewerDiv.css('display','none');
-						$('#content').append(scheduleViewerDiv);
+						var scheduleViewerDiv = $('#schedule_viewer_div');
+						if(!scheduleViewerDiv.length) {
+							scheduleViewerDiv = $('<div/>', {'id' : 'schedule_viewer_div'});
+							scheduleViewerDiv.ScheduleListViewer(list);
+							scheduleViewerDiv.css('display','none');
+							$('#content').append(scheduleViewerDiv);
+						}
 						
-						optionsDiv.animate({left : '-=800px'}, flowDuration, flowEasing);
-						pickerDiv.parent().animate({left : '-=800px' + pickerDiv.parent().css('width')}, flowDuration, flowEasing);
-						courseList.parent().animate({left : '-=800px'}, flowDuration, flowEasing, function() {
+						animateForwardShift(curStep, function() {
 							scheduleViewerDiv.show(flowDuration, flowEasing, function() {
-								$this.html(oldInnerHTML);
+								$this.html('Save Selected Schedules');
 								$this.removeClass('button_disabled');
+								
+								backButton.html('&lt; Back');
+								backButton.removeClass('button_disabled');
 								curStep++;
 							});
 						});						
 					});
 					break;
+				case 2:
+					var scheduleListFactory = getCourseScheduleListFactory();
+					scheduleListFactory.saveCourseSchedule($('#schedule_master li a.schedule_on:first').attr('href').replace('#',''), function(success) {
+						if(success) {
+							alert('SUCCESS');
+						}
+						else {
+							alert('OOPS!');
+							$this.html('Save Selected Schedules');
+							$this.removeClass('button_disabled');
+						}
+					});
 				default:
 					break;
 			}
 		}
+		return false;
+	});
+	
+	function animateBackwardShift(step) {
+		var flowShift = flowShiftMap[step - 1];
+					
+		pickerDiv.parent().animate({left : flowShift['pickerDiv']}, flowDuration, flowEasing);
+		courseList.parent().animate({left : flowShift['courseList']}, flowDuration, flowEasing);
+		optionsDiv.animate({left : flowShift['optionsDiv']}, flowDuration, flowEasing, function() {
+			backButton.animate({bottom : flowShift['backButton']}, buttonDuration, flowEasing);
+			
+			backButton.html('&lt; Back');
+			if(step > 1) {
+				backButton.removeClass('button_disabled');
+			}
+			
+			nextButton.html('Continue &gt;');
+			nextButton.removeClass('button_disabled');
+		});
+	}
+	
+	
+	backButton.click(function() {
+		var $this = $(this);
+		if(!$this.hasClass('button_disabled')) {
+			$this.addClass('button_disabled');
+			$this.html('').append(getSpinnerElem());
+			
+			nextButton.addClass('button_disabled');
+			nextButton.html('').append(getSpinnerElem());
+					
+			switch (curStep) {
+				case 1:
+					courseList.find('ul').remove();
+					courseList.find('a').css('display','block');
+					animateBackwardShift(curStep);
+					break;
+				case 2:
+					var localStep = curStep; //need this so that we have value pre-decremented on animation callback
+					$('#schedule_viewer_div').hide(flowDuration, flowEasing, function() {
+						animateBackwardShift(localStep);
+					});
+					break;
+				default:
+					break;
+			}
+			
+			curStep--;
+		}
+		
 		return false;
 	});
 	

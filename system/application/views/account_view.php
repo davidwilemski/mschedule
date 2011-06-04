@@ -5,9 +5,10 @@
 		It is called by the (user) dashboard controller
 	*/
 ?>
+<div id="account_forms">
 <div id="announcement"><?=$this->session->flashdata('action')?></div>
 <div class="error"><?php echo validation_errors(); ?></div>
-<div id="password_reset">
+<div id="password_reset" class="account_form_container">
 <?php
 $this->load->helper('form'); 
 echo form_open('dashboard/password_reset'); 
@@ -50,7 +51,7 @@ $button_data = array(
 <?php echo form_close(); ?>
 </div>
 
-<div id="personal_info">
+<div id="personal_info" class="account_form_container">
 <?php
 $this->load->helper('form'); 
 echo form_open('dashboard/modify_user'); 
@@ -95,4 +96,5 @@ $button_data = array(
 
 <?php echo form_close(); ?>
 
+</div>
 </div>

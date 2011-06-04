@@ -218,6 +218,11 @@ function CourseSchedule(courseSections) {
 	this.scheduleId = '';
 	this.title = '';
 	this.week = new CourseScheduleWeek();
+	
+	this.serverScheduleId = function() {
+		return this.scheduleId.split('_').join(';') + ';';
+	};
+	
 	var weekdays;
 	var section;
 	
@@ -511,9 +516,9 @@ function CourseScheduleListFactory() {
 	
 	//classIds is a sequential array of classid strings
 	this.getCourseSchedules = function(classIds, timesOption, callback) {
-		var curSheduleKey = classIds.sort().join(';');
-		if(this.courseScheduleListMap.hasOwnProperty(curSheduleKey)) {
-			callback(this.courseScheduleListMap[curSheduleKey]);
+		var scheduleListKey = classIds.sort().join('_');
+		if(this.courseScheduleListMap.hasOwnProperty(scheduleListKey)) {
+			callback(this.courseScheduleListMap[scheduleListKey]);
 		}
 		else {
 			var localCourseScheduleListMap = this.courseScheduleListMap;
@@ -535,7 +540,8 @@ function CourseScheduleListFactory() {
 				}
 				
 				var scheduleList = new CourseScheduleList(schedules);
-				localCourseScheduleListMap[curSheduleKey] = scheduleList;
+				localCourseScheduleListMap[scheduleListKey] = scheduleList;
+				curScheduleListKey = scheduleListKey;
 				
 				callback(scheduleList);
 			}, 'json');
@@ -560,7 +566,7 @@ function CourseScheduleListFactory() {
 				callback(false);
 			}
 			else {
-				$.post('api/json/class_model/saveSchedule', { 'data': schedule.scheduleId }, function(data){
+				$.post('api/json/class_model/saveSchedule', { 'data': schedule.serverScheduleId() }, function(data){
 					callback(data === 'true');
 				});
 			}
