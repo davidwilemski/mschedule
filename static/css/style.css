@@ -413,7 +413,7 @@ ul#schedule_master li a {
 
 div#schedule_detail {
 	float: right;
-	width:700px;
+	width: 710px;
 }
 
 div.schedule {
@@ -441,6 +441,7 @@ ul.schedule_week {
 ul.schedule_week li {
 	float: left;
 	width: 140px;
+	margin: 0 1px;
 }
 
 ul.schedule_day {
@@ -484,12 +485,14 @@ ul.schedule_day li h3 {
 
 ul.schedule_day li.day_empty {
 	background: none;
-	border: none;
+	border-left: solid 1px transparent;
+	border-right: solid 1px transparent;
 }
 
 ul.schedule_day li.day_break {
 	background: none;
-	border: none;
+	border-left: solid 1px transparent;
+	border-right: solid 1px transparent;
 }
 
 

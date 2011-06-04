@@ -1,6 +1,7 @@
 /* Requires jQuery, jQueryUI Effects Core, jQuery.ScrollTo, and mschedule_model.js */
 
 var pixelsPerHour = 60;
+var borderPixelsPerHour = 1;
 
 //Source: http://jdsharp.us/jQuery/minute/calculate-scrollbar-width.php
 function scrollbarWidth() {
@@ -14,6 +15,7 @@ function scrollbarWidth() {
 }
 
 function diffTimes(greater, lesser) {
+	console.log('---- START -----');
 	if(typeof greater === 'string') {
 		greater = parseInt(greater, 10);
 		if(isNaN(greater)) {
@@ -26,15 +28,22 @@ function diffTimes(greater, lesser) {
 			lesser = 0;
 		}
 	}
+	
+	console.log(greater);
+	console.log(lesser);
+	
 	greater /= 100.0;
 	lesser /= 100.0;
-	if(greater % 1.0 < 1.0) {
-		greater = Math.ceil(greater) + 0.5;
+	if(greater % 1.0 > 0.0) {
+		greater = Math.floor(greater) + 0.5;
 	}
-	if(lesser % 1.0 < 1.0) {
-		lesser = Math.ceil(lesser) + 0.5;
+	if(lesser % 1.0 > 0.0) {
+		lesser = Math.floor(lesser) + 0.5;
 	}
 	
+	console.log(greater);
+	console.log(lesser);
+	console.log('---- END -----');
 	return (greater - lesser);
 }
 
@@ -48,6 +57,14 @@ function CourseScheduleView(courseSchedule) {
 		return scheduleElement;
 	};
 	
+	function createEmptyScheduleElem(theClass, pixels, borderPixels) {
+		var emptyBorderStyle = 'solid ' + borderPixels.toString() + 'px transparent';
+		return $('<li/>', {
+		'class' : theClass,
+		'style' : 'height:' + pixels.toString() + 'px;' + 'border-top:' + emptyBorderStyle + ';border-bottom:' + emptyBorderStyle + ';'
+		});
+	}
+	
 	scheduleElement.append($('<h1/>', {text : courseSchedule.title}));
 	var weekList = $('<ul/>', {'class' : 'schedule_week'});
 	var day;
@@ -58,6 +75,7 @@ function CourseScheduleView(courseSchedule) {
 			var section;
 			var courseSection = null;
 			var numPixels;
+			var numBorderPixels;
 			
 			if(dayArr.length) {
 				for(section = 0; section < dayArr.length; section++) {
@@ -66,12 +84,14 @@ function CourseScheduleView(courseSchedule) {
 						prevHourDiff = diffTimes(dayArr[section].startTime, courseSection.endTime);
 						if(prevHourDiff) {
 							numPixels = Math.ceil(pixelsPerHour * prevHourDiff);
-							dayListElement.append($('<li/>', { 'class' : 'day_break', 'style' : 'height:' + numPixels + 'px;' }));
+							numBorderPixels = Math.ceil(borderPixelsPerHour * prevHourDiff);
+							dayListElement.append(createEmptyScheduleElem('day_break', numPixels, numBorderPixels));
 						}
 					}
 					else if((prevHourDiff = diffTimes(dayArr[section].startTime, this.courseSchedule.baseHour)) > 0) {
 						numPixels = Math.ceil(pixelsPerHour * prevHourDiff);
-						dayListElement.append($('<li/>', { 'class' : 'day_empty', 'style' : 'height:' + numPixels + 'px;' }));
+						numBorderPixels = Math.ceil(borderPixelsPerHour * prevHourDiff);
+						dayListElement.append(createEmptyScheduleElem('day_empty', numPixels, numBorderPixels));
 					}
 					
 					courseSection = dayArr[section];
@@ -84,7 +104,7 @@ function CourseScheduleView(courseSchedule) {
 				}
 			}
 			else {
-				dayListElement.append($('<li/>', {'class' : 'day_empty'}));
+				dayListElement.append(createEmptyScheduleElem('day_empty', 1, 1));
 			}
 			
 			var weekListItemElement = $('<li/>');

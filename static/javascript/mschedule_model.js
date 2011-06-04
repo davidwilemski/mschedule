@@ -114,7 +114,7 @@ function CourseSection(jsonObj) {
 	function formatTime(time) {
 		var hours = parseInt(time, 10);
 		var minutes = hours % 100;
-		hours /= 100;
+		hours /= 100.0;
 		var minuteStr = minutes.toString();
 		if(minutes < 10) {
 			minuteStr += '0';
@@ -128,7 +128,7 @@ function CourseSection(jsonObj) {
 			hours -= 12;
 		}
 		
-		return hours.toString() + ':' + minuteStr + ampm;
+		return Math.floor(hours).toString() + ':' + minuteStr + ampm;
 	}
 	
 	var cachedTimeStr = '';
