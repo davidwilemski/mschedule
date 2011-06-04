@@ -413,39 +413,59 @@ var checkMarkSymbolEntity = '&#10004;';
 				var data = $this.data('ScheduleListViewer');
 				if($.isEmptyObject(data)) {
 					data = {
-						scheduleViewManager : (new CourseScheduleViewManager(scheduleList)),
+						scheduleViewManager : {},
 						scheduleDetailContainer : $('<div/>', {'id' : 'schedule_detail'}),
 						scheduleMasterContainer : $('<ul/>', {'id' : 'schedule_master'})
 					};
 					$this.data('ScheduleListViewer', data);
 				}
 				
-				var i;
-				var scheduleListSize = scheduleList.size();
-				var schedule;
-				for(i = 0; i < scheduleListSize; i++) {
-					schedule = scheduleList.getSchedule(i);
-					data.scheduleMasterContainer.append($('<li/>', {text : 'Schedule ' + i.toString()}).prepend($('<a/>', {'href' : '#' + schedule.scheduleId})));
-				}
-				
-				data.scheduleMasterContainer.find('li a').click(function() {
-					if($(this).html().trim()) {
-						$(this).html('');
-					}
-					else {
-						$(this).html(checkMarkSymbolEntity);
-					}
-					$(this).toggleClass('schedule_on');
-					$this.ScheduleListViewer('toggleScheduleView', $(this).attr('href').replace('#',''));
-					return false;
-				});
-				
-				$this.append(data.scheduleDetailContainer);
-				$this.append(data.scheduleMasterContainer);
-				
-				data.scheduleMasterContainer.find('li a:first').toggleClass('schedule_on').html(checkMarkSymbolEntity);
-				return $this.ScheduleListViewer('toggleScheduleView', scheduleList.getSchedule(0).scheduleId);
+				return $this.ScheduleListViewer('setScheduleList', scheduleList);
 			});
+		},
+		
+		setScheduleList : function(scheduleList) {
+			var $this = $(this);
+			if(scheduleList === undefined || !scheduleList.size()) {
+				$.error('ScheduleListViewer: jQuery.ScheduleListViewer requires a valid scheduleList argument');
+				return $this;
+			}
+			
+			var data = $this.data('ScheduleListViewer');
+			if($.isEmptyObject(data)) {
+				$.error('ScheduleListViewer: jQuery.ScheduleListViewer was not initialized');
+				return $this;
+			}
+			
+			data.scheduleViewManager = new CourseScheduleViewManager(scheduleList);
+			data.scheduleDetailContainer.html('')
+			data.scheduleMasterContainer.html('');
+			
+			var i;
+			var scheduleListSize = scheduleList.size();
+			var schedule;
+			for(i = 0; i < scheduleListSize; i++) {
+				schedule = scheduleList.getSchedule(i);
+				data.scheduleMasterContainer.append($('<li/>', {text : 'Schedule ' + i.toString()}).prepend($('<a/>', {'href' : '#' + schedule.scheduleId})));
+			}
+			
+			data.scheduleMasterContainer.find('li a').click(function() {
+				if($(this).html().trim()) {
+					$(this).html('');
+				}
+				else {
+					$(this).html(checkMarkSymbolEntity);
+				}
+				$(this).toggleClass('schedule_on');
+				$this.ScheduleListViewer('toggleScheduleView', $(this).attr('href').replace('#',''));
+				return false;
+			});
+			
+			$this.append(data.scheduleDetailContainer);
+			$this.append(data.scheduleMasterContainer);
+			
+			data.scheduleMasterContainer.find('li a:first').toggleClass('schedule_on').html(checkMarkSymbolEntity);
+			return $this.ScheduleListViewer('toggleScheduleView', scheduleList.getSchedule(0).scheduleId);
 		},
 		
 		toggleScheduleView : function(id) {

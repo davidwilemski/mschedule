@@ -237,6 +237,10 @@ $(document).ready(function() {
 							scheduleViewerDiv.css('display','none');
 							$('#content').append(scheduleViewerDiv);
 						}
+						else {
+							scheduleViewerDiv.ScheduleListViewer('setScheduleList', list);
+							
+						}
 						
 						animateForwardShift(curStep, function() {
 							scheduleViewerDiv.show(flowDuration, flowEasing, function() {
