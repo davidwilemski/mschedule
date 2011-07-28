@@ -12,7 +12,7 @@
 	*/
 ?>
 <?php
-class class_model extends Model {
+class class_model extends CI_Model {
 
 	function _required($required, $data) {
 		

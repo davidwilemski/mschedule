@@ -7,11 +7,11 @@
 ?>
 <?php
 
-class Classes extends controller {
+class Classes extends CI_Controller {
 	
-	function Classes() {
+	function __construct() {
 		
-		parent::controller();
+		parent::__construct();
 		
 		$this->load->library('form_validation');
 		$this->load->model('class_model');

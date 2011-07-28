@@ -1,8 +1,8 @@
 <?php
 
-Class Import_Users extends Controller{
-	function Import_Users(){
-		parent::Controller();	
+Class Import_Users extends CI_Controller{
+	function __construct(){
+		parent::__construct();	
 	}
 	
 	function index(){

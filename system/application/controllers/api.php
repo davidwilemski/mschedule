@@ -8,11 +8,11 @@
 ?>
 <?php
 
-class Api extends Controller {
+class Api extends CI_Controller {
 	
-	function Api() {
+	function __construct() {
 		
-		parent::controller();
+		parent::__construct();
 		
 		
 		

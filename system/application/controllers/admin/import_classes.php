@@ -3,7 +3,7 @@
 
 */
 
-class import_classes extends Controller {
+class import_classes extends CI_Controller {
 
 	function index() {
 	

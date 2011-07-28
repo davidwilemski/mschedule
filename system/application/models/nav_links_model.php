@@ -7,12 +7,12 @@
 <?php
 
 //handles nav bar
-class Nav_links_model extends Model
+class Nav_links_model extends CI_Model
 {
 
-		function Nav_links_model()
+		function __construct()
 		{
-			parent::Model();
+			parent::__construct();
 		}
 		
 		function getNavBarLinks()

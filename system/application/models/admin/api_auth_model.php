@@ -1,10 +1,10 @@
 <?php
 
-Class api_auth_model extends Model
+Class api_auth_model extends CI_Model
 {
-	function api_auth_model()
+	function __construct()
 	{
-		parent::Model();
+		parent::__construct();
 		
 		$this->load->helper('string');
 	}

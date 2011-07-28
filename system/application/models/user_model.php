@@ -39,7 +39,7 @@
 ?>
 <?php
 
-class user_model extends Model {
+class user_model extends CI_Model {
 	
 	function _required($required, $data) {
 		

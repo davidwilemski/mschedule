@@ -5,11 +5,11 @@
 ?>
 <?php
 
-class Home extends Controller {
+class Home extends CI_Controller {
 	
-	function Home() {
+	function __construct() {
 		
-		parent::controller();
+		parent::__construct();
 		$this->load->model('static_pages_model');
 	}
 	

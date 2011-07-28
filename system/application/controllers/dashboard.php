@@ -16,11 +16,11 @@
 ?>
 <?php
 
-class dashboard extends Controller {
+class dashboard extends CI_Controller {
 	
-	function dashboard() {
+	function __construct() {
 		
-		parent::controller();
+		parent::__construct();
 		if(!$this->user_model->Secure(array('userType'=>array('admin', 'user')))) {
 		
 			$this->session->set_flashdata('flashError', 'You must be logged in to access this page.');

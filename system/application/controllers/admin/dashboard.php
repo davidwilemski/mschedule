@@ -16,11 +16,11 @@
 		//have recently logged in and which are recently registered.
 		//These will link to the pages that allow you to fully manage pages and users and so on.
 		
-class Dashboard extends Controller {
+class Dashboard extends CI_Controller {
 	
-	function dashboard() {
+	function __construct() {
 		
-		parent::controller();
+		parent::__construct();
 		
 		if(!$this->user_model->Secure(array('userType'=>'admin'))) 
 		{

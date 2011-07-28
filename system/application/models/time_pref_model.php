@@ -4,7 +4,7 @@
 	*/
 ?>
 <?php
-class time_pref_model extends Model {
+class time_pref_model extends CI_Model {
 	
 	function checkTime($options = array()) {
 	

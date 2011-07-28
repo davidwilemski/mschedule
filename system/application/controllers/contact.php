@@ -8,11 +8,11 @@
 	Note for future: you can add TRUE as a second argument to $this->input->post() to put it through the XSS filter
 */
 
-class Contact extends controller {
+class Contact extends CI_Controller {
 	
-	function Contact() {
+	function __construct() {
 		
-		parent::controller();
+		parent::__construct();
 		$this->load->model('static_pages_model');
 		
 	}

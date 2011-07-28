@@ -6,11 +6,11 @@
 	*/
 ?>
 <?php 
-	class Static_pages_model extends Model
+	class Static_pages_model extends CI_Model
 	{
-		function Static_pages_model()
+		function __construct()
 		{
-			parent::Model();
+			parent::__construct();
 		}
 				
 		

@@ -1,10 +1,10 @@
 <?php
 
-class Admin_model extends Model
+class Admin_model extends CI_Model
 {
-	function Admin_model()
+	function __construct()
 	{
-		parent::Model();
+		parent::__construct();
 		
 		//Needed to convert timestamps
 		$this->load->helper('date');

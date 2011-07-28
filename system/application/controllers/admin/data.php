@@ -6,13 +6,13 @@
 ?>
 <?php
  
- class Data extends Controller 
+class Data extends Controller 
  {
 	
-	function Data() 
+	function __construct() 
 	{
 		
-		parent::controller();
+		parent::__construct();
 		
 		if(!$this->user_model->Secure(array('userType'=>'admin'))) 
 		{

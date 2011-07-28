@@ -16,11 +16,11 @@
 ?>
 <?php
 
-class account extends Controller {
+class account extends CI_Controller {
 	
-	function account() {
+	function __construct() {
 		
-		parent::controller();
+		parent::__construct();
 		
 		$this->load->library('form_validation');
 		

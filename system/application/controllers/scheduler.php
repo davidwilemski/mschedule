@@ -16,11 +16,11 @@
 ?>
 <?php
 
-class scheduler extends Controller {
+class scheduler extends CI_Controller {
 	
-	function scheduler() {
+	function __construct() {
 		
-		parent::controller();
+		parent::__construct();
 		
 		if(!$this->user_model->Secure(array('userType'=>array('admin', 'user')))) {
 		

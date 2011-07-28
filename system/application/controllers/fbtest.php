@@ -1,10 +1,10 @@
 <?php
 
-	class Fbtest extends Controller {
+	class Fbtest extends CI_Controller {
 		
-		function Fbtest()
+		function __construct()
 		{
-			parent::Controller();
+			parent::__construct();
 			
 			$this->load->helper('url');
 		}
