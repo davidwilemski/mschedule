@@ -236,10 +236,10 @@ class class_model extends CI_Model {
 	}
 	
 	function getMasterDepartmentList($options = array()) {
-		
+
 		$this->db->from('classes_' . $this->config->item('current_term'));
 		$this->db->select('dept, department_names.full_name');
-		$this->db->join('department_names', 'classes_winter11.dept = department_names.short_name');
+		$this->db->join('department_names', 'classes_' . $this->config->item('current_term') . '.dept = department_names.short_name');
 		$this->db->order_by('dept', 'asc');
 		
 		$q = $this->db->get();

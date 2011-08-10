@@ -11,7 +11,7 @@
 | It is going to be in the format "<season><year>"
 |
 */
-$config['current_term'] = 'winter11';
+$config['current_term'] = 'fall11';
 
 /*
 |--------------------------------------------------------------------------
