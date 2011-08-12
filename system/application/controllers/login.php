@@ -23,19 +23,38 @@ class login extends CI_Controller {
 		
 		parent::__construct();
 		
-		$this->load->library('form_validation');
+        $this->load->library('form_validation');
+        $this->load->helper('email');
 		
 	}
 	
 	function index() {
-		$this->form_validation->set_rules('username', 'Username', 'trim|required|callback__check_login');
+        //check whether username is an email address, if so look up the username that matches the email
+        if(valid_email($this->input->post('username'))){
+            $username = $this->user_model->getUserByEmail($this->input->post('username'));
+            if($username === false){
+                $this->form_validation->set_message('_check_login', 'Your username / password combination is not correct. If you have not activated your account, please check your email.');
+                redirect('home');
+            }
+        }
+        else{
+            $this->form_validation->set_rules('username', 'Username', 'trim|required|callback__check_login');
+        }
+
 		$this->form_validation->set_rules('password', 'Password', 'trim|required');
 
 		if($this->form_validation->run()) {
-			
-			if($this->user_model->login(array('username' => $this->input->post('username'), 'password' => $this->input->post('password')))) {
-				redirect($this->input->post('redirect'));
-			}
+
+			if($username === false){
+                if($this->user_model->login(array('username' => $this->input->post('username'), 'password' => $this->input->post('password')))) {
+                    redirect($this->input->post('redirect'));
+                }
+            }
+
+            if($this->user_model->login(array('username' => $username, 'password' => $this->input->post('password')))) {
+                    redirect($this->input->post('redirect'));
+            }
+
 			
 		}
 		

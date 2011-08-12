@@ -35,6 +35,8 @@
 				   returns true if session=>userdata['userType'] reflects a parameter in the argument passed in
 				   returns false otherwise
 				   user this in the construct of a controller along with a redirect to secure parts of the site				  
+
+        getUserByEmail() - returns a username (string) given an email address (string)
 	*/
 ?>
 <?php
@@ -333,6 +335,16 @@ class user_model extends CI_Model {
 		$r = $q->row();
 		return $r->pass;
 	}
+
+    function getUserByEmail($email){
+        $this->db->select('username')->from('users')->where('email', $email);
+        $query = $this->db->get();
+
+        if ($query->num_rows() == 0)
+            return false;
+        else 
+            return $query->row()->username;
+    }
 
 
 }
