@@ -557,7 +557,7 @@ class class_model extends CI_Model {
 					//echo $diff . '*';
 					//print_r($lec_sec);
 					if($diff >= 2) { // We don't need to associate things if the lectures are very close together
-						$type_names = array('LAB', 'DISC', 'RESC', 'SEM');
+						$type_names = array('LAB', 'DIS', 'REC', 'SEM');
 						foreach($type_names as $type_name) {
 							if(isset($c[$type_name])) {
 								foreach($c[$type_name] as $z) {
@@ -601,6 +601,7 @@ class class_model extends CI_Model {
 		//print_r($place_max);
 		//echo $schedules_count . '<br />';
 		
+		$max_score = 100000;
 		for($i = 0; $i < $schedules_count; $i++){ // This loops through the # of possible schedules
 			//echo $i. '<br />';
 			//print_r($place);
@@ -639,13 +640,18 @@ class class_model extends CI_Model {
 				
 				$s['full_score'] = $full_score;
 				//print_r($s);
-				if(count($schedules) < 50) {
-					$schedules[] = $s;
-				} else {
-					if($schedules[49]['full_score'] < $full_score)
+				if(count($schedules) >= 50) {
+					if($max_score > $full_score) {
+						$this->_sort_schedules(&$schedules);
 						$schedules[49] = $s;
+						$max_score = $full_score;
+					}
+				} else {
+					$max_score = ($max_score < $full_score ? $full_score : $max_score);
+					$schedules[] = $s;
 				}
-			}	
+			}
+			//print_r($schedules);
 			//echo 'count: ' . count($schedules) . '<br />';
 			
 			// increment the place holders so we can create the next one
@@ -671,26 +677,25 @@ class class_model extends CI_Model {
 		
 		//echo $schedules_count . ' ' . count($schedules);
 		
-		return $this->class_model->_fix_schedules_and_go($schedules);
+		return $this->class_model->_fix_schedules_and_go(&$schedules);
 	
 	}
 	
-	
-	
 	function _sort_schedules($schedules) {
-	
-		function my_sort($a, $b) {
-			if($a['full_score'] == $b['full_score']) return 0;
-			return ($a['full_score'] > $b['full_score']) ? -1 : 1;
+		
+		if(!function_exists("my_sort")) {
+			function my_sort($a, $b) {
+				if($a['full_score'] == $b['full_score']) return 0;
+				return ($a['full_score'] > $b['full_score']) ? 1 : -1;
+			}
 		}
-	
-		usort($schedules, "my_sort");
+		usort(&$schedules, 'my_sort');
 	
 	}
 	
 	function _fix_schedules_and_go($schedules) {
 	
-		$this->_sort_schedules($schedules);
+		$this->_sort_schedules(&$schedules);
 	
 		foreach($schedules as &$s) {
 			//echo $s['full_score'] . '<br />';

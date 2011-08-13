@@ -11,26 +11,27 @@ class import_classes extends CI_Controller {
 	
 		//$courses = "http://www.ro.umich.edu/timesched/pdf/FA2010.csv";
 		//$term = "fall10";
-		$courses = "http://www.ro.umich.edu/timesched/pdf/WN2011.csv";
-		$term = "winter11";
+		$courses = "http://www.ro.umich.edu/timesched/pdf/FA2011.csv";
+		$term = "fall11";
 		
 		//Term1,Session2,Acad Group3,Class Nbr4,Subject5,Catalog Nbr6,Section7,Course Title8,Component9,Codes10,M,T,W,TH,F,S,SU,Start Date18,End Date19,Time20,Location21,Instructor22,Units23,
 		// Grab file
-		$ch = curl_init();
+		/*$ch = curl_init();
 		curl_setopt($ch, CURLOPT_URL, $courses);
 		curl_setopt($ch, CURLOPT_RETURNTRANSFER,true);
 		$cvs = curl_exec($ch);
-		curl_close($ch);
-		/*$cvs = 'Term,Session,Acad Group,Class Nbr,Subject,Catalog Nbr,Section,Course Title,Component,Codes,M,T,W,TH,F,S,SU,Time,Location,Instructor,
-"Fall 2010","Regular Academic Session","Architecture & Urban Planning","10001","Architecture (ARCH)"," 201","001","Basic Drawing","LAB","P  W","M","","W","","","","","1130-230PM","1227 A&AB","Tierman, Smith",
-"Fall 2010","Regular Academic Session","Architecture & Urban Planning","10003","Architecture (ARCH)"," 202","001","Graphic Commun","LAB","P  W","M","","W","","","","","11-2PM","B100 MLB","Quinn, Alcorn",
-"Fall 2010","Regular Academic Session","Architecture & Urban Planning","10065","Architecture (ARCH)"," 211","001","CAD Fundamentals","LEC","P RW","M","","","","","","","1230-2PM","2104 A&AB","Bard, Tomova, Riikonen",
-"Fall 2010","Regular Academic Session","Architecture & Urban Planning","","Architecture (ARCH)"," 211","","CAD Fundamentals","LEC","P RW","","","W","","F","","","1030-12PM","DC","",
-"Fall 2010","Regular Academic Session","Architecture & Urban Planning","","Architecture (ARCH)"," 211","","CAD Fundamentals","LEC","P RW","","","W","","F","","","1030-12PM","ARR","",';*/
+		curl_close($ch);*/
+		$cvs = 'Term,Session,Acad Group,Class Nbr,Subject,Catalog Nbr,Section,Course Title,Component,Codes,M,T,W,TH,F,S,SU,Start Date,End Date,Time,Location,Instructor,Units,
+"Fall 2011","Regular Academic Session","Architecture & Urban Planning","10001","Architecture (ARCH)"," 201","001","Basic Drawing","LAB","P  W","M","","W","","","","","09/06/2011","12/13/2011","1130-2PM","1227 A&AB","Harris, Tierman, Vandermark","3.00",
+"Fall 2011","Regular Academic Session","Architecture & Urban Planning","10002","Architecture (ARCH)"," 202","001","Graphic Commun","LAB","P  W","M","","W","","","","","09/06/2011","12/13/2011","11-2PM","B100 MLB","Harmon, Bonfil","3.00",
+"Fall 2011","Regular Academic Session","Architecture & Urban Planning","10033","Architecture (ARCH)"," 211","001","Digital Drawing","LEC","P RW","M","","","","F","","","09/06/2011","12/13/2011","1230-2PM","2104 A&AB","Bard, May, Bennett","3.00",
+"Fall 2011","Regular Academic Session","Architecture & Urban Planning","10033","Architecture (ARCH)"," 211","001","Digital Drawing","LEC","P RW","","","W","","","","","09/06/2011","12/13/2011","11-2PM","ARR","","3.00",
+"Fall 2011","Regular Academic Session","Architecture & Urban Planning","26069","Architecture (ARCH)"," 212","001","Understand Arch","LEC","A   ","M","","W","","","","","09/06/2011","12/13/2011","10-11AM","AUD A AH","Trandafirescu","3.00",';
 		$classes = preg_split('/\n/', $cvs);
 		// Remove description line
 		unset($classes[0]);
-		
+		$prevclassnum = '';
+		$prevsection = '';
 		// Loop through classes
 		foreach($classes as $class) {
 			if($class == null) continue;
@@ -45,9 +46,9 @@ class import_classes extends CI_Controller {
 			$name = $fields[7];
 			$classnum = $fields[3];
 			$location = $fields[20];
-		        $instructor = $fields[21];
-		        $section = $fields[6];
-		        $sectype = $fields[8];
+		    $instructor = $fields[21];
+		    $section = $fields[6];
+		    $sectype = $fields[8];
 		
 			$time = $fields[19];
 			$mon = $fields[10];
@@ -153,7 +154,38 @@ class import_classes extends CI_Controller {
 			if ($fields[4] = preg_match('/([^\"]+?) \(([^\"]+?)\)/', $fields[4], $matches))
 			{
 				//if we have a legit course name/number add it to the db
-				if($name != "" && $num != "" && $classnum != "")
+				if(/*$name != "" && $num != "" && $classnum != ""*/$classnum == $prevclassnum && $section == $prevsection)
+				{
+					//$classnum = $prevclassnum;
+					//$section = $prevsection;
+					$this->db->from("classes_$term");
+					$this->db->where('classid', $classnum);
+					$q = $this->db->get();
+					$data = $q->row_array(0);
+					
+					
+					$this->db->from("classes_$term");
+					$this->db->where('classid', $classnum);
+					$this->db->delete();
+					
+					//if we have a legit course name/number add it to the db
+					//echo "argh" . $classnum . '</br>';
+					if($name != "" && $num != "" && $classnum != "")
+					{
+						//echo $time . '</br>';
+						$data['days'] = $data['days'] . ';' . $days;
+						$data['time'] = $data['time'] . ';' . $time;
+						$data['location'] = $data['location'] . ';' . $location;
+						
+						print_r($data);
+						//$this->db->where('classid', $data['classid']);
+						$this->db->insert("classes_$term", $data);
+						
+						//sql("DELETE FROM classes_$term WHERE classid = $classnum");
+						//sql("INSERT INTO classes_$term VALUES('$classnum','$matches[2]','$num','$section','','$sectype','$days','$time','$location','$instructor') ON DUPLICATE KEY UPDATE location='$location', instructor='$instructor'");
+					}
+				}
+				else
 				{
 					$this->db->from("classes_$term");
 					$this->db->where('classid', $classnum);
@@ -175,40 +207,12 @@ class import_classes extends CI_Controller {
 					//print_r($this->class_model->getClassDetail(array('classid' => $classnum)));
 					//sql("INSERT INTO classes_$term VALUES('$classnum','$matches[2]','$num','$section','','$sectype','$days','$time','$location','$instructor','$name') ON DUPLICATE KEY UPDATE location='$location', instructor='$instructor'");
 				}
-				else 
-				{
-					$classnum = $prevclassnum;
-					$section = $prevsection;
-					$this->db->from("classes_$term");
-					$this->db->where('classid', $classnum);
-					$q = $this->db->get();
-					$data = $q->row_array(0);
-					
-					
-					$this->db->from("classes_$term");
-					$this->db->where('classid', $classnum);
-					$this->db->delete();
-					//print_r($data);
-					
-					//if we have a legit course name/number add it to the db
-					//echo "argh" . $classnum . '</br>';
-					if($name != "" && $num != "" && $classnum != "")
-					{
-						//echo $time . '</br>';
-						$data['days'] = $data['days'] . ';' . $days;
-						$data['time'] = $data['time'] . ';' . $time;
-						$data['location'] = $data['location'] . ';' . $location;
-						
-						$this->db->where('classid', $data['classid']);
-						$this->db->insert("classes_$term", $data);
-						
-						//sql("DELETE FROM classes_$term WHERE classid = $classnum");
-						//sql("INSERT INTO classes_$term VALUES('$classnum','$matches[2]','$num','$section','','$sectype','$days','$time','$location','$instructor') ON DUPLICATE KEY UPDATE location='$location', instructor='$instructor'");
-					}
-				}
+				
 			}
 			$prevclassnum = $classnum;
 			$prevsection = $section;
+			echo($prevclassnum . '<br/>');
+			echo($prevsection . '<br/>');
 		
 		}
 	

@@ -29,7 +29,7 @@ class time_pref_model extends CI_Model {
 			'TU' => array(0900, 1700),
 			'W' => array(0900, 1700),
 			'TH' => array(0900, 1700),
-			'F' => array(2359, 0000)
+			'F' => array(0000, 0000)
 		);
 	
 		$check = array();
@@ -47,32 +47,37 @@ class time_pref_model extends CI_Model {
 				return 0;
 		}
 		
-		$day = $options['day'];
-		$time = $options['time'];
-		//echo 'hi' .$day .  strpos(',', $day);
-		if(!strpos($day, ',')) {
-			if(!strpos($time, ':')) {
-				$this_time = preg_split('/-/', $time);
-				if($check[$day][0] > $this_time[0]) {
-					if($check[$day][0] - $this_time[0] > 100) {
-						return 1;
-					} else {
-						return 3;
-					}
-				} else if($check[$day][0] < $this_time[0] && $check[$day][1] > $this_time[0]) {
-					return 5;
-				} else if($this_time[0] - $check[$day][1] > 100){
-					return 1;
-				} else {
-					return 3;
-				}
-			} else {
-				return 0;
-			}
-		} else {
-			return 0;
+		$days = $options['day'];
+		if(strpos($days, ';'))
+			$days = preg_split('/;/', $days);
+		else
+			$days = array($days);
+		foreach($days as &$day) {
+			if(strpos($day, ','))
+				$day = preg_split('/,/', $day);
+			else
+				$day = array($day);
 		}
-		
-		return 0;
+
+		$time = $options['time'];
+		if(strpos($time, ';'))
+			$time = preg_split('/;/', $time);
+		else
+			$time = array($time);
+
+		$sum = 0;
+		foreach($days as $day) {
+		$num = 0;
+			foreach($day as $d) {
+				error_log("DAY: " . $d);
+				$this_time = preg_split('/-/', $time[$num]);
+				$mean = ($check[$d][1] + $check[$d][0])/2;
+				$this_mean = ($this_time[1] + $this_time[0])/2;
+				$sum += sqrt(abs($mean-$this_mean));
+				$num++;
+			}
+		}
+		return $sum;
+
 	}
 }
