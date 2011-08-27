@@ -150,6 +150,10 @@ class user_model extends CI_Model {
 			
 		$this->db->from('users');
 		$q = $this->db->get();
+
+        if($q->num_rows() == 0){
+            return false;
+        }
 		
 		if(isset($options['username']) || isset($options['userID']) || isset($options['email']) || isset($options['activate_code']))
 			return $q->row(0);
@@ -164,8 +168,15 @@ class user_model extends CI_Model {
 	function hasMigrated($options = array()){
 		$this->db->select('migrated')->from('users')->where('username', $options['username']);
 		$q = $this->db->get();
-		$usr = $q->row();
-		return $usr->migrated;
+
+        //If user doesn't exist the return -100 XXX
+        if($q->num_rows() <= 0){
+            print_r($q->row());
+            return -100;
+        }
+
+        $usr = $q->row();
+        return $usr->migrated;
 	}
 	
 	function login($options = array()) {
@@ -175,10 +186,16 @@ class user_model extends CI_Model {
 
 		$user = null;
 
-		if($this->user_model->hasMigrated(array('username' => $options['username']))== 1){
+        $migrated = $this->user_model->hasMigrated(array('username' => $options['username']));
+
+        if($migrated == -100){
+            return false;
+        }
+
+        else if($migrated == 1){
 			$user = $this->user_model->getUsers(array('username' => $options['username'], 'password' => hash('sha256', $options['username'] . $options['password'])));
 		}	
-		else if($this->user_model->hasMigrated(array('username' => $options['username']))== 0){
+		else if($migrated == 0){
 			//otherwise get user data, then if user data matches, migrate the password to the new hash (sha256(username + password))
 			$user = $this->user_model->getUsers(array('username' => $options['username'], 'password' => (md5($options['password']))));
 			if($user){//then migrate
