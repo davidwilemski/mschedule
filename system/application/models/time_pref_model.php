@@ -66,12 +66,9 @@ class time_pref_model extends CI_Model {
 			$time = array($time);
 
 		$sum = 0;
-		error_log("DAYs: " . print_r($days, true));
-		error_log("TIME: " . print_r($time, true));
 		foreach($days as $day) {
 			$num = 0;
 			foreach($day as $d) {
-				error_log("DAY: " . $d);
 				$this_time = preg_split('/-/', $time[$num]);
 				$mean = ($check[$d][1] + $check[$d][0])/2;
 				$this_mean = ($this_time[1] + $this_time[0])/2;

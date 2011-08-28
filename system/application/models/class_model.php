@@ -698,8 +698,33 @@ class class_model extends CI_Model {
 		$this->_sort_schedules(&$schedules);
 	
 		foreach($schedules as &$s) {
-			//echo $s['full_score'] . '<br />';
 			unset($s['full_score']);
+			$original_count = count($s);
+			for($i = 0; $i < $original_count; $i++) {
+				if(preg_match('/;/', $s[$i]['days'][0])) {
+					// We need to split these up into a new entry for the schedule viewer
+					$days = preg_split('/;/', $s[0]['days'][0]);
+					$times = preg_split('/;/', $s[0]['time'][0]);
+					$locations = preg_split('/;/', $s[0]['location'][0]);
+					// Make the copy, and start re-adding the seperate date/times
+					$copy = $s[$i];
+					unset($s[$i]);
+					for($j = 0; $j < count($days); $j++) {
+						$copy['days'] = array($days[$j]);
+						$copy['time'] = array($times[$j]);
+						$copy['location'] = array($locations[$j]);
+						// So, we need to replace the one we removed (to prevent breaks)
+						// and then just add to the end (and sort at the end)
+						if(!isset($s[$i])) {
+							$s[$i] = $copy;
+						} else {
+							$s[] = $copy;
+						}
+					}
+				}
+			}
+			// Need to keep things in order for the display to work right (argh)
+			sort(&$s);
 		}
 			
 		return $schedules;
