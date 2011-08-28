@@ -49,7 +49,10 @@ if($_SERVER['SERVER_NAME'] == 'localhost')
 }
 else
 {
-	$config['base_url']	= "http://beta.mschedule.com/"; //use mschedule framework for now
+	if( isset($_SERVER['HTTPS']) )
+		$config['base_url']	= "https://beta.mschedule.com/";
+	else
+		$config['base_url']	= "http://beta.mschedule.com/";
 }
 
 
