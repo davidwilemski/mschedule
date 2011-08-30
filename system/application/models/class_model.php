@@ -86,23 +86,45 @@ class class_model extends CI_Model {
 		return $info;
 	
 	}
+	
+	function _makeScheduleID($options = array()) {
+	
+		if(!$this->_required(array('list', 'uid'), $options))
+			return false;
+			
+		$list = explode(';', $options['list']);
+		unset($list[count($list)-1]);
+		sort($list);
+		$length = count($list);
+		for($i = 0; $i < $length - 1; $i++) {
+			if($list[$i] == $list[$i+1])
+				unset($list[$i]);
+		}
+		$list = implode(";", $list) . ";"; // need to keep the ; on the end
+		
+		$uid = $options['uid'];
+
+		return sha1($uid . $list); 
+	
+	}
 
 	function saveSchedule($options = array()) {
+		// $options is the class ids formatted as 123456;123456;123456;
+		// NOTE: the ending semicolin
 		$uid = $this->session->userdata('userID');
 		
-		$scheduleID = sha1($uid + $options);
+		// We don't need to check to see if the schedule exists already, we have fixed this in importClasses
+		/*$scheduleID = $this->_makeScheduleID(array('uid'=>$uid, 'list'=>$options));
 		$this->db->where('scheduleID', $scheduleID);
 		$this->db->from('user_class');
 		$q = $this->db->get();
 		if($q->num_rows() > 0)
-			return false;
+			return true; */
 		
 		$this->db->where('userID', $uid);
 		$this->db->from('user_prefs');
 		$q = $this->db->get();
 		$q = $q->result_array();
-		// $options is the class ids formatted as 123456;123456;123456;
-		// NOTE: the ending semicolin
 		if(count($q) == 1) {
 			if($q[0]['curr_schedule'] == '') {
 				$this->db->where('userID', $uid);
@@ -125,7 +147,7 @@ class class_model extends CI_Model {
 		if(!$this->_required(array('userID', 'class_list'), $options))
 			return false;
 	
-		$new_sched_id = sha1($options['userID'] . $options['scheduleID']);
+		$new_sched_id = $this->_makeScheduleID(array('uid'=>$options['userID'], 'list'=>implode(";", $options['class_list']).';'));
 		
 		foreach($options['class_list'] as $class) {
 			$this->db->where('scheduleID', $new_sched_id);
@@ -134,21 +156,26 @@ class class_model extends CI_Model {
 			$this->db->from('user_class');
 			$q = $this->db->get();
 			if($q->num_rows() == 0) {
-				if(!$this->addRow(array(
+				$this->addRow(array(
 					'scheduleID' => $new_sched_id, 
 					'userID' => $options['userID'], 
 					'classID' => $class, 
 					'term' => $this->config->item('current_term')
-				)))
-					return false;
+				));
+				//	return false; // This isn't a condition any more, we just move on
 			}
 		}
+		
+		$this->db->where('userID', $options['userID']);
+		$this->db->set('curr_schedule', '');
+		$this->db->update('user_prefs');
 		
 		$this->db->where('userID', $options['userID']);
 		$this->db->set('curr_schedule', $new_sched_id);
 		$this->db->update('user_prefs');
 		
-		return true;
+		$changed = $this->db->affected_rows();
+		return ($changed == 1 ? true : false);
 		
 	}
 	
@@ -642,7 +669,7 @@ class class_model extends CI_Model {
 				//print_r($s);
 				if(count($schedules) >= 50) {
 					if($max_score > $full_score) {
-						$this->_sort_schedules(&$schedules);
+						$this->_sort_schedules($schedules);
 						$schedules[49] = $s;
 						$max_score = $full_score;
 					}
@@ -677,11 +704,11 @@ class class_model extends CI_Model {
 		
 		//echo $schedules_count . ' ' . count($schedules);
 		
-		return $this->class_model->_fix_schedules_and_go(&$schedules);
+		return $this->class_model->_fix_schedules_and_go($schedules);
 	
 	}
 	
-	function _sort_schedules($schedules) {
+	function _sort_schedules(&$schedules) {
 		
 		if(!function_exists("my_sort")) {
 			function my_sort($a, $b) {
@@ -689,13 +716,13 @@ class class_model extends CI_Model {
 				return ($a['full_score'] > $b['full_score']) ? 1 : -1;
 			}
 		}
-		usort(&$schedules, 'my_sort');
+		usort($schedules, 'my_sort');
 	
 	}
 	
-	function _fix_schedules_and_go($schedules) {
+	function _fix_schedules_and_go(&$schedules) {
 	
-		$this->_sort_schedules(&$schedules);
+		$this->_sort_schedules($schedules);
 	
 		foreach($schedules as &$s) {
 			unset($s['full_score']);
@@ -724,7 +751,7 @@ class class_model extends CI_Model {
 				}
 			}
 			// Need to keep things in order for the display to work right (argh)
-			sort(&$s);
+			sort($s);
 		}
 			
 		return $schedules;

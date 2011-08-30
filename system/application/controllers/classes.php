@@ -27,7 +27,26 @@ class Classes extends CI_Controller {
 	
 	function index() {
 	
+		redirect('classes/view');
 
+	}
+	
+	function view() {
+	
+		$classes = $this->class_model->getUserClassSchedule(array('userID' => $this->session->userdata('userID')));
+		
+		$data = array(
+			'view_name'	=> 'class/class_view',
+			'ad'		=> 'static/ads/google_ad_120_234.php',
+			'navigation'=> "navigation",
+			'nav_data'	=> $this->nav_links_model->getNavBarLinks(),
+			'page_data'	=> array('user_classes' => $classes),
+			'css'		=> includeCSSFile("style") . includeCSSFile("jquery.bubblepopup.v2.3.1"),
+			'javascript'=> includeJSFile("jquery") . /*includeJSFile("class/display_user_schedule") .*/ includeJSFile("schedule_view_maker") . includeJSFile("jquery.bubblepopup.v2.3.1.min")
+		);
+		
+		$this->load->view('include/template', $data);
+	
 	}
 	
 	function import() {
@@ -159,24 +178,6 @@ class Classes extends CI_Controller {
 		}
 		
 		return false;
-	
-	}
-	
-	function view() {
-	
-		$classes = $this->class_model->getUserClassSchedule(array('userID' => $this->session->userdata('userID')));
-		
-		$data = array(
-			'view_name'	=> 'class/class_view',
-			'ad'		=> 'static/ads/google_ad_120_234.php',
-			'navigation'=> "navigation",
-			'nav_data'	=> $this->nav_links_model->getNavBarLinks(),
-			'page_data'	=> array('user_classes' => $classes),
-			'css'		=> includeCSSFile("style") . includeCSSFile("jquery.bubblepopup.v2.3.1"),
-			'javascript'=> includeJSFile("jquery") . includeJSFile("class/display_user_schedule") . includeJSFile("schedule_view_maker") . includeJSFile("jquery.bubblepopup.v2.3.1.min")
-		);
-		
-		$this->load->view('include/template', $data);
 	
 	}
 	

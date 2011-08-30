@@ -29,7 +29,6 @@ class scheduler extends CI_Controller {
 		
 		}
 		
-		
 	}
 	
 	function index() {
