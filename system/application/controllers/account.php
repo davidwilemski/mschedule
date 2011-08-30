@@ -2,7 +2,7 @@
 	/*
 		-secure- user, admin
 		This controller is the main user interface for users to change their preferences.
-		It loads the dashboard_view to show the password reset and personal info update forms.
+		It loads the account_view to show the password reset and personal info update forms.
 		This has several custom form_validation callback functions:
 		For the password reset:
 			_check_user_password - validates the user's password agains the database hash
@@ -54,7 +54,7 @@ class account extends CI_Controller {
 	function password_reset() {
 	
 		$data = array(
-			'view_name'	=> 'dashboard_view',
+			'view_name'	=> 'account_view',
 			'ad'		=> 'static/ads/google_ad_120_234.php',
 			'navigation'=> "navigation",
 			'css'		=> includeCSSFile("style"),
@@ -120,7 +120,7 @@ class account extends CI_Controller {
 	function modify_user() {
 
 		$data = array(
-			'view_name'	=> 'dashboard_view',
+			'view_name'	=> 'account_view',
 			'ad'		=> 'static/ads/google_ad_120_234.php',
 			'navigation'=> "navigation",
 			'css'		=> includeCSSFile("style"),
