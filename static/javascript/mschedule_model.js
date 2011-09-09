@@ -4,7 +4,7 @@ function FlexiStack() {
 	var arr = [];
 	this.push = function(obj) {
 		if(obj === undefined) {
-			$.error('FlexiStack: Attempt to push undefined obj!');
+			$j.error('FlexiStack: Attempt to push undefined obj!');
 			return;
 		}
 		arr.push(obj);
@@ -12,7 +12,7 @@ function FlexiStack() {
 	
 	this.pop = function(index) {
 		if(!arr.length) {
-			$.error('FlexiStack: Attempt to pop empty stack!');
+			$j.error('FlexiStack: Attempt to pop empty stack!');
 			return;
 		}
 		if(index !== undefined) {
@@ -27,7 +27,7 @@ function FlexiStack() {
 	
 	this.top = function() {
 		if(!arr.length) {
-			$.error('FlexiStack: Attempt to look at empty stack!');
+			$j.error('FlexiStack: Attempt to look at empty stack!');
 			return;
 		}
 		return arr[arr.length - 1];
@@ -343,7 +343,7 @@ function DeptListFactory() {
 		else {
 			var localDeptList = this.deptList;
 			
-			$.post('api/json/class_model/getMasterDepartmentList', function(data) {
+			$j.post('api/json/class_model/getMasterDepartmentList', function(data) {
 				var objKey;
 				for(objKey in data) {
 					if(data.hasOwnProperty(objKey)) {
@@ -375,7 +375,7 @@ function CourseListFactory() {
 		else {
 			var listMap = this.courseListMap;
 			
-			$.post('api/json/class_model/getDeptClassList',{ 'data[]': [deptId]}, function(data) {
+			$j.post('api/json/class_model/getDeptClassList',{ 'data[]': [deptId]}, function(data) {
 				var objKey;
 				var courseList = listMap[deptId] = [];
 				for(objKey in data) {
@@ -472,7 +472,7 @@ function CourseSectionListFactory() {
 			var sectionListMap = this.courseSectionListMap;
 			var finishSectionListGet = getCachedCourseSectionLists;
 			
-			$.post('api/json/class_model/getClassSections', { 'data[]': sendData }, function(data) {
+			$j.post('api/json/class_model/getClassSections', { 'data[]': sendData }, function(data) {
 				var sectionObj;
 				var keyString;
 				
@@ -522,7 +522,7 @@ function CourseScheduleListFactory() {
 		}
 		else {
 			var localCourseScheduleListMap = this.courseScheduleListMap;
-			$.post('api/json/class_model/createSchedules', { 'data[]': [timesOption].concat(classIds) }, function(data) {
+			$j.post('api/json/class_model/createSchedules', { 'data[]': [timesOption].concat(classIds) }, function(data) {
 				var prop;
 				var schedules = [];
 				for(prop in data) {
@@ -566,7 +566,7 @@ function CourseScheduleListFactory() {
 				callback(false);
 			}
 			else {
-				$.post('api/json/class_model/saveSchedule', { 'data': schedule.serverScheduleId() }, function(data){
+				$j.post('api/json/class_model/saveSchedule', { 'data': schedule.serverScheduleId() }, function(data){
 					callback(data === 'true');
 				});
 			}

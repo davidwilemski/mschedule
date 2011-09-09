@@ -38,10 +38,9 @@ class scheduler extends CI_Controller {
 		
 		$data = array(
 			'view_name'	=> 'mschedule_view',
-			'ad'		=> 'static/ads/google_ad_120_234.php',
 			'navigation'=> "navigation",
 			'css'		=> includeCSSFile("style") . includeCSSFile("scheduler") . includeCSSFile("jquery.bubblepopup.v2.3.1"),
-			'javascript'=> includeJSFile("jquery") . includeJSFile('jquery.effects') . includeJSFile('jquery.scrollTo') . includeJSFile("schedule_view_maker") . includeJSFile('mschedule_model') . includeJSFile('mschedule_viewcontroller') . includeJSFile('mschedule_new') . includeJSFile("jquery.bubblepopup.v2.3.1.min"),
+			'javascript'=> includeJSFile('jquery.effects') . includeJSFile('jquery.scrollTo') . includeJSFile('mschedule_model') . includeJSFile('mschedule_viewcontroller') . includeJSFile('mschedule'),
 			'nav_data'	=> $this->nav_links_model->getNavBarLinks(),
 			'nav_location' => 'scheduler'
 		);

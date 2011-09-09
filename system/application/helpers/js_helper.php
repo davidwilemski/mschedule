@@ -11,7 +11,7 @@ function includeJSFile($filename)
 	$baseURL = $CI->config->item('base_url');
 	$src = "static/javascript/${filename}.js";
    
-	$js = '<script type="text/JavaScript" src="' . $baseURL . $src . '"></script>';
+	$js = '<script type="text/javascript" src="' . $baseURL . $src . '"></script>';
 	
 	return $js;
 }

@@ -38,15 +38,11 @@ class account extends CI_Controller {
 		
 		$data = array(
 			'view_name'	=> 'account_view',
-			'ad'		=> 'static/ads/google_ad_120_234.php',
 			'navigation'=> "navigation",
 			'css'		=> includeCSSFile("style"),
 			'nav_data'	=> $this->nav_links_model->getNavBarLinks(),
 			'nav_location' => 'account'
 		);
-		
-		$data['javascript'] = includeJSFile('jquery');
-		$data['javascript'] .= includeJSFile('account_view');
 		
 		$this->load->view('include/template', $data);
 	}

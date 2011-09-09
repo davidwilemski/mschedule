@@ -5,12 +5,12 @@ var borderPixelsPerHour = 1;
 
 //Source: http://jdsharp.us/jQuery/minute/calculate-scrollbar-width.php
 function scrollbarWidth() {
-    var div = $('<div style="width:50px;height:50px;overflow:hidden;position:absolute;top:-200px;left:-200px;"><div style="height:100px;"></div>');
-    $('body').append(div);
-    var w1 = $('div', div).innerWidth();
+    var div = $j('<div style="width:50px;height:50px;overflow:hidden;position:absolute;top:-200px;left:-200px;"><div style="height:100px;"></div>');
+    $j('body').append(div);
+    var w1 = $j('div', div).innerWidth();
     div.css('overflow-y', 'scroll');
-    var w2 = $('div', div).innerWidth();
-    $(div).remove();
+    var w2 = $j('div', div).innerWidth();
+    $j(div).remove();
     return (w1 - w2);
 }
 
@@ -52,25 +52,25 @@ function CourseScheduleView(courseSchedule) {
 	this.courseSchedule = courseSchedule;
 	
 	//create the scheduleElement, which can just be injected into the page
-	var scheduleElement = $('<div/>', { 'class' : 'schedule', 'id' : 'schedule_view_' + courseSchedule.scheduleId });
+	var scheduleElement = $j('<div/>', { 'class' : 'schedule', 'id' : 'schedule_view_' + courseSchedule.scheduleId });
 	this.getElement = function() {
 		return scheduleElement;
 	};
 	
 	function createEmptyScheduleElem(theClass, pixels, borderPixels) {
 		var emptyBorderStyle = 'solid ' + borderPixels.toString() + 'px transparent';
-		return $('<li/>', {
+		return $j('<li/>', {
 		'class' : theClass,
 		'style' : 'height:' + pixels.toString() + 'px;' + 'border-top:' + emptyBorderStyle + ';border-bottom:' + emptyBorderStyle + ';'
 		});
 	}
 	
-	scheduleElement.append($('<h1/>', {text : courseSchedule.title}));
-	var weekList = $('<ul/>', {'class' : 'schedule_week'});
+	scheduleElement.append($j('<h1/>', {text : courseSchedule.title}));
+	var weekList = $j('<ul/>', {'class' : 'schedule_week'});
 	var day;
 	for(day in this.courseSchedule.week) {
 		if(this.courseSchedule.week.hasOwnProperty(day)) {
-			var dayListElement = $('<ul/>', {'class': 'schedule_day'});
+			var dayListElement = $j('<ul/>', {'class': 'schedule_day'});
 			var dayArr = this.courseSchedule.week[day];
 			var section;
 			var courseSection = null;
@@ -97,17 +97,17 @@ function CourseScheduleView(courseSchedule) {
 					courseSection = dayArr[section];
 					
 					numPixels = Math.ceil(pixelsPerHour * diffTimes(courseSection.endTime,courseSection.startTime));
-					var courseTitle = $('<h1/>', {text : courseSection.dept + ' ' + courseSection.number + '-' + courseSection.section});
-					var coursePlace = $('<h2/>', {text : courseSection.getPlace()});
-					var courseTime = $('<h3/>', {text : courseSection.getTimes()});
-					dayListElement.append($('<li/>', {'style' : 'height:' + numPixels + 'px;'}).append(courseTitle).append(coursePlace).append(courseTime));
+					var courseTitle = $j('<h1/>', {text : courseSection.dept + ' ' + courseSection.number + '-' + courseSection.section});
+					var coursePlace = $j('<h2/>', {text : courseSection.getPlace()});
+					var courseTime = $j('<h3/>', {text : courseSection.getTimes()});
+					dayListElement.append($j('<li/>', {'style' : 'height:' + numPixels + 'px;'}).append(courseTitle).append(coursePlace).append(courseTime));
 				}
 			}
 			else {
 				dayListElement.append(createEmptyScheduleElem('day_empty', 1, 1));
 			}
 			
-			var weekListItemElement = $('<li/>');
+			var weekListItemElement = $j('<li/>');
 			weekListItemElement.append(dayListElement);
 			weekList.append(weekListItemElement);
 		}
@@ -161,7 +161,7 @@ function ScheduleItemListView(items, breadCrumbText, aClass, aHTML) {
 	if(breadCrumbText !== undefined) {
 		this.breadCrumbText = breadCrumbText;
 	}
-	var listElement = $('<ul/>', {'class' : 'schedule_item_list'});
+	var listElement = $j('<ul/>', {'class' : 'schedule_item_list'});
 	this.getElement	= function() {
 		return listElement;
 	};
@@ -171,12 +171,12 @@ function ScheduleItemListView(items, breadCrumbText, aClass, aHTML) {
 	var curLetter = '';
 	for(item = 0; item < items.length; item++) {
 		obj = items[item];
-		var listItem = $('<li/>');
+		var listItem = $j('<li/>');
 		if(curLetter !== obj.getHeader().toUpperCase().charAt(0)) {
 			curLetter = obj.getHeader().toUpperCase().charAt(0);
 			this.anchors.push([item, curLetter]);
 		}
-		var aTag = $('<a/>', {'href' : '#' + obj.getAction()});
+		var aTag = $j('<a/>', {'href' : '#' + obj.getAction()});
 		if(aClass !== undefined) {
 			aTag.addClass(aClass);
 		}
@@ -184,8 +184,8 @@ function ScheduleItemListView(items, breadCrumbText, aClass, aHTML) {
 			aTag.html(aHTML);
 		}
 		listItem.append(aTag);
-		listItem.append($('<h1/>', {text:obj.getHeader()}));
-		listItem.append($('<p/>', {text:obj.getDetail()}));
+		listItem.append($j('<h1/>', {text:obj.getHeader()}));
+		listItem.append($j('<p/>', {text:obj.getDetail()}));
 		listElement.append(listItem);
 	}
 	
@@ -194,11 +194,11 @@ function ScheduleItemListView(items, breadCrumbText, aClass, aHTML) {
 	}
 }
 
-(function( $ ){
+(function( $j ){
 	var methods = {
 		init : function(options) {
-			var $this = $(this);
-			return $this.each(function() {
+			var $jthis = $j(this);
+			return $jthis.each(function() {
 				var settings = {
 					width : '400px',
 					height : '400px',
@@ -209,28 +209,28 @@ function ScheduleItemListView(items, breadCrumbText, aClass, aHTML) {
 				};
 				
 				if (options !== undefined) { 
-					$.extend( settings, options );
+					$j.extend( settings, options );
 				}
-				var data = $this.data('ScheduleItemPicker');
-				if($.isEmptyObject(data)) {
+				var data = $jthis.data('ScheduleItemPicker');
+				if($j.isEmptyObject(data)) {
 					data = {
-						slideContainer : $('<div/>', {'style' : 'position:absolute; top:' + settings.breadCrumbsHeight + '; left:' + settings.scrollListWidth + ';'}),
-						onScreen : $('<div/>', {'style' : 'position:absolute; top:0;'}),
-						offScreen : $('<div/>', {'style' : 'position:absolute; top:0;'}),
-						breadCrumbs : $('<ul/>', {'class' : 'schedule_item_list_breadcrumbs', 'style' : 'position:absolute; top:0; left:' + settings.scrollListWidth + ';'}),
-						scrollList : $('<ul/>', {'class' : 'schedule_item_list_scrollList', 'style' : 'position:absolute; top:' + settings.breadCrumbsHeight + '; left:0;'}),
+						slideContainer : $j('<div/>', {'style' : 'position:absolute; top:' + settings.breadCrumbsHeight + '; left:' + settings.scrollListWidth + ';'}),
+						onScreen : $j('<div/>', {'style' : 'position:absolute; top:0;'}),
+						offScreen : $j('<div/>', {'style' : 'position:absolute; top:0;'}),
+						breadCrumbs : $j('<ul/>', {'class' : 'schedule_item_list_breadcrumbs', 'style' : 'position:absolute; top:0; left:' + settings.scrollListWidth + ';'}),
+						scrollList : $j('<ul/>', {'class' : 'schedule_item_list_scrollList', 'style' : 'position:absolute; top:' + settings.breadCrumbsHeight + '; left:0;'}),
 						listStack : (new FlexiStack()),
 						settings : settings
 					};
-					$this.data('ScheduleItemPicker', data);
+					$jthis.data('ScheduleItemPicker', data);
 				}
 				
 				
 				var fullHeight = parseInt(settings.breadCrumbsHeight, 10) + parseInt(settings.height, 10) + 'px';
 				var fullWidth = parseInt(settings.scrollListWidth, 10) + parseInt(settings.width, 10) + 'px';
-				$this.css('height', fullHeight);
-				$this.css('width', fullWidth);
-				$this.css('overflow', 'hidden');
+				$jthis.css('height', fullHeight);
+				$jthis.css('width', fullWidth);
+				$jthis.css('overflow', 'hidden');
 
 				data.slideContainer.css('overflow', 'hidden');
 				data.slideContainer.css('height', settings.height);
@@ -252,28 +252,28 @@ function ScheduleItemListView(items, breadCrumbText, aClass, aHTML) {
 				
 				data.breadCrumbs.css('left', 0);
 				
-				$this.append(data.breadCrumbs);
-				$this.append(data.scrollList);
-				$this.append(data.slideContainer);
+				$jthis.append(data.breadCrumbs);
+				$jthis.append(data.scrollList);
+				$jthis.append(data.slideContainer);
 				data.slideContainer.append(data.onScreen);
 				data.slideContainer.append(data.offScreen);
 				
 				var scrollToOptions = {duration : data.settings.duration, easing : data.settings.easing, axis : 'y'};
-				$('#' + $this.attr('id')).delegate('ul.schedule_item_list_scrollList li a', 'click', function() {
-					data.onScreen.scrollTo('li:eq(' + $(this).attr('href').replace('#','') + ')', scrollToOptions);
+				$j('#' + $jthis.attr('id')).delegate('ul.schedule_item_list_scrollList li a', 'click', function() {
+					data.onScreen.scrollTo('li:eq(' + $j(this).attr('href').replace('#','') + ')', scrollToOptions);
 					return false;
 				});
 				
-				return $this;
+				return $jthis;
 			});
 		},
 		
 		push : function(listView, reverse, breadCrumbsManaged) {
-			var $this = $(this);
-			var data = $this.data('ScheduleItemPicker');
-			if($.isEmptyObject(data)) {
-				$.error('ScheduleItemPicker: jQuery.ScheduleItemPicker was not initialized');
-				return $this;
+			var $jthis = $j(this);
+			var data = $jthis.data('ScheduleItemPicker');
+			if($j.isEmptyObject(data)) {
+				$j.error('ScheduleItemPicker: jQuery.ScheduleItemPicker was not initialized');
+				return $jthis;
 			}
 			
 			function resetOffScreen() {
@@ -306,24 +306,24 @@ function ScheduleItemListView(items, breadCrumbText, aClass, aHTML) {
 			
 			var i;
 			var anchors = listView.anchors;
-			var tempList = $('<ul/>');
+			var tempList = $j('<ul/>');
 			for(i = 0; i < anchors.length; i++) {
-				var listItem = $('<li/>');
-				listItem.append($('<a/>', {href : '#' + anchors[i][0], text : anchors[i][1]}));
+				var listItem = $j('<li/>');
+				listItem.append($j('<a/>', {href : '#' + anchors[i][0], text : anchors[i][1]}));
 				tempList.append(listItem);
 			}
 			data.scrollList.html(tempList.html());
 			
 			data.listStack.push(listView);
-			return $this;
+			return $jthis;
 		},
 		
 		goto : function(index) {
-			var $this = $(this);
-			var data = $this.data('ScheduleItemPicker');
-			if($.isEmptyObject(data)) {
-				$.error('ScheduleItemPicker: jQuery.ScheduleItemPicker was not initialized');
-				return $this;
+			var $jthis = $j(this);
+			var data = $jthis.data('ScheduleItemPicker');
+			if($j.isEmptyObject(data)) {
+				$j.error('ScheduleItemPicker: jQuery.ScheduleItemPicker was not initialized');
+				return $jthis;
 			}
 			
 			if(typeof index === 'string') {
@@ -331,77 +331,77 @@ function ScheduleItemListView(items, breadCrumbText, aClass, aHTML) {
 			}
 			
 			if(index >= data.listStack.size() - 1 || index < 0) {
-				$.error('ScheduleItemPicker: Bad stack location');
-				return $this;
+				$j.error('ScheduleItemPicker: Bad stack location');
+				return $jthis;
 			}
 			if(index === 0) {
-				return $this.ScheduleItemPicker('reset');
+				return $jthis.ScheduleItemPicker('reset');
 			} else {
-				$('#' + $this.attr('id') + ' ul.schedule_item_list_breadcrumbs li').slice(index).remove();
+				$j('#' + $jthis.attr('id') + ' ul.schedule_item_list_breadcrumbs li').slice(index).remove();
 				var newTop = data.listStack.pop(index);
-				return $this.ScheduleItemPicker('push', newTop, true, true);
+				return $jthis.ScheduleItemPicker('push', newTop, true, true);
 			}
 		},
 		
 		reset : function() {
-			var $this = $(this);
-			var data = $this.data('ScheduleItemPicker');
-			if($.isEmptyObject(data)) {
-				$.error('ScheduleItemPicker: jQuery.ScheduleItemPicker was not initialized');
-				return $this;
+			var $jthis = $j(this);
+			var data = $jthis.data('ScheduleItemPicker');
+			if($j.isEmptyObject(data)) {
+				$j.error('ScheduleItemPicker: jQuery.ScheduleItemPicker was not initialized');
+				return $jthis;
 			}
 			data.breadCrumbs.html('');
 			var first = data.listStack.pop(0);
-			return $this.ScheduleItemPicker('push', first, true);
+			return $jthis.ScheduleItemPicker('push', first, true);
 		},
 		
 		bindItem : function(type, callback) {
-			var $this = $(this);
-			var data = $this.data('ScheduleItemPicker');
-			if($.isEmptyObject(data)) {
-				$.error('ScheduleItemPicker: jQuery.ScheduleItemPicker was not initialized');
-				return $this;
+			var $jthis = $j(this);
+			var data = $jthis.data('ScheduleItemPicker');
+			if($j.isEmptyObject(data)) {
+				$j.error('ScheduleItemPicker: jQuery.ScheduleItemPicker was not initialized');
+				return $jthis;
 			}
 			
-			$('#' + $this.attr('id')).undelegate('ul.schedule_item_list li a', type);
-			$('#' + $this.attr('id')).delegate('ul.schedule_item_list li a', type, function() {
-				var courseObj = data.listStack.top().items[$(this).parent().index()];
+			$j('#' + $jthis.attr('id')).undelegate('ul.schedule_item_list li a', type);
+			$j('#' + $jthis.attr('id')).delegate('ul.schedule_item_list li a', type, function() {
+				var courseObj = data.listStack.top().items[$j(this).parent().index()];
 				callback.apply(this, [courseObj]);
 				return false;
 			});
 			
-			return $this;
+			return $jthis;
 		},
 		
 		bindBreadCrumb : function(type, callback) {
-			var $this = $(this);
-			var data = $this.data('ScheduleItemPicker');
-			if($.isEmptyObject(data)) {
-				$.error('ScheduleItemPicker: jQuery.ScheduleItemPicker was not initialized');
-				return $this;
+			var $jthis = $j(this);
+			var data = $jthis.data('ScheduleItemPicker');
+			if($j.isEmptyObject(data)) {
+				$j.error('ScheduleItemPicker: jQuery.ScheduleItemPicker was not initialized');
+				return $jthis;
 			}
 			
-			$('#' + $this.attr('id')).undelegate('ul.schedule_item_list_breadcrumbs li a', type);
-			$('#' + $this.attr('id')).delegate('ul.schedule_item_list_breadcrumbs li a', type, callback);
+			$j('#' + $jthis.attr('id')).undelegate('ul.schedule_item_list_breadcrumbs li a', type);
+			$j('#' + $jthis.attr('id')).delegate('ul.schedule_item_list_breadcrumbs li a', type, callback);
 			
-			return $this;
+			return $jthis;
 		},
 		
 		stackSize : function() {
-			var $this = $(this);
-			var data = $this.data('ScheduleItemPicker');
-			if($.isEmptyObject(data)) {
-				$.error('ScheduleItemPicker: jQuery.ScheduleItemPicker was not initialized');
-				return $this;
+			var $jthis = $j(this);
+			var data = $jthis.data('ScheduleItemPicker');
+			if($j.isEmptyObject(data)) {
+				$j.error('ScheduleItemPicker: jQuery.ScheduleItemPicker was not initialized');
+				return $jthis;
 			}
 			
 			return data.listStack.size();
 		}
 	};
 		
-	$.fn.ScheduleItemPicker = function(method) {
+	$j.fn.ScheduleItemPicker = function(method) {
 	    if(!this.attr('id')) {
-			$.error('ScheduleItemPicker: jQuery.ScheduleItemPicker requires a container with a valid id attribute');
+			$j.error('ScheduleItemPicker: jQuery.ScheduleItemPicker requires a container with a valid id attribute');
 			return this;
 	    }
 		if (methods.hasOwnProperty(method)) {
@@ -411,7 +411,7 @@ function ScheduleItemListView(items, breadCrumbText, aClass, aHTML) {
 			return methods.init.apply(this, arguments);
 		}
 		else {
-			$.error('ScheduleItemPicker: Method ' +  method + ' does not exist on jQuery.ScheduleItemPicker');
+			$j.error('ScheduleItemPicker: Method ' +  method + ' does not exist on jQuery.ScheduleItemPicker');
 			return this;
 		}
 	};
@@ -419,42 +419,42 @@ function ScheduleItemListView(items, breadCrumbText, aClass, aHTML) {
 
 var checkMarkSymbolEntity = '&#10004;';
 
-(function( $ ){
+(function( $j ){
 	var methods = {
 		//scheduleList should be a CourseScheduleList object
 		init : function(scheduleList) {
-			var $this = $(this);
-			return $this.each(function() {
+			var $jthis = $j(this);
+			return $jthis.each(function() {
 				if(scheduleList === undefined || !scheduleList.size()) {
-					$.error('ScheduleListViewer: jQuery.ScheduleListViewer requires a valid scheduleList argument');
-					return $this;
+					$j.error('ScheduleListViewer: jQuery.ScheduleListViewer requires a valid scheduleList argument');
+					return $jthis;
 				}
 				
-				var data = $this.data('ScheduleListViewer');
-				if($.isEmptyObject(data)) {
+				var data = $jthis.data('ScheduleListViewer');
+				if($j.isEmptyObject(data)) {
 					data = {
 						scheduleViewManager : {},
-						scheduleDetailContainer : $('<div/>', {'id' : 'schedule_detail'}),
-						scheduleMasterContainer : $('<ul/>', {'id' : 'schedule_master'})
+						scheduleDetailContainer : $j('<div/>', {'id' : 'schedule_detail'}),
+						scheduleMasterContainer : $j('<ul/>', {'id' : 'schedule_master'})
 					};
-					$this.data('ScheduleListViewer', data);
+					$jthis.data('ScheduleListViewer', data);
 				}
 				
-				return $this.ScheduleListViewer('setScheduleList', scheduleList);
+				return $jthis.ScheduleListViewer('setScheduleList', scheduleList);
 			});
 		},
 		
 		setScheduleList : function(scheduleList) {
-			var $this = $(this);
+			var $jthis = $j(this);
 			if(scheduleList === undefined || !scheduleList.size()) {
-				$.error('ScheduleListViewer: jQuery.ScheduleListViewer requires a valid scheduleList argument');
-				return $this;
+				$j.error('ScheduleListViewer: jQuery.ScheduleListViewer requires a valid scheduleList argument');
+				return $jthis;
 			}
 			
-			var data = $this.data('ScheduleListViewer');
-			if($.isEmptyObject(data)) {
-				$.error('ScheduleListViewer: jQuery.ScheduleListViewer was not initialized');
-				return $this;
+			var data = $jthis.data('ScheduleListViewer');
+			if($j.isEmptyObject(data)) {
+				$j.error('ScheduleListViewer: jQuery.ScheduleListViewer was not initialized');
+				return $jthis;
 			}
 			
 			data.scheduleViewManager = new CourseScheduleViewManager(scheduleList);
@@ -466,57 +466,57 @@ var checkMarkSymbolEntity = '&#10004;';
 			var schedule;
 			for(i = 0; i < scheduleListSize; i++) {
 				schedule = scheduleList.getSchedule(i);
-				data.scheduleMasterContainer.append($('<li/>', {text : 'Schedule ' + i.toString()}).prepend($('<a/>', {'href' : '#' + schedule.scheduleId})));
+				data.scheduleMasterContainer.append($j('<li/>', {text : 'Schedule ' + i.toString()}).prepend($j('<a/>', {'href' : '#' + schedule.scheduleId})));
 			}
 			
 			data.scheduleMasterContainer.find('li a').click(function() {
-				if($(this).html().trim()) {
-					$(this).html('');
+				if($j(this).html().trim()) {
+					$j(this).html('');
 				}
 				else {
-					$(this).html(checkMarkSymbolEntity);
+					$j(this).html(checkMarkSymbolEntity);
 				}
-				$(this).toggleClass('schedule_on');
-				$this.ScheduleListViewer('toggleScheduleView', $(this).attr('href').replace('#',''));
+				$j(this).toggleClass('schedule_on');
+				$jthis.ScheduleListViewer('toggleScheduleView', $j(this).attr('href').replace('#',''));
 				return false;
 			});
 			
-			$this.append(data.scheduleDetailContainer);
-			$this.append(data.scheduleMasterContainer);
+			$jthis.append(data.scheduleDetailContainer);
+			$jthis.append(data.scheduleMasterContainer);
 			
 			data.scheduleMasterContainer.find('li a:first').toggleClass('schedule_on').html(checkMarkSymbolEntity);
-			return $this.ScheduleListViewer('toggleScheduleView', scheduleList.getSchedule(0).scheduleId);
+			return $jthis.ScheduleListViewer('toggleScheduleView', scheduleList.getSchedule(0).scheduleId);
 		},
 		
 		toggleScheduleView : function(id) {
-			var $this = $(this);
-			var data = $this.data('ScheduleListViewer');
-			if($.isEmptyObject(data)) {
-				$.error('ScheduleListViewer: jQuery.ScheduleListViewer was not initialized');
-				return $this;
+			var $jthis = $j(this);
+			var data = $jthis.data('ScheduleListViewer');
+			if($j.isEmptyObject(data)) {
+				$j.error('ScheduleListViewer: jQuery.ScheduleListViewer was not initialized');
+				return $jthis;
 			}
 			var fullId = '#schedule_view_' + id;
-			var schedule = $(fullId);
+			var schedule = $j(fullId);
 			if(schedule.length) {
 				schedule.remove();
 			}
 			else {
 				schedule = data.scheduleViewManager.getScheduleView(id);
 				if(schedule === null) {
-					$.error('ScheduleListViewer: jQuery.ScheduleListViewer could not toggle id' + id);
+					$j.error('ScheduleListViewer: jQuery.ScheduleListViewer could not toggle id' + id);
 				} else {
 					data.scheduleDetailContainer.append(schedule.getElement());
 				}
 			}
-			return $this;
+			return $jthis;
 		},
 		
 		showNextScheduleView : function() {
-			var $this = $(this);
-			var data = $this.data('ScheduleListViewer');
-			if($.isEmptyObject(data)) {
-				$.error('ScheduleListViewer: jQuery.ScheduleListViewer was not initialized');
-				return $this;
+			var $jthis = $j(this);
+			var data = $jthis.data('ScheduleListViewer');
+			if($j.isEmptyObject(data)) {
+				$j.error('ScheduleListViewer: jQuery.ScheduleListViewer was not initialized');
+				return $jthis;
 			}
 			var newScheduleView = data.scheduleViewManager.getNextScheduleView();
 			if(newScheduleView !== null) {
@@ -526,11 +526,11 @@ var checkMarkSymbolEntity = '&#10004;';
 		},
 		
 		showPrevScheduleView : function() {
-			var $this = $(this);
-			var data = $(this).data('ScheduleListViewer');
-			if($.isEmptyObject(data)) {
-				$.error('ScheduleListViewer: jQuery.ScheduleListViewer was not initialized');
-				return $this;
+			var $jthis = $j(this);
+			var data = $j(this).data('ScheduleListViewer');
+			if($j.isEmptyObject(data)) {
+				$j.error('ScheduleListViewer: jQuery.ScheduleListViewer was not initialized');
+				return $jthis;
 			}
 			var newScheduleView = data.scheduleViewManager.getPrevScheduleView();
 			if(newScheduleView !== null) {
@@ -540,9 +540,9 @@ var checkMarkSymbolEntity = '&#10004;';
 		}
 	};
 		
-	$.fn.ScheduleListViewer = function(method) {
+	$j.fn.ScheduleListViewer = function(method) {
 	    if(!this.attr('id')) {
-			$.error('ScheduleListViewer: jQuery.ScheduleListViewer requires a container with a valid id attribute');
+			$j.error('ScheduleListViewer: jQuery.ScheduleListViewer requires a container with a valid id attribute');
 			return this;
 	    }
 		if (methods.hasOwnProperty(method)) {
@@ -552,7 +552,7 @@ var checkMarkSymbolEntity = '&#10004;';
 			return methods.init.apply(this, arguments);
 		}
 		else {
-			$.error('ScheduleListViewer: Method ' +  method + ' does not exist on jQuery.ScheduleListViewer');
+			$j.error('ScheduleListViewer: Method ' +  method + ' does not exist on jQuery.ScheduleListViewer');
 			return this;
 		}
 	};

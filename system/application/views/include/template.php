@@ -29,6 +29,14 @@
 
 $css = includeCSSFile('reset') . $css;
 $data['css'] = $css;
+$ad = 'static/ads/google_ad_120_234.php';
+
+$js = '';
+if (isset($javascript)) {
+    $js = $javascript;
+}
+
+$javascript = includeJSFile('jquery') . includeJSFile('jquery.noconflict') . $js;
 
 $this->load->view('include/header', $data);
 $this->load->view('include/' . $navigation, $nav_data);
@@ -64,10 +72,7 @@ if(isset($view_name))
 echo '</div>';
 
 //Include Google Analytics for all pages and pass that along with any other JS file loaded into the footer
-if(isset($javascript))
-	$javascript .= includeJSFile('google_analytics');
-else
-	$javascript = includeJSFile('google_analytics');
+$javascript .= includeJSFile('google_analytics');
 
 $footer_data['javascript'] = $javascript;
 
