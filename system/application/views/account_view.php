@@ -2,7 +2,7 @@
 	/*
 		-needs to be secure- user, admin
 		This is the user account view. It contains a password change and a personal info update form.
-		It is called by the (user) dashboard controller
+		It is called by the (user) account controller
 	*/
 ?>
 <div id="account_forms">
@@ -11,7 +11,7 @@
 <div id="password_reset" class="account_form_container">
 <?php
 $this->load->helper('form'); 
-echo form_open('dashboard/password_reset'); 
+echo form_open('account/password_reset'); 
 ?>
 <fieldset>
 <legend id="password_label">Change Password</legend>
@@ -54,7 +54,7 @@ $button_data = array(
 <div id="personal_info" class="account_form_container">
 <?php
 $this->load->helper('form'); 
-echo form_open('dashboard/modify_user'); 
+echo form_open('account/modify_user'); 
 ?>
 <fieldset>
 <legend id="info_label">Personal Info</legend>

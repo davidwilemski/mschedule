@@ -67,15 +67,14 @@ class time_pref_model extends CI_Model {
 
 		$sum = 0;
 		foreach($days as $day) {
-		$num = 0;
+			$num = 0;
 			foreach($day as $d) {
-				error_log("DAY: " . $d);
 				$this_time = preg_split('/-/', $time[$num]);
 				$mean = ($check[$d][1] + $check[$d][0])/2;
 				$this_mean = ($this_time[1] + $this_time[0])/2;
 				$sum += sqrt(abs($mean-$this_mean));
-				$num++;
 			}
+			$num++;
 		}
 		return $sum;
 

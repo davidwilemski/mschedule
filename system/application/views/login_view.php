@@ -39,13 +39,12 @@ $button_data = array(
 
 <?php /* Setup Login/Logout Button */ ?>
 <?php
-$text = "";
-$url = "";
 if($this->session->userdata('userID')) {
 	$text = "Sign Out";
 	$url = "login/logout";
 } else {
 	$text = "Sign In";
+	$url = "";
 }
 echo anchor($url, $text, 'id="signin_button" class="gradient_button rounded_corners"');
 ?>

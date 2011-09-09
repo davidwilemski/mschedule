@@ -29,5 +29,6 @@
 	}
 	?>
 	</table>
+	<p><?=$schedule_id_string?></p>
 	<span id="put_schedule_here" value="<?=$schedule_id_string?>"><p>Loading</p></span>
 <? } else echo "<p>You have no schedule, yet.</p>"; ?>
