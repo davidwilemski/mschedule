@@ -48,6 +48,15 @@ p {
 	margin: 5px;
 }
 
+dl {
+	margin: 10px inherit;
+}
+
+dl dt {
+	float: left;
+	clear: left;
+}
+
 #body {
 	background:none repeat scroll 0 0 #fff;
 	margin:0 auto;
@@ -354,8 +363,9 @@ li.nav_item a {
 }
 
 div#account_forms {
-	margin: 0 auto;
-	width: 400px;
+	margin: 0;
+	width: 100%;
+	text-align: center;
 }
 
 div#account_forms fieldset {
@@ -370,9 +380,30 @@ div#account_forms legend {
 }
 
 div.account_form_container {
-	margin: 20px auto;
+	margin: 20px;
+	display: inline-block;
 }
 
+div.account_form_container legend {
+	text-align: left;
+}
+
+div#password_reset dl dd {
+	margin: 0 0 0 145px;
+}
+
+div#personal_info dl dd {
+	margin: 0 0 0 92px;
+}
+
+div.account_form_container dt {
+	font-size: 14px;
+	padding: 4px 0;
+}
+
+div.account_form_container .submit {
+	float: right;
+}
 
 /* Schedule List View */
 

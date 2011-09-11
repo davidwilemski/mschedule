@@ -5,9 +5,10 @@
 		It is called by the (user) account controller
 	*/
 ?>
-<div id="account_forms">
 <div id="announcement"><?=$this->session->flashdata('action')?></div>
 <div class="error"><?php echo validation_errors(); ?></div>
+
+<div id="account_forms">
 <div id="password_reset" class="account_form_container">
 <?php
 $this->load->helper('form'); 
@@ -34,14 +35,20 @@ $new_password2 = array(
 
 $button_data = array(
 	'name'	=> 'updatePassword',
-	'id'	=> 'submit',
 	'value'	=> 'Update Password',
-	'class'	=> 'button'
+	'class'	=> 'button submit'
 );
 ?>
-<p><label for="password">Current Password: </label><?=form_password($curr_password)?></p>
-<p><label for="new_password">New Password: </label><?=form_password($new_password)?></p>
-<p><label for="new_password2">Confirm Password: </label><?=form_password($new_password2)?></p>
+<dl>
+<dt>Current Password:</dt>
+<dd><?=form_password($curr_password)?></dd>
+
+<dt>New Password:</dt>
+<dd><?=form_password($new_password)?></dd>
+
+<dt>Confirm Password:</dt>
+<dd><?=form_password($new_password2)?></dd>
+</dl>
 
 <?php echo form_submit($button_data); ?>
 </div>
@@ -80,14 +87,21 @@ $last_name = array(
 
 $button_data = array(
 	'name'	=> 'updateData',
-	'id'	=> 'submit',
 	'value'	=> 'Update Information',
-	'class'	=> 'button'
+	'class'	=> 'button submit'
 );
 ?>
-<p><label for="password">First Name: </label><?=form_input($first_name)?></p>
-<p><label for="new_password">Last Name: </label><?=form_input($last_name)?></p>
-<p><label for="new_password2">Email: </label><?=form_input($email)?></p>
+
+<dl>
+<dt>First Name:</dt>
+<dd><?=form_password($curr_password)?></dd>
+
+<dt>Last Name:</dt>
+<dd><?=form_password($new_password)?></dd>
+
+<dt>Email:</dt>
+<dd><?=form_password($new_password2)?></dd>
+</dl>
 
 <?php echo form_submit($button_data); ?>
 </div>
