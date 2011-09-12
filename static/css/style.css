@@ -460,6 +460,8 @@ ul#schedule_master li a {
 div#schedule_detail {
 	float: right;
 	width: 710px;
+	height: 460px;
+	overflow: auto;
 }
 
 div.schedule {
