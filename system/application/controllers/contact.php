@@ -23,7 +23,8 @@ class Contact extends CI_Controller {
 			'view_name'	=> 'contact_view',
 			'navigation'=> "navigation",
 			'css'		=> includeCSSFile("style"),
-			'nav_data'	=> $this->nav_links_model->getNavBarLinks()
+			'nav_data'	=> $this->nav_links_model->getNavBarLinks(),
+			'nav_location' => 'contact'
 		);
 		
 		$this->load->view('include/template', $data);

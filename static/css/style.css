@@ -368,11 +368,15 @@ div#account_forms {
 	text-align: center;
 }
 
-div#account_forms fieldset {
+div#account_forms fieldset, div#contact_form fieldset {
 	border: none;
 }
 
-div#account_forms legend {
+div#contact_form fieldset {
+	padding: 10px 0;
+}
+
+div#account_forms legend, div#contact_form legend {
 	margin: 0;
 	padding: 5px 0;
 	border-bottom: solid 1px #000;
@@ -396,7 +400,11 @@ div#personal_info dl dd {
 	margin: 0 0 0 92px;
 }
 
-div.account_form_container dt {
+div#contact_form dl dd {
+	margin: 0 0 0 88px;
+}
+
+div.account_form_container dl dt, div#contact_form dl dt {
 	font-size: 14px;
 	padding: 4px 0;
 }

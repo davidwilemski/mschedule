@@ -4,6 +4,7 @@
 		Called by the contact controller
 	*/
 ?>
+<div id="contact_form">
 <?php 
 
 $this->load->helper('form');
@@ -44,11 +45,17 @@ $submit_data = array(
 );
 
 ?>
-
 <legend>Email Us</legend>
-<p><label for="name">Full Name: </label><?php echo form_input($name_data); ?></p>
-<p><label for="email">Email: </label><?php echo form_input($email_data); ?></p>
-<p><label for="email">Message: </label><?php echo form_textarea($message_data); ?></p>
+<dl>
+<dt>Full Name:</dt>
+<dd><?php echo form_input($name_data); ?></dd>
+
+<dt>Email:</dt>
+<dd><?php echo form_input($email_data); ?></dd>
+
+<dt>Message:</dt>
+<dd><?php echo form_textarea($message_data); ?></dd>
+</dl>
 
 <p><?php echo form_submit($submit_data); ?></p>
 
@@ -57,3 +64,4 @@ $submit_data = array(
 </fieldset>
 
 <?php echo form_close(); ?>
+</div>
