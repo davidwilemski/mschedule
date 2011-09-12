@@ -392,6 +392,11 @@ div.account_form_container legend {
 	text-align: left;
 }
 
+div#contact_form dl {
+	margin: 10px 0;
+}
+
+
 div#password_reset dl dd {
 	margin: 0 0 0 145px;
 }
