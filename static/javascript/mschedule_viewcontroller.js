@@ -57,11 +57,10 @@ function CourseScheduleView(courseSchedule) {
 		return scheduleElement;
 	};
 	
-	function createEmptyScheduleElem(theClass, pixels, borderPixels) {
-		var emptyBorderStyle = 'solid ' + borderPixels.toString() + 'px transparent';
+	function createEmptyScheduleElem(theClass, pixels) {
 		return $j('<li/>', {
 		'class' : theClass,
-		'style' : 'height:' + pixels.toString() + 'px;' + 'border-top:' + emptyBorderStyle + ';border-bottom:' + emptyBorderStyle + ';'
+		'style' : 'height:' + pixels.toString() + 'px;'
 		});
 	}
 	
@@ -75,7 +74,6 @@ function CourseScheduleView(courseSchedule) {
 			var section;
 			var courseSection = null;
 			var numPixels;
-			var numBorderPixels;
 			
 			if(dayArr.length) {
 				for(section = 0; section < dayArr.length; section++) {
@@ -84,14 +82,12 @@ function CourseScheduleView(courseSchedule) {
 						prevHourDiff = diffTimes(dayArr[section].startTime, courseSection.endTime);
 						if(prevHourDiff) {
 							numPixels = Math.ceil(pixelsPerHour * prevHourDiff);
-							numBorderPixels = Math.ceil(borderPixelsPerHour * prevHourDiff);
-							dayListElement.append(createEmptyScheduleElem('day_break', numPixels, numBorderPixels));
+							dayListElement.append(createEmptyScheduleElem('day_break', numPixels));
 						}
 					}
 					else if((prevHourDiff = diffTimes(dayArr[section].startTime, this.courseSchedule.baseHour)) > 0) {
 						numPixels = Math.ceil(pixelsPerHour * prevHourDiff);
-						numBorderPixels = Math.ceil(borderPixelsPerHour * prevHourDiff);
-						dayListElement.append(createEmptyScheduleElem('day_empty', numPixels, numBorderPixels));
+						dayListElement.append(createEmptyScheduleElem('day_empty', numPixels));
 					}
 					
 					courseSection = dayArr[section];
@@ -100,11 +96,12 @@ function CourseScheduleView(courseSchedule) {
 					var courseTitle = $j('<h1/>', {text : courseSection.dept + ' ' + courseSection.number + '-' + courseSection.section});
 					var coursePlace = $j('<h2/>', {text : courseSection.getPlace()});
 					var courseTime = $j('<h3/>', {text : courseSection.getTimes()});
-					dayListElement.append($j('<li/>', {'style' : 'height:' + numPixels + 'px;'}).append(courseTitle).append(coursePlace).append(courseTime));
+					var courseItemDiv = $j('<div/>', {'style' : 'height:' + (numPixels - 2).toString() + 'px;'}).append(courseTitle).append(coursePlace).append(courseTime);
+					dayListElement.append($j('<li/>', {'style' : 'height:' + numPixels.toString() + 'px;'}).append(courseItemDiv));
 				}
 			}
 			else {
-				dayListElement.append(createEmptyScheduleElem('day_empty', 1, 1));
+				dayListElement.append(createEmptyScheduleElem('day_empty', 1));
 			}
 			
 			var weekListItemElement = $j('<li/>');

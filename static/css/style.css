@@ -495,13 +495,18 @@ ul.schedule_day {
 }
 
 ul.schedule_day li {
+	padding: 0;
+	width: 140px;
+}
+
+ul.schedule_day li div {
 	background-color: lime;
 	padding: 0 5px;
 	width: 130px;
 	border: solid 1px #AAA;
 }
 
-ul.schedule_day li h1 {
+ul.schedule_day li div h1 {
 	font-size: 15px;
     text-align: center;
     font-weight: 600;
@@ -511,7 +516,7 @@ ul.schedule_day li h1 {
     margin: 4px 0;
 }
 
-ul.schedule_day li h2 {
+ul.schedule_day li div h2 {
 	font-size: 14px;
     text-align: center;
     font-weight: 200;
@@ -519,7 +524,7 @@ ul.schedule_day li h2 {
     padding: 0;
 }
 
-ul.schedule_day li h3 {
+ul.schedule_day li div h3 {
 	font-size: 14px;
     text-align: center;
     font-weight: 200;
