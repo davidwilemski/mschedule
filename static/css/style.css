@@ -431,6 +431,8 @@ ul#schedule_master {
     list-style: none outside none;
     margin: 0;
     padding: 0;
+    overflow: hidden;
+    height: 450px;
 }
 ul#schedule_master li {
 	margin: 0 0 0 10px;
