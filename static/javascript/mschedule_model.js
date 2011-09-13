@@ -112,9 +112,9 @@ function CourseSection(jsonObj) {
 	};
 	
 	function formatTime(time) {
-		var hours = parseInt(time, 10);
-		var minutes = hours % 100;
-		hours /= 100.0;
+	 	var time = parseInt(time, 10);
+		var hours = Math.floor(time / 100);
+		var minutes = time % 100;
 		var minuteStr = minutes.toString();
 		if(minutes < 10) {
 			minuteStr += '0';
@@ -128,13 +128,13 @@ function CourseSection(jsonObj) {
 			hours -= 12;
 		}
 		
-		return Math.floor(hours).toString() + ':' + minuteStr + ampm;
+		return hours.toString() + ':' + minuteStr + ampm;
 	}
 	
 	var cachedTimeStr = '';
 	
 	this.getTimes = function() {
-		if(!cachedTimeStr) {
+		if(!cachedTimeStr.length) {
 			var timeStr = '';
 			if(!this.startTime && !this.endTime) {
 				timeStr = 'TBD';
