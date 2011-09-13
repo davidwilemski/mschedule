@@ -39,7 +39,6 @@ class scheduler extends CI_Controller {
 		$data = array(
 			'view_name'	=> 'mschedule_view',
 			'navigation'=> "navigation",
-			'css'		=> includeCSSFile("style") . includeCSSFile("scheduler") . includeCSSFile("jquery.bubblepopup.v2.3.1"),
 			'javascript'=> includeJSFile('jquery.effects') . includeJSFile('jquery.scrollTo') . includeJSFile('mschedule_model') . includeJSFile('mschedule_viewcontroller') . includeJSFile('mschedule'),
 			'nav_data'	=> $this->nav_links_model->getNavBarLinks(),
 			'nav_location' => 'scheduler'

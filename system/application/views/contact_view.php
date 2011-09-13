@@ -39,9 +39,8 @@ $message_data = array(
 
 $submit_data = array(
 	'name'	=> 'sumbit',
-	'id'	=> 'submit_button',
 	'value'	=> 'Submit',
-	'class'	=> 'button'
+	'class'	=> 'submit button'
 );
 
 ?>

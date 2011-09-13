@@ -39,7 +39,6 @@ class account extends CI_Controller {
 		$data = array(
 			'view_name'	=> 'account_view',
 			'navigation'=> "navigation",
-			'css'		=> includeCSSFile("style"),
 			'nav_data'	=> $this->nav_links_model->getNavBarLinks(),
 			'nav_location' => 'account'
 		);

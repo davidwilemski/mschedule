@@ -27,7 +27,12 @@
 ?>
 <?php
 
-$css = includeCSSFile('reset') . $css;
+$specific_css = '';
+if (isset($css)) {
+    $specific_css = $css;
+}
+
+$css = includeCSSFile('reset') . includeCSSFile('style') . $specific_css;
 $data['css'] = $css;
 $ad = 'static/ads/google_ad_120_234.php';
 

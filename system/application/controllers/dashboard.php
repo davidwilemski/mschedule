@@ -36,7 +36,6 @@ class dashboard extends CI_Controller {
 		$data = array(
 			'view_name'	=> 'dashboard_view',
 			'navigation'=> "navigation",
-			'css'		=> includeCSSFile("style"),
 			'nav_data'	=> $this->nav_links_model->getNavBarLinks(),
 			'nav_location' => 'dashboard'
 		);

@@ -17,15 +17,13 @@ class Home extends CI_Controller {
 		
 		$data = array(
 			'view_name' => "home_view",
-			'navigation'=> "navigation"
+            'navigation'=> "navigation",
+		    'css' => includeCSSFile('tipsy'), 
+		    'javascript' => includeJSFile('jquery.tipsy') . includeJSFile('signin'),
+		    'nav_data' => $this->nav_links_model->getNavBarLinks(),
+		    'page_data' => $this->static_pages_model->getPageContent($page)
 		);
 		
-		$data['css'] = includeCSSFile("style");
-		$data['css'] .= includeCSSFile('tipsy');
-		$data['javascript'] = includeJSFile('jquery.tipsy');
-		$data['javascript'] .= includeJSFile('signin');
-		$data['nav_data'] = $this->nav_links_model->getNavBarLinks();
-		$data['page_data'] = $this->static_pages_model->getPageContent($page);	
 		
 		$this->load->view('include/template', $data);
 		

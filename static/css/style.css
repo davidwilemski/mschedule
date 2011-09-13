@@ -414,7 +414,7 @@ div.account_form_container dl dt, div#contact_form dl dt {
 	padding: 4px 0;
 }
 
-div.account_form_container .submit {
+div.account_form_container .submit, div#contact_form .submit {
 	float: right;
 }
 
