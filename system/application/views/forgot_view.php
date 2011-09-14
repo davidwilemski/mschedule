@@ -10,6 +10,7 @@ if($this->session->flashdata('resent')) { ?>
 <div class="error"><?=$this->session->flashdata('resent')?></div>
 <?php }
 ?>
+<div id="forgot_form">
 <?=form_open('login/forgot')?>
 <fieldset>
 <legend>Forgot Password</legend>
@@ -23,14 +24,13 @@ $email = array(
 
 $button_data = array(
 	'name'	=> 'forgot',
-	'id'	=> 'submit',
-	'content'	=> 'Recover',
-	'class'	=> 'button'
+	'value'	=> 'Recover',
+	'class'	=> 'submit button'
 );
 
 ?>
 
-<p><label for="username">Email: </label><?php echo form_input($email); ?></p>
+<label for="username">Email: </label><?php echo form_input($email); ?>
 
 <?php echo form_submit($button_data); ?>
 
@@ -39,3 +39,4 @@ $button_data = array(
 </fieldset>
 
 <?php echo form_close(); ?>
+</div>
