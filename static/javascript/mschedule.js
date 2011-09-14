@@ -248,7 +248,9 @@ $j(document).ready(function() {
 						animateForwardShift(curStep, function() {
 							scheduleViewerDiv.show(flowDuration, flowEasing, function() {
 								$jthis.html('Save Selected Schedules');
-								$jthis.removeClass('button_disabled');
+								if (scheduleViewerDiv.ScheduleListViewer('hasSchedules')) {
+									$jthis.removeClass('button_disabled');
+								}
 								
 								backButton.html(backwardUnicodeEntity + ' Back');
 								backButton.removeClass('button_disabled');
