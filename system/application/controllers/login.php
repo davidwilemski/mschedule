@@ -129,7 +129,6 @@ class login extends CI_Controller {
 			'view_name'	=> 'register_view',
 			'ad'		=> 'static/ads/google_ad_120_234.php',
 			'navigation'=> "navigation",
-			'css'		=> includeCSSFile("style"),
 			'nav_data'	=> $this->nav_links_model->getNavBarLinks()
 		);
 		
@@ -225,7 +224,6 @@ class login extends CI_Controller {
 			'view_name'	=> 'activate_view',
 			'ad'		=> 'static/ads/google_ad_120_234.php',
 			'navigation'=> "navigation",
-			'css'		=> includeCSSFile("style"),
 			'nav_data'	=> $this->nav_links_model->getNavBarLinks()
 		);
 		
@@ -267,7 +265,6 @@ class login extends CI_Controller {
 			'view_name'	=> 'forgot_view',
 			'ad'		=> 'static/ads/google_ad_120_234.php',
 			'navigation'=> "navigation",
-			'css'		=> includeCSSFile("style"),
 			'nav_data'	=> $this->nav_links_model->getNavBarLinks()
 		);
 		
@@ -325,7 +322,6 @@ class login extends CI_Controller {
 			'view_name'	=> 'password_reset_view',
 			'ad'		=> 'static/ads/google_ad_120_234.php',
 			'navigation'=> "navigation",
-			'css'		=> includeCSSFile("style"),
 			'nav_data'	=> $this->nav_links_model->getNavBarLinks()
 		);
 		

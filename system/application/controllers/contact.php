@@ -22,7 +22,6 @@ class Contact extends CI_Controller {
 		$data = array(
 			'view_name'	=> 'contact_view',
 			'navigation'=> "navigation",
-			'css'		=> includeCSSFile("style"),
 			'nav_data'	=> $this->nav_links_model->getNavBarLinks(),
 			'nav_location' => 'contact'
 		);
@@ -69,7 +68,6 @@ class Contact extends CI_Controller {
 					'view_name'	=> 'home_view',
 					'ad'		=> 'static/ads/google_ad_120_234.php',
 					'navigation'=> "navigation",
-					'css'		=> includeCSSFile("style"),
 					'nav_data'	=> $this->nav_links_model->getNavBarLinks(),
 					'page_data'	=> $this->static_pages_model->getPageContent('msgconfirm')
 				);
@@ -82,7 +80,6 @@ class Contact extends CI_Controller {
 					'view_name'	=> 'contact_view',
 					'ad'		=> 'static/ads/google_ad_120_234.php',
 					'navigation'=> "navigation",
-					'css'		=> includeCSSFile("style"),
 					'nav_data'	=> $this->nav_links_model->getNavBarLinks(),
 					'page_data'	=> $this->static_pages_model->getPageContent('msgerror')
 				);
