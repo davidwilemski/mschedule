@@ -77,6 +77,7 @@ if(isset($view_name))
 echo '</div>';
 
 if (!$this->session->userdata('userID')) {
+	$javascript .= includeJSFile('jquery.placeholder');
 	$javascript .= includeJSFile('signin');
 }
 

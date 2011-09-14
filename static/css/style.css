@@ -152,16 +152,7 @@ a#signin_button {
 }
 
 #signin_menu {
-	-moz-border-radius: 5px 0px 5px 5px;
-	-webkit-border-radius: 5px 0px 5px 5px;
-	-khtml-border-radius: 5px 0px 5px 5px;
-	behavior: url("border-radius.htc");
-	border-radius: 5px 0px 5px 5px;
-	display:none;
-	background-color:#39608f;
-	border:5px solid #FFCE34;
-	position:absolute;
-	width:230px;
+	width: 417px;
 	z-index:100;
 	text-align:left;
 	padding:5px;
@@ -170,55 +161,69 @@ a#signin_button {
 	margin-top:5px;
 	color:#fff;
 	font-size:11px;
-	right: 20px;
-	top: 46px;
+	float: right;
+	margin-top: 50px;
 }
 
 #signin_menu fieldset {
 	border: none;
-	padding: 5px 8px;
+	padding: 0;
 	margin: 0;
+}
+
+#signin_menu input {
+	float: left;
+	
 }
 
 #signin_menu input[type=text], #signin_menu input[type=password] {
 	display:block;
 	border:1px solid #ACE;
 	font-size:13px;
-	margin:0 0 5px;
+	width: 150px;
+	margin-right: 10px;
 	padding:5px;
-	width:203px;
+	height: 15px;
 }
+
 #signin_menu p {
-	margin:5px 10px;
+	margin:5px 0 0;
 }
-#signin_menu a {
-	color:#6AC;
-}
+
 #signin_menu label {
 	font-weight:normal;
 }
+
 #signin_menu p.remember {
 	padding:10px 0;
 }
+
 #signin_menu p.forgot {
 	clear:both;
 }
+
 #signin_menu p a {
 	color:#fff !important;
 }
+
 #signin_submit {
 	background-color: #FFCE34;
 	border: none;
 	color:#333;
-	padding:4px 10px 5px;
-	font-size:11px;
-	margin:0 5px 0 0;
+	padding: 7px 15px 8px;
+	font-size:12px;
+	margin: 0;
 	font-weight:lighter;
+	height: 11px;
+	font-weight: bold;
+	display: inline-block;
 }
+
 #signin_submit::-moz-focus-inner {
-padding:0;
-border:0;
+	padding:0;
+	border:0;
 }
+
 #signin_submit:hover, #signin_submit:focus {
 	cursor:pointer;
 }
