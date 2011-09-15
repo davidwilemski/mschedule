@@ -6,13 +6,6 @@
 ?>
 <div id="contact_form">
 <?php 
-
-$this->load->helper('form');
-
-echo form_open('contact/send_email');
-
-echo '<fieldset>';
-
 $name_data = array(
 	'name'	=> 'name',
 	'id'	=> 'name',
@@ -42,9 +35,17 @@ $submit_data = array(
 	'value'	=> 'Submit',
 	'class'	=> 'submit button'
 );
-
+$this->load->helper('form');
 ?>
-<legend>Email Us</legend>
+<h2>About Us</h2>
+<p>Mschedule is a free service that helps students create schedules for the University of Michigan. Using the login system, users are also able to share schedules with each other and see what other students are in your class (if they decide to share their schedules as well).</p>
+<p>More to come...</p>
+<p>Maintained by Bryan Kendall, David Wilemski, Tom Bombach, Ben Asher, and Jake Schwartz.</p>
+<hr/>
+<h2>Contact Us</h2>
+<p>If you would like to contact us, please use the form below. We read every email, but may not have time to get back to you right away.</p>
+<?=form_open('about/send_email')?>
+<fieldset>
 <dl>
 <dt>Full Name:</dt>
 <dd><?php echo form_input($name_data); ?></dd>
