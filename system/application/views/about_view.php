@@ -41,6 +41,7 @@ $this->load->helper('form');
 <p>Mschedule is a free service that helps students create schedules for the University of Michigan. Using the login system, users are also able to share schedules with each other and see what other students are in your class (if they decide to share their schedules as well).</p>
 <p>More to come...</p>
 <p>Maintained by Bryan Kendall, David Wilemski, Tom Bombach, Ben Asher, and Jake Schwartz.</p>
+<p>Design by Paul Provenza.</p>
 <hr/>
 <h2>Contact Us</h2>
 <p>If you would like to contact us, please use the form below. We read every email, but may not have time to get back to you right away.</p>

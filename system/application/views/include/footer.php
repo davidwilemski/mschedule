@@ -7,9 +7,8 @@
 ?>
 <div id="footer">
 	<div id="footer_content">
-		<p>For support, mschedule issues, free coffee, or mediocre advice, email webmaster [at] mschedule [dot] com.</p>
-		<p>Maintained by Bryan Kendall, David Wilemski, Tom Bombach, Ben Asher, and Jake Schwartz. &copy; Copyright <?php echo date('Y'); ?>.</p>
-		<p>Design by Paul Provenza.</p>
+		<p>For support, mschedule issues, free coffee, or mediocre advice, please <?=anchor('about', 'contact us')?>.</p>
+		<p>&copy; Copyright <?php echo date('Y'); ?>.</p>
 	</div>
 </div>
 
