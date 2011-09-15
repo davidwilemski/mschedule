@@ -41,7 +41,7 @@ class Dashboard extends CI_Controller {
 		$data = array(
 			'view_name'	=> 'admin/dashboard_view',
 			'navigation'=> "navigation",
-			'css'		=> includeCSSFile("style") . includeCSSFile("admin_dashboard"),
+			'css'		=> includeCSSFile("admin_dashboard"),
 			'nav_data'	=> $this->nav_links_model->getNavBarLinks()
 		);
 		

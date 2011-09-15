@@ -15,7 +15,6 @@ function scrollbarWidth() {
 }
 
 function diffTimes(greater, lesser) {
-	console.log('---- START -----');
 	if(typeof greater === 'string') {
 		greater = parseInt(greater, 10);
 		if(isNaN(greater)) {
@@ -29,9 +28,6 @@ function diffTimes(greater, lesser) {
 		}
 	}
 	
-	console.log(greater);
-	console.log(lesser);
-	
 	greater /= 100.0;
 	lesser /= 100.0;
 	if(greater % 1.0 > 0.0) {
@@ -41,9 +37,6 @@ function diffTimes(greater, lesser) {
 		lesser = Math.floor(lesser) + 0.5;
 	}
 	
-	console.log(greater);
-	console.log(lesser);
-	console.log('---- END -----');
 	return (greater - lesser);
 }
 
@@ -422,7 +415,7 @@ var checkMarkSymbolEntity = '&#10004;';
 		init : function(scheduleList) {
 			var $jthis = $j(this);
 			return $jthis.each(function() {
-				if(scheduleList === undefined || !scheduleList.size()) {
+				if(scheduleList === undefined) {
 					$j.error('ScheduleListViewer: jQuery.ScheduleListViewer requires a valid scheduleList argument');
 					return $jthis;
 				}
@@ -443,46 +436,64 @@ var checkMarkSymbolEntity = '&#10004;';
 		
 		setScheduleList : function(scheduleList) {
 			var $jthis = $j(this);
-			if(scheduleList === undefined || !scheduleList.size()) {
+			if(scheduleList === undefined) {
 				$j.error('ScheduleListViewer: jQuery.ScheduleListViewer requires a valid scheduleList argument');
 				return $jthis;
 			}
 			
-			var data = $jthis.data('ScheduleListViewer');
-			if($j.isEmptyObject(data)) {
-				$j.error('ScheduleListViewer: jQuery.ScheduleListViewer was not initialized');
+			if(scheduleList.size()) {		
+				var data = $jthis.data('ScheduleListViewer');
+				if($j.isEmptyObject(data)) {
+					$j.error('ScheduleListViewer: jQuery.ScheduleListViewer was not initialized');
+					return $jthis;
+				}
+				
+				$jthis.text('');
+				$jthis.css('text-align', '');
+				$jthis.css('font-size', '');
+				$jthis.css('color', '');
+				$jthis.css('height', '');
+				$jthis.css('line-height', '');
+				
+				data.scheduleViewManager = new CourseScheduleViewManager(scheduleList);
+				data.scheduleDetailContainer.html('')
+				data.scheduleMasterContainer.html('');
+				
+				var i;
+				var scheduleListSize = scheduleList.size();
+				var schedule;
+				for(i = 0; i < scheduleListSize; i++) {
+					schedule = scheduleList.getSchedule(i);
+					data.scheduleMasterContainer.append($j('<li/>', {text : 'Schedule ' + i.toString()}).prepend($j('<a/>', {'href' : '#' + schedule.scheduleId})));
+				}
+				
+				data.scheduleMasterContainer.find('li a').click(function() {
+					if($j(this).html().trim()) {
+						$j(this).html('');
+					}
+					else {
+						$j(this).html(checkMarkSymbolEntity);
+					}
+					$j(this).toggleClass('schedule_on');
+					$jthis.ScheduleListViewer('toggleScheduleView', $j(this).attr('href').replace('#',''));
+					return false;
+				});
+				
+				$jthis.append(data.scheduleDetailContainer);
+				$jthis.append(data.scheduleMasterContainer);
+				
+				data.scheduleMasterContainer.find('li a:first').toggleClass('schedule_on').html(checkMarkSymbolEntity);
+				return $jthis.ScheduleListViewer('toggleScheduleView', scheduleList.getSchedule(0).scheduleId);
+			}
+			else {
+				$jthis.text("Sorry. There aren't any schedules that match your course list.");
+				$jthis.css('text-align', 'center');
+				$jthis.css('font-size', '25px');
+				$jthis.css('color', '#777');
+				$jthis.css('height', '450px');
+				$jthis.css('line-height', '450px');
 				return $jthis;
 			}
-			
-			data.scheduleViewManager = new CourseScheduleViewManager(scheduleList);
-			data.scheduleDetailContainer.html('')
-			data.scheduleMasterContainer.html('');
-			
-			var i;
-			var scheduleListSize = scheduleList.size();
-			var schedule;
-			for(i = 0; i < scheduleListSize; i++) {
-				schedule = scheduleList.getSchedule(i);
-				data.scheduleMasterContainer.append($j('<li/>', {text : 'Schedule ' + i.toString()}).prepend($j('<a/>', {'href' : '#' + schedule.scheduleId})));
-			}
-			
-			data.scheduleMasterContainer.find('li a').click(function() {
-				if($j(this).html().trim()) {
-					$j(this).html('');
-				}
-				else {
-					$j(this).html(checkMarkSymbolEntity);
-				}
-				$j(this).toggleClass('schedule_on');
-				$jthis.ScheduleListViewer('toggleScheduleView', $j(this).attr('href').replace('#',''));
-				return false;
-			});
-			
-			$jthis.append(data.scheduleDetailContainer);
-			$jthis.append(data.scheduleMasterContainer);
-			
-			data.scheduleMasterContainer.find('li a:first').toggleClass('schedule_on').html(checkMarkSymbolEntity);
-			return $jthis.ScheduleListViewer('toggleScheduleView', scheduleList.getSchedule(0).scheduleId);
 		},
 		
 		toggleScheduleView : function(id) {
@@ -534,6 +545,17 @@ var checkMarkSymbolEntity = '&#10004;';
 				data.scheduleDetailContainer.html('');
 				data.scheduleDetailContainer.append(newScheduleView.getElement());
 			}
+		},
+		
+		hasSchedules : function() {
+			var $jthis = $j(this);
+			var data = $j(this).data('ScheduleListViewer');
+			if($j.isEmptyObject(data)) {
+				$j.error('ScheduleListViewer: jQuery.ScheduleListViewer was not initialized');
+				return $jthis;
+			}
+			
+			return (!$j.isEmptyObject(data.scheduleViewManager) && data.scheduleViewManager.size() > 0);
 		}
 	};
 		

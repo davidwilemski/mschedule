@@ -66,6 +66,11 @@ if(isset($view_name))
 
 echo '</div>';
 
+if (!$this->session->userdata('userID')) {
+	$javascript .= includeJSFile('jquery.placeholder');
+	$javascript .= includeJSFile('signin');
+}
+
 //Include Google Analytics for all pages and pass that along with any other JS file loaded into the footer
 $javascript .= includeJSFile('google_analytics');
 

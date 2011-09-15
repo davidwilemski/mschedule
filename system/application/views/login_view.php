@@ -14,6 +14,7 @@ $username_data = array(
 	'name'	=> 'username',
 	'id'	=> 'username',
 	'title' => 'username',
+	'placeholder' => 'Username or Email',
 	'tabindex' => '4',
 	'class' => 'rounded_corners_small',
 	'value'	=> set_value('username')
@@ -23,30 +24,24 @@ $password_data = array(
 	'name'	=> 'password',
 	'id'	=> 'password',
 	'title' => 'password',
+	'placeholder' => 'Password',
 	'tabindex' => '5',
 	'class' => 'rounded_corners_small'
 );
 
-$button_data = array(
+$hidden_submit_data = array(
 	'name'	=> 'login',
-	'id'	=> 'signin_submit',
-	'value'	=> 'Sign in',
-	'tabindex' => '6',
-	'class'	=> 'rounded_corners_small'
+	'value'	=> 'Sign in'
 );
 
 ?>
 
 <?php /* Setup Login/Logout Button */ ?>
+
 <?php
 if($this->session->userdata('userID')) {
-	$text = "Sign Out";
-	$url = "login/logout";
-} else {
-	$text = "Sign In";
-	$url = "";
+	echo anchor("login/logout", "Sign Out", 'id="signin_button" class="gradient_button rounded_corners"');
 }
-echo anchor($url, $text, 'id="signin_button" class="gradient_button rounded_corners"');
 ?>
 
 <?php /* Setup Login Form (if we're not logged in) */ ?>
@@ -54,9 +49,7 @@ echo anchor($url, $text, 'id="signin_button" class="gradient_button rounded_corn
 <div id="signin_menu">
 	<?=form_open('login')?>
 		<fieldset>
-			<label for="username">Username or email</label>
 			<?=form_input($username_data)?>
-			<label for="password">Password</label>
 			<?=form_password($password_data)?>
 			<?php
 			if($this->session->flashdata('flashRedirect')) {
@@ -66,11 +59,12 @@ echo anchor($url, $text, 'id="signin_button" class="gradient_button rounded_corn
 			}
 			if($this->session->flashdata('flashError')) {}
 			?>
-			<?=form_submit($button_data)?>
+			<?=form_hidden($hidden_submit_data)?>
+
+			<a href="#" id="signin_submit" tabindex="6" class="gradient_button rounded_corners_small">Sign In</a>
 		</fieldset>
 	<?=form_close()?>
-	<p class="forgot"> <?=anchor('login/forgot', 'Forgot Your Password?', 'id="resend_password_link"')?></p>
-	<p class="forgot-username"> <?=anchor('login/forgot', 'Forgot Your Username?', 'id="forgot_username_link" title="If you remember your password, try logging in with your uniqname"')?></p>
+	<p class="forgot"> <?=anchor('login/forgot', 'Forgot your username or password?', 'id="forgot_username_link" title="If you remember your password, then try logging in with your uniqname."')?></p>
 	<div class="error"><?php echo validation_errors(); ?></div>
 </div>
 <?php } ?>

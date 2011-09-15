@@ -19,7 +19,7 @@ class Home extends CI_Controller {
 			'view_name' => "home_view",
             'navigation'=> "navigation",
 		    'css' => includeCSSFile('tipsy'), 
-		    'javascript' => includeJSFile('jquery.tipsy') . includeJSFile('signin'),
+		    'javascript' => includeJSFile('jquery.tipsy'),
 		    'nav_data' => $this->nav_links_model->getNavBarLinks(),
 		    'page_data' => $this->static_pages_model->getPageContent($page),
 		    'nav_location' => 'home'

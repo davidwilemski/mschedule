@@ -1,4 +1,4 @@
-<?php
+f<?php
 	/*
 		This controller is for working with a user's class information.
 		import() - loads view for importing classes by classID
@@ -99,7 +99,6 @@ class Classes extends CI_Controller {
 		$data = array(
 			'view_name'	=> 'class/import_view',
 			'navigation'=> "navigation",
-			'css'		=> includeCSSFile("style"),
 			'javascript'=> includeJSFile('jquery') . includeJSFile('class_view'),
 			'nav_data'	=> $this->nav_links_model->getNavBarLinks(),
 			'page_data' => array('user_classes' => $user_classes, 'curr_schedule' => $user_curr_schedule_id)

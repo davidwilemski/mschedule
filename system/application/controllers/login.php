@@ -128,7 +128,6 @@ class login extends CI_Controller {
 		$data = array(
 			'view_name'	=> 'register_view',
 			'navigation'=> "navigation",
-			'css'		=> includeCSSFile("style"),
 			'nav_data'	=> $this->nav_links_model->getNavBarLinks()
 		);
 		
@@ -223,7 +222,6 @@ class login extends CI_Controller {
 		$data = array(
 			'view_name'	=> 'activate_view',
 			'navigation'=> "navigation",
-			'css'		=> includeCSSFile("style"),
 			'nav_data'	=> $this->nav_links_model->getNavBarLinks()
 		);
 		
@@ -264,7 +262,6 @@ class login extends CI_Controller {
 		$data = array(
 			'view_name'	=> 'forgot_view',
 			'navigation'=> "navigation",
-			'css'		=> includeCSSFile("style"),
 			'nav_data'	=> $this->nav_links_model->getNavBarLinks()
 		);
 		
@@ -321,7 +318,6 @@ class login extends CI_Controller {
 		$data = array(
 			'view_name'	=> 'password_reset_view',
 			'navigation'=> "navigation",
-			'css'		=> includeCSSFile("style"),
 			'nav_data'	=> $this->nav_links_model->getNavBarLinks()
 		);
 		
