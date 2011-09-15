@@ -34,7 +34,6 @@ if (isset($css)) {
 
 $css = includeCSSFile('reset') . includeCSSFile('style') . $specific_css;
 $data['css'] = $css;
-$ad = 'static/ads/google_ad_120_234.php';
 
 $js = '';
 if (isset($javascript)) {
@@ -50,15 +49,6 @@ if($this->user_model->Secure(array('userType'=>'admin'))) {
 }
 
 echo '<div id="body_pane">';
-
-if(isset($ad))
-{
-	echo '<div id="vertical_ad">';
-	include($ad);
-	echo '</div>';
-}
-
-
 
 if(isset($view_name)) 
 {

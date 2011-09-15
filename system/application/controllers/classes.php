@@ -37,7 +37,6 @@ class Classes extends CI_Controller {
 		
 		$data = array(
 			'view_name'	=> 'class/class_view',
-			'ad'		=> 'static/ads/google_ad_120_234.php',
 			'navigation'=> "navigation",
 			'nav_data'	=> $this->nav_links_model->getNavBarLinks(),
 			'page_data'	=> array('user_classes' => $classes),
@@ -99,7 +98,6 @@ class Classes extends CI_Controller {
 	
 		$data = array(
 			'view_name'	=> 'class/import_view',
-			'ad'		=> 'static/ads/google_ad_120_234.php',
 			'navigation'=> "navigation",
 			'css'		=> includeCSSFile("style"),
 			'javascript'=> includeJSFile('jquery') . includeJSFile('class_view'),
