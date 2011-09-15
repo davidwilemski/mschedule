@@ -20,7 +20,7 @@ class About extends CI_Controller {
 			'navigation'=> "navigation",
 			'css'		=> includeCSSFile("style"),
 			'nav_data'	=> $this->nav_links_model->getNavBarLinks(),
-			'nav_location' => 'contact'
+			'nav_location' => 'about us'
 		);
 		
 		$this->load->view('include/template', $data);
