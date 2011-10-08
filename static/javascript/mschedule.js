@@ -1,4 +1,4 @@
-/* Requires jQuery, jQueryUI Effects Core, mschedule_viewcontroller.js, and mschedule_model.js */
+/* Requires jQuery, jQueryUI Effects Core, mschedule_viewcontroller.js, mschedule_model.js, and mschedule_utils.js */
 
 $j(document).ready(function() {
 	

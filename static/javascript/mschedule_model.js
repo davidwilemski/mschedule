@@ -1,4 +1,4 @@
-/* Requires jQuery */
+/* Requires jQuery and mschedule_utils.js */
 
 function FlexiStack() {
 	var arr = [];

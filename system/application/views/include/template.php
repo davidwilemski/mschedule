@@ -41,7 +41,7 @@ if (isset($javascript)) {
     $js = $javascript;
 }
 
-$javascript = includeJSFile('jquery') . includeJSFile('jquery.noconflict') . $js;
+$javascript = includeJSFile('jquery') . includeJSFile('jquery.noconflict') . includeJSFile('mschedule_utils') . $js;
 
 $this->load->view('include/header', $data);
 $this->load->view('include/' . $navigation, $nav_data);
