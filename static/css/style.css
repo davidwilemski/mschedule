@@ -95,7 +95,10 @@ input[type=search] {
 	background-repeat: no-repeat;
 	background-position: 6px 3px;
     border: 1px solid #A6A6A6;
-    border-radius: 10px 10px 10px 10px;
+    -moz-border-radius: 10px;
+	-khtml-border-radius: 10px;
+	behavior: url("border-radius.htc");
+    border-radius: 10px;
     box-shadow: 0 1px 1px #D6D6D6 inset;
     height: 16px;
 	padding: 1px 18px 1px 22px;
@@ -601,17 +604,36 @@ div#schedule_picker_container h1.heading {
 
 div#schedule_picker_div {
 	position: relative;
+	overflow: hidden;
+	height: 100%;
+	width:100%;
+}
+
+div#schedule_picker_div div.slide_container {
+	position: relative;
+	overflow: hidden;
+	width: 94%;
+	height: 100%;
+}
+
+div#schedule_picker_div div.slide_container div.slider {
+	position: absolute;
+	top: 0;
+	height: 100%;
+	width: 100%;
+	overflow-x: hidden;
+	overflow-y: auto;
 }
 
 ul.schedule_item_list {
 	list-style: none;
 	padding: 0;
-	margin: 0;
+	margin: 5px;
 }
 
 
 ul.schedule_item_list li {
-    margin: 0 7px 10px;
+    margin: 0 0 10px;
     padding: 2px;
     position: relative;
     width: 100%;
@@ -630,7 +652,7 @@ ul.schedule_item_list li a {
 
 ul.schedule_item_list li h1 {
 	font-size: 18px;
-    margin: 5px 10px;
+    margin: 5px 0;
     padding: 0;
     text-align: left;
     line-height: 10px;
@@ -638,7 +660,7 @@ ul.schedule_item_list li h1 {
 }
 
 ul.schedule_item_list li p {
-	margin: 5px 10px 0;
+	margin: 5px 0 0;
     padding: 0;
     font-size: 16px;
 }
@@ -647,6 +669,7 @@ ul.schedule_item_list_breadcrumbs {
 	list-style: none;
 	margin: 0;
 	padding: 0;
+	height: 20px;
 }
 
 ul.schedule_item_list_breadcrumbs li {
@@ -659,40 +682,26 @@ ul.schedule_item_list_breadcrumbs li a {
 	
 }
 
-ul.schedule_item_list_scrollList {
+ul.schedule_item_list_jumpList {
 	list-style: none;
 	margin: 5px 0 0 0;
 	padding: 0;
+	width: 6%;
+	height: 100%;
+	float: left;
 }
 
-ul.schedule_item_list_scrollList li {
+ul.schedule_item_list_jumpList li {
 	margin: 0;
 	padding: 0;
 }
 
-ul.schedule_item_list_scrollList li a {
+ul.schedule_item_list_jumpList li a {
 	margin: 0;
 	padding: 0;
 	font-size: 14px;
 	color: black;
 }
-
-ul.schedule_item_list_scrollList li a:link {
-	color: black;
-}
-
-ul.schedule_item_list_scrollList li a:visited {
-	color: black;
-}
-
-ul.schedule_item_list_scrollList li a:hover {
-	color: black;
-}
-
-ul.schedule_item_list_scrollList li a:active {
-	color: black;
-}
-
 
 /* Course List */
 
