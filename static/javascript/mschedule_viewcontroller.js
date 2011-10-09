@@ -201,19 +201,26 @@ function ScheduleItemListView(items, breadCrumbText, aClass, aHTML) {
 					$jthis.data('ScheduleItemPicker', data);
 				}
 				
+				data.onScreen.css('left', 0);
+				data.offScreen.css('left', '100%');
+				
 				if (!MScheduleUtils.browserIsWebkit()) {
 					MScheduleUtils.preloadImage('search-x.png');
 				}
 				
-				data.onScreen.css('left', 0);
-				data.offScreen.css('left', '100%');
+				var upperDiv = $j('<div/>', {'class' : 'upper'});
+				var lowerDiv = $j('<div/>', {'class' : 'lower'});
 				
-				$jthis.append($j('<div/>', {'style' : 'position:relative;'}).append(data.searchBox));
-				$jthis.append(data.breadCrumbs);
-				$jthis.append(data.jumpList);
-				$jthis.append(data.slideContainer);
+				upperDiv.append($j('<div/>', {'style' : 'position:relative;'}).append(data.searchBox));
+				upperDiv.append(data.breadCrumbs);
+				
+				lowerDiv.append(data.jumpList);
 				data.slideContainer.append(data.onScreen);
 				data.slideContainer.append(data.offScreen);
+				lowerDiv.append(data.slideContainer);
+				
+				$jthis.append(upperDiv);
+				$jthis.append(lowerDiv);
 				
 				var scrollToOptions = {
 					duration : data.settings.duration,

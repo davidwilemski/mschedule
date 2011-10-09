@@ -7,6 +7,10 @@ a:active
 
 */
 
+html, body {
+	width: 100%;
+	height: 100%;
+}
 
 body {
 	background:none repeat scroll 0 0 #fff;
@@ -113,6 +117,7 @@ a.input_reset {
     width: 12px;
     top: 4px;
     left: 176px;
+    cursor: default;
 }
 
 .rounded_bottom_corners {
@@ -324,9 +329,8 @@ li.nav_item a {
 
 #content {
 	width:900px;
-	min-width:675px;
 	margin:0 auto;
-	min-height:550px;
+	height:550px;
 	padding:5px 0;
 	position: relative;
 	overflow: hidden;
@@ -453,6 +457,15 @@ div.account_form_container .submit, div#contact_form .submit {
 div#forgot_form .submit {
 	margin-left: 5px;
 }
+
+
+div#scheduler_scroller {
+	overflow: hidden;
+	width: 100%;
+	height: 85%;
+	margin-top: 15px;
+}
+
 
 /* Schedule List View */
 
@@ -588,11 +601,9 @@ ul.schedule_day li.day_break {
 /* Schedule Item Picker */
 
 div#schedule_picker_container {
-	height: 465px;
-	width: 415px;
-	position: absolute;
-	left: 20px;
-	top: 20px;
+	height: 100%;
+	width: 50%;
+	float: left;
 }
 
 div#schedule_picker_container h1.heading {
@@ -605,8 +616,18 @@ div#schedule_picker_container h1.heading {
 div#schedule_picker_div {
 	position: relative;
 	overflow: hidden;
-	height: 100%;
+	height: 90%;
 	width:100%;
+}
+
+div#schedule_picker_div div.upper {
+	width: 100%;
+	height: 10%;
+}
+
+div#schedule_picker_div div.lower {
+	width: 100%;
+	height: 90%;
 }
 
 div#schedule_picker_div div.slide_container {
@@ -706,12 +727,9 @@ ul.schedule_item_list_jumpList li a {
 /* Course List */
 
 div#course_list_container {
-	position: absolute;
-	left: 580px;
-	top: 20px;
-	margin: 0;
-	padding: 0;
-	width: 300px;
+	width: 50%;
+	height: 100%;
+	float: left;
 }
 
 div#course_list_container h1.heading {
