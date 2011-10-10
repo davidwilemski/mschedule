@@ -201,7 +201,7 @@ function ScheduleItemListView(items, breadCrumbText, aClass, aHTML) {
 					$jthis.data('ScheduleItemPicker', data);
 				}
 				
-				data.onScreen.css('left', 0);
+				data.onScreen.css('left', '0%');
 				data.offScreen.css('left', '100%');
 				
 				if (!MScheduleUtils.browserIsWebkit()) {
@@ -288,7 +288,7 @@ function ScheduleItemListView(items, breadCrumbText, aClass, aHTML) {
 				data.onScreen.animate({left: '100%'}, data.settings.duration, data.settings.easing, resetOffScreen);
 			}
 			
-			data.offScreen.animate({left: 0}, data.settings.duration, data.settings.easing);
+			data.offScreen.animate({left: '0%'}, data.settings.duration, data.settings.easing);
 			
 			var temp = data.offScreen;
 			data.offScreen = data.onScreen;
