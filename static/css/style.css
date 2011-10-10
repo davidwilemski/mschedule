@@ -458,21 +458,37 @@ div#forgot_form .submit {
 	margin-left: 5px;
 }
 
+/* Scheduler Main */
 
 div#scheduler_scroller {
 	overflow: hidden;
 	width: 100%;
 	height: 85%;
 	margin-top: 15px;
+	white-space: nowrap;
 }
+
+
+div#scheduler_scroller div.scheduler_option_div {
+	display: inline-block;
+	height: 100%;
+	width: 46%;
+	margin: 0 2%;
+}
+
 
 
 /* Schedule List View */
 
-div#schedule_viewer_div {
-    margin: 20px auto;
-    padding: 0;
+div#schedule_viewer_div_wrapper {
+	display: inline-block;
     width: 100%;
+    height: 100%;
+}
+
+div#schedule_viewer_div {
+    width: 100%;
+    height: 100%;
 }
 
 ul#schedule_master {
@@ -601,9 +617,6 @@ ul.schedule_day li.day_break {
 /* Schedule Item Picker */
 
 div#schedule_picker_container {
-	height: 100%;
-	width: 50%;
-	float: left;
 }
 
 div#schedule_picker_container h1.heading {
@@ -727,9 +740,6 @@ ul.schedule_item_list_jumpList li a {
 /* Course List */
 
 div#course_list_container {
-	width: 50%;
-	height: 100%;
-	float: left;
 }
 
 div#course_list_container h1.heading {
@@ -824,11 +834,8 @@ div#course_list_container ul li ul li a {
 /* Scheduler Option List */
 
 div#schedule_options {
-	width: 400px;
 	overflow-x: hidden;
 	overflow-y: auto;
-	position: absolute;
-	top: 20px;
 }
 
 div#schedule_options h1 {

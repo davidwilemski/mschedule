@@ -12,11 +12,11 @@ $this->load->helper('form');
 
 ?>
 <div id="scheduler_scroller">
-	<div id="schedule_picker_container">
+	<div id="schedule_picker_container" class="scheduler_option_div">
 		<h1 class="heading">Course Chooser</h1>
 		<div id="schedule_picker_div"></div>
 	</div>
-	<div id="course_list_container">
+	<div id="course_list_container" class="scheduler_option_div">
 		<h1 class="heading">Course List</h1>
 		<ul></ul>
 	</div>

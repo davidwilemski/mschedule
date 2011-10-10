@@ -227,6 +227,7 @@ function ScheduleItemListView(items, breadCrumbText, aClass, aHTML) {
 					easing : data.settings.easing,
 					axis : 'y'
 				};
+				
 				$j('#' + $jthis.attr('id')).delegate('ul.schedule_item_list_jumpList li a', 'click', function() {
 					data.onScreen.scrollTo('li:eq(' + $j(this).attr('href').replace('#','') + ')', scrollToOptions);
 					return false;
