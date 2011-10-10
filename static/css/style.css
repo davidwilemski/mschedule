@@ -474,6 +474,7 @@ div#scheduler_scroller div.scheduler_option_div {
 	height: 100%;
 	width: 46%;
 	margin: 0 2%;
+    vertical-align: top;
 }
 
 
@@ -484,6 +485,7 @@ div#schedule_viewer_div_wrapper {
 	display: inline-block;
     width: 100%;
     height: 100%;
+    vertical-align: top;
 }
 
 div#schedule_viewer_div {
