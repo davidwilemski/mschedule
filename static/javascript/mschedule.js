@@ -1,10 +1,11 @@
-/* Requires jQuery, jQueryUI Effects Core, mschedule_viewcontroller.js, and mschedule_model.js */
+/* Requires jQuery, jQueryUI Effects Core, mschedule_viewcontroller.js, mschedule_model.js, and mschedule_utils.js */
 
 $j(document).ready(function() {
 	
 	/* Start Schedule Picker */
 	
 	var deptListFactory = getDeptListFactory();
+	var schedulerScroller = $j('#scheduler_scroller');
 	var pickerDiv = $j('#schedule_picker_div');
 	var courseList = $j('#course_list_container ul');
 	var optionsDiv;
@@ -12,13 +13,20 @@ $j(document).ready(function() {
 	var backButton = $j('#backButton');
 	var courseListMap = {};
 	
-	
-	var deleteSymbolEntity = '&#10761;';
 	var checkMarkSymbolEntity = '&#10004;';
 	var forwardUnicodeEntity = '<span class="unicode_direction">&nbsp;&#8594;</span>';
 	var backwardUnicodeEntity = '<span class="unicode_direction">&#8592;&nbsp;</span>';
-	var spinnerImage = new Image();
-	spinnerImage.src = 'http://localhost/mschedule/static/images/spinner.gif';
+	var spinnerImage = MScheduleUtils.preloadImage('spinner.gif');
+	
+	courseList.delegate('li', 'mouseenter', function () {
+		if (!$j(this).hasClass('hover')) {
+			$j(this).addClass('hover');
+		}
+	}).delegate('li', 'mouseleave', function () {
+		if ($j(this).hasClass('hover')) {
+			$j(this).removeClass('hover');
+		}
+	});
 	
 	deptListFactory.getDeptList(function(list) {	
 		var listView = new ScheduleItemListView(list, 'Departments');
@@ -45,7 +53,7 @@ $j(document).ready(function() {
 					if(!courseListMap.hasOwnProperty(courseObj.getAction())) {
 						courseListMap[courseObj.getAction()] = courseObj;
 						var listItem = $j('<li/>');
-						listItem.append($j('<a/>', {'href' : '#' + courseObj.getAction()}).html(deleteSymbolEntity));
+						listItem.append($j('<a/>', {'href' : '#' + courseObj.getAction()}));
 						listItem.append($j('<h1/>', {text:courseObj.getHeader()}));
 						courseList.append(listItem);
 						if(nextButton.hasClass('button_disabled')) {
@@ -108,26 +116,20 @@ $j(document).ready(function() {
 	var buttonDuration = 500;
 	var flowShiftMap = [
 	{
-		'pickerDiv' : '20px',
-		'courseList' : '580px',
-		'optionsDiv' : '900px',
+		'scroller' : 'div#schedule_picker_container',
 		'backButton' : '-40px'
 	},
 	{
-		'pickerDiv' : '-415px',
-		'courseList' : '20px',
-		'optionsDiv' : '355px',
+		'scroller' : 'div#course_list_container',
 		'backButton' : '15px'
 	},
 	{
-		'pickerDiv' : '-1170px',
-		'courseList' : '-735px',
-		'optionsDiv' : '-400px',
+		'scroller' : 'div#schedule_viewer_div_wrapper',
 		'backButton' : '15px'
 	}];
 	
 	function createOptionsDiv() {
-		var optionsDiv = $j('<div/>', {'id' : 'schedule_options'});
+		var optionsDiv = $j('<div/>', {'id' : 'schedule_options', 'class' : 'scheduler_option_div'});
 		optionsDiv.append($j('<h1/>', {text : 'Scheduler Options'}));
 		optionsDiv.append($j('<h2/>', {text : 'Get up early, or stay out late?'}));
 		var optionList = $j('<ul/>', {'class' : 'option_list'});
@@ -138,18 +140,22 @@ $j(document).ready(function() {
 		return optionsDiv;
 	}
 	
+	function animateShift (flowShift, callback) {
+		var scrollToOptions = {
+			duration : flowDuration,
+			easing : flowEasing,
+			axis : 'x'
+		};
+		
+		if (callback !== undefined) {
+			scrollToOptions.onAfter = callback;
+		}
+		schedulerScroller.scrollTo(flowShift.scroller, scrollToOptions);
+	}
+	
 	function animateForwardShift(step, callback) {
 		var flowShift = flowShiftMap[step + 1];
-		
-		pickerDiv.parent().animate({left : flowShift['pickerDiv']}, flowDuration, flowEasing);
-		courseList.parent().animate({left : flowShift['courseList']}, flowDuration, flowEasing);
-		
-		if(callback !== undefined) {
-			optionsDiv.animate({left : flowShift['optionsDiv']}, flowDuration, flowEasing, callback);
-		}
-		else {
-			optionsDiv.animate({left : flowShift['optionsDiv']}, flowDuration, flowEasing);
-		}
+		animateShift(flowShift, callback);
 	}
 	
 	function getSpinnerElem() {
@@ -189,8 +195,7 @@ $j(document).ready(function() {
 						
 						if(optionsDiv === undefined) {
 							optionsDiv = createOptionsDiv();
-							optionsDiv.css('left','900px');
-							$j('#content').append(optionsDiv);
+							$j('#scheduler_scroller').append(optionsDiv);
 						}
 						
 						$j('#' + optionsDiv.attr('id') + ' ul li a').unbind('click');
@@ -238,7 +243,7 @@ $j(document).ready(function() {
 							scheduleViewerDiv = $j('<div/>', {'id' : 'schedule_viewer_div'});
 							scheduleViewerDiv.ScheduleListViewer(list);
 							scheduleViewerDiv.css('display','none');
-							$j('#content').append(scheduleViewerDiv);
+							$j('#scheduler_scroller').append($j('<div/>', {'id' : 'schedule_viewer_div_wrapper'}).append(scheduleViewerDiv));
 						}
 						else {
 							scheduleViewerDiv.ScheduleListViewer('setScheduleList', list);
@@ -280,12 +285,9 @@ $j(document).ready(function() {
 	
 	function animateBackwardShift(step) {
 		var flowShift = flowShiftMap[step - 1];
-					
-		pickerDiv.parent().animate({left : flowShift['pickerDiv']}, flowDuration, flowEasing);
-		courseList.parent().animate({left : flowShift['courseList']}, flowDuration, flowEasing);
-		optionsDiv.animate({left : flowShift['optionsDiv']}, flowDuration, flowEasing, function() {
+		animateShift(flowShift, function () {
 			backButton.animate({bottom : flowShift['backButton']}, buttonDuration, flowEasing);
-			
+		
 			backButton.html(backwardUnicodeEntity + ' Back');
 			if(step > 1) {
 				backButton.removeClass('button_disabled');

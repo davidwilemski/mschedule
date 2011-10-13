@@ -1,18 +1,7 @@
-/* Requires jQuery, jQueryUI Effects Core, jQuery.ScrollTo, and mschedule_model.js */
+/* Requires jQuery, jQueryUI Effects Core, jQuery.ScrollTo, mschedule_model.js, and mschedule_utils.js */
 
 var pixelsPerHour = 60;
 var borderPixelsPerHour = 1;
-
-//Source: http://jdsharp.us/jQuery/minute/calculate-scrollbar-width.php
-function scrollbarWidth() {
-    var div = $j('<div style="width:50px;height:50px;overflow:hidden;position:absolute;top:-200px;left:-200px;"><div style="height:100px;"></div>');
-    $j('body').append(div);
-    var w1 = $j('div', div).innerWidth();
-    div.css('overflow-y', 'scroll');
-    var w2 = $j('div', div).innerWidth();
-    $j(div).remove();
-    return (w1 - w2);
-}
 
 function diffTimes(greater, lesser) {
 	if(typeof greater === 'string') {
@@ -187,13 +176,9 @@ function ScheduleItemListView(items, breadCrumbText, aClass, aHTML) {
 (function( $j ){
 	var methods = {
 		init : function(options) {
-			var $jthis = $j(this);
-			return $jthis.each(function() {
+			return $j(this).each(function() {
+				var $jthis = $j(this);
 				var settings = {
-					width : '400px',
-					height : '400px',
-					breadCrumbsHeight: '20px',
-					scrollListWidth: '15px',
 					easing: 'easeInOutQuint',
 					duration: 750
 				};
@@ -204,54 +189,73 @@ function ScheduleItemListView(items, breadCrumbText, aClass, aHTML) {
 				var data = $jthis.data('ScheduleItemPicker');
 				if($j.isEmptyObject(data)) {
 					data = {
-						slideContainer : $j('<div/>', {'style' : 'position:absolute; top:' + settings.breadCrumbsHeight + '; left:' + settings.scrollListWidth + ';'}),
-						onScreen : $j('<div/>', {'style' : 'position:absolute; top:0;'}),
-						offScreen : $j('<div/>', {'style' : 'position:absolute; top:0;'}),
-						breadCrumbs : $j('<ul/>', {'class' : 'schedule_item_list_breadcrumbs', 'style' : 'position:absolute; top:0; left:' + settings.scrollListWidth + ';'}),
-						scrollList : $j('<ul/>', {'class' : 'schedule_item_list_scrollList', 'style' : 'position:absolute; top:' + settings.breadCrumbsHeight + '; left:0;'}),
+						slideContainer : $j('<div/>', {'class' : 'slide_container'}),
+						onScreen : $j('<div/>', {'class' : 'slider'}),
+						offScreen : $j('<div/>', {'class' : 'slider'}),
+						breadCrumbs : $j('<ul/>', {'class' : 'schedule_item_list_breadcrumbs'}),
+						searchBox : $j('<input/>', {'type' : 'search', 'results' : '0', 'name' : 'course_filter'}),
+						jumpList : $j('<ul/>', {'class' : 'schedule_item_list_jumpList'}),
 						listStack : (new FlexiStack()),
 						settings : settings
 					};
 					$jthis.data('ScheduleItemPicker', data);
 				}
 				
+				data.onScreen.css('left', '0%');
+				data.offScreen.css('left', '100%');
 				
-				var fullHeight = parseInt(settings.breadCrumbsHeight, 10) + parseInt(settings.height, 10) + 'px';
-				var fullWidth = parseInt(settings.scrollListWidth, 10) + parseInt(settings.width, 10) + 'px';
-				$jthis.css('height', fullHeight);
-				$jthis.css('width', fullWidth);
-				$jthis.css('overflow', 'hidden');
-
-				data.slideContainer.css('overflow', 'hidden');
-				data.slideContainer.css('height', settings.height);
-				data.slideContainer.css('width', settings.width);
+				if (!MScheduleUtils.browserIsWebkit()) {
+					MScheduleUtils.preloadImage('search-x.png');
+				}
 				
-				var widthWithScrollBars = (parseInt(settings.width, 10) - scrollbarWidth()).toString() + 'px';
+				var upperDiv = $j('<div/>', {'class' : 'upper'});
+				var lowerDiv = $j('<div/>', {'class' : 'lower'});
 				
-				data.onScreen.css('width', widthWithScrollBars);
-				data.onScreen.css('height', settings.height);
-				data.onScreen.css('left', 0);
-				data.onScreen.css('overflow-x', 'hidden');
-				data.onScreen.css('overflow-y', 'auto');
+				upperDiv.append($j('<div/>', {'style' : 'position:relative;'}).append(data.searchBox));
+				upperDiv.append(data.breadCrumbs);
 				
-				data.offScreen.css('width', widthWithScrollBars);
-				data.offScreen.css('height', settings.height);
-				data.offScreen.css('left', settings.width);
-				data.offScreen.css('overflow-x', 'hidden');
-				data.offScreen.css('overflow-y', 'auto');
-				
-				data.breadCrumbs.css('left', 0);
-				
-				$jthis.append(data.breadCrumbs);
-				$jthis.append(data.scrollList);
-				$jthis.append(data.slideContainer);
+				lowerDiv.append(data.jumpList);
 				data.slideContainer.append(data.onScreen);
 				data.slideContainer.append(data.offScreen);
+				lowerDiv.append(data.slideContainer);
 				
-				var scrollToOptions = {duration : data.settings.duration, easing : data.settings.easing, axis : 'y'};
-				$j('#' + $jthis.attr('id')).delegate('ul.schedule_item_list_scrollList li a', 'click', function() {
+				$jthis.append(upperDiv);
+				$jthis.append(lowerDiv);
+				
+				var scrollToOptions = {
+					duration : data.settings.duration,
+					easing : data.settings.easing,
+					axis : 'y'
+				};
+				
+				$j('#' + $jthis.attr('id')).delegate('ul.schedule_item_list_jumpList li a', 'click', function() {
 					data.onScreen.scrollTo('li:eq(' + $j(this).attr('href').replace('#','') + ')', scrollToOptions);
 					return false;
+				});
+				
+				data.searchBox.bind('input', function() {
+					var searchText = $j(this).val().toLowerCase();
+					
+					if (!MScheduleUtils.browserIsWebkit()) {
+						if(searchText.length) {
+							if(!$j(this).closest('div').find('a.input_reset').length) {
+								var resetButton = $j('<a/>', {'class' : 'input_reset', 'href' : '#', 'style' : 'background-image:' + 'url(\'' + MScheduleUtils.urlForImageName('search-x.png') + '\');'});
+								resetButton.click(function() {
+									$j(this).closest('div').find('input').val('').trigger('input');
+									return false;
+								});
+								$j(this).closest('div').append(resetButton);
+								
+							}
+						}
+						else {
+							$j(this).closest('div').find('a.input_reset').unbind('click').remove();
+						}
+					}
+					
+					data.onScreen.find('ul li').each(function () {
+						$j(this).css('display', $j(this).text().toLowerCase().indexOf(searchText) < 0 ? 'none' : '');
+					});
 				});
 				
 				return $jthis;
@@ -266,6 +270,9 @@ function ScheduleItemListView(items, breadCrumbText, aClass, aHTML) {
 				return $jthis;
 			}
 			
+			data.searchBox.val('');
+			data.onScreen.find('ul li').css('display', '');
+			
 			function resetOffScreen() {
 				data.offScreen.html('');
 				data.offScreen.scrollTop(0);
@@ -274,14 +281,14 @@ function ScheduleItemListView(items, breadCrumbText, aClass, aHTML) {
 			data.offScreen.html('').append(listView.getElement());
 			
 			if(reverse === undefined || reverse === false) {
-				data.offScreen.css('left', data.settings.width);
-				data.onScreen.animate({left:'-' + data.settings.width}, data.settings.duration, data.settings.easing, resetOffScreen);
+				data.offScreen.css('left', '100%');
+				data.onScreen.animate({left: '-100%'}, data.settings.duration, data.settings.easing, resetOffScreen);
 			} else {
-				data.offScreen.css('left', '-' + data.settings.width);
-				data.onScreen.animate({left:data.settings.width}, data.settings.duration, data.settings.easing, resetOffScreen);
+				data.offScreen.css('left', '-100%');
+				data.onScreen.animate({left: '100%'}, data.settings.duration, data.settings.easing, resetOffScreen);
 			}
 			
-			data.offScreen.animate({left: data.settings.scrollListWidth}, data.settings.duration, data.settings.easing);
+			data.offScreen.animate({left: '0%'}, data.settings.duration, data.settings.easing);
 			
 			var temp = data.offScreen;
 			data.offScreen = data.onScreen;
@@ -302,7 +309,7 @@ function ScheduleItemListView(items, breadCrumbText, aClass, aHTML) {
 				listItem.append($j('<a/>', {href : '#' + anchors[i][0], text : anchors[i][1]}));
 				tempList.append(listItem);
 			}
-			data.scrollList.html(tempList.html());
+			data.jumpList.html(tempList.html());
 			
 			data.listStack.push(listView);
 			return $jthis;

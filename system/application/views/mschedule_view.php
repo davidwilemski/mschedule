@@ -11,13 +11,15 @@
 $this->load->helper('form');
 
 ?>
-<div id="schedule_picker_container">
-<h1 class="heading">Course Chooser</h1>
-<div id="schedule_picker_div"></div>
-</div>
-<div id="course_list_container">
-<h1 class="heading">Course List</h1>
-<ul></ul>
+<div id="scheduler_scroller">
+	<div id="schedule_picker_container" class="scheduler_option_div">
+		<h1 class="heading">Course Chooser</h1>
+		<div id="schedule_picker_div"></div>
+	</div>
+	<div id="course_list_container" class="scheduler_option_div">
+		<h1 class="heading">Course List</h1>
+		<ul></ul>
+	</div>
 </div>
 
 <a id="backButton" class="gradient_button button_disabled" href="#"><span class="unicode_direction">&#8592;&nbsp;</span> Back</a>
