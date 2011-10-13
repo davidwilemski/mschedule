@@ -309,17 +309,13 @@ li.nav_item a {
 	margin:0;
 }
 
-#nav_location {
-	float: left;
-	padding-left: 10px;
-}
-
-#nav_location h1 {
+h1#nav_location {
 	color: #fff;
 	font-weight: 100;
 	font-size: 40px;
-	margin: 0;
+	margin-left: 10px;
 	padding: 0;
+	text-align: left;
 }
 
 #content {

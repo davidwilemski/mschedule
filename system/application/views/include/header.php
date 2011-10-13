@@ -26,9 +26,7 @@
 			?>
 		</div>
 		<?php if($this->session->userdata('userID')) { ?>
-			<div id="nav_location">
-				<?php if(isset($nav_location)) echo "<h1>" . $nav_location . "</h1>"; ?>
-			</div>
+			<h1 id="nav_location"><?php if(isset($nav_location)) echo $nav_location; ?></h1>
 		<?php } ?>
 		<?php $this->load->view('include/' . $navigation, $nav_data); ?>
 		<div class="clear"></div>
