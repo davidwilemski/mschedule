@@ -174,24 +174,14 @@ a.gradient_button:active {
 
 /* Start Sign In Menu */
 
-a#signin_button {
-	position: absolute;
-	top: 20px;
-	right: 20px;
-}
-
 #signin_menu {
 	width: 417px;
-	z-index:100;
 	text-align:left;
 	padding:5px;
-	margin-left:-8px;
-	*margin-left:-15px;
-	margin-top:5px;
+	margin-top: 4px;
 	color:#fff;
 	font-size:11px;
 	float: right;
-	margin-top: 4px;
 }
 
 #signin_menu fieldset {
@@ -235,13 +225,26 @@ a#signin_button {
 	color:#fff !important;
 }
 
-#signin_submit {
+a.signin_button {
+		
+}
+
+a#signout_button {
+	float: right;
+	margin: 9px 10px
+}
+
+a#signin_button {
+	display: inline-block;
+	margin: 0;
+}
+
+a.signin_button {
 	background-color: #FFCE34;
 	border: none;
 	color:#333;
 	padding: 7px 15px 8px;
 	font-size:12px;
-	margin: 0;
 	font-weight:lighter;
 	height: 11px;
 	font-weight: bold;

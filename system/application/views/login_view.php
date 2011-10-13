@@ -40,7 +40,7 @@ $hidden_submit_data = array(
 
 <?php
 if($this->session->userdata('userID')) {
-	echo anchor("login/logout", "Sign Out", 'id="signin_button" class="gradient_button rounded_corners"');
+	echo anchor("login/logout", "Sign Out", 'id="signout_button" class="gradient_button rounded_corners_small signin_button"');
 }
 ?>
 
@@ -61,7 +61,7 @@ if($this->session->userdata('userID')) {
 			?>
 			<?=form_hidden($hidden_submit_data)?>
 
-			<a href="#" id="signin_submit" tabindex="6" class="gradient_button rounded_corners_small">Sign In</a>
+			<a href="#" id="signin_submit" tabindex="6" class="gradient_button rounded_corners_small signin_button">Sign In</a>
 		</fieldset>
 	<?=form_close()?>
 	<p class="forgot"> <?=anchor('login/forgot', 'Forgot your username or password?', 'id="forgot_username_link" title="If you remember your password, then try logging in with your uniqname."')?></p>
