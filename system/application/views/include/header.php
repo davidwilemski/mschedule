@@ -25,9 +25,16 @@
 				echo anchor('home', img(array('src' => 'static/images/mschedule_large.png', 'alt' => 'mschedule_logo')));
 			?>
 		</div>
-		<?php if($this->session->userdata('userID')) { ?>
-			<h1 id="nav_location"><?php if(isset($nav_location)) echo $nav_location; ?></h1>
-		<?php } ?>
+		
+		<h1>
+		<?php
+		$nav_location_title = '&nbsp;';
+		if(isset($nav_location)) {
+			$nav_location_title = $nav_location;
+		}
+		?>
+		</h1>
+		<h1 id="nav_location"><?php echo $nav_location_title; ?></h1>
 		<?php $this->load->view('include/' . $navigation, $nav_data); ?>
 		<div class="clear"></div>
 </div>
