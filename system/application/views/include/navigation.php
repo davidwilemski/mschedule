@@ -6,7 +6,6 @@
 		This is loaded by include/template.
 	*/
 ?>
-<?php if($this->session->userdata('userID')) {?>
 <div id="navigation_pane">
 	<ul id="nav_bar">
 		<?php
@@ -25,4 +24,3 @@
 		?>
 	</ul>
 </div>
-<?php } ?>

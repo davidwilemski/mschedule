@@ -41,17 +41,8 @@ var MScheduleUtils = {
 		return (window.navigator.appVersion.toLowerCase().indexOf('webkit') >= 0);
 	},
 	
-	getLocalhostMScheduleDir : function() {
-		var dir = MScheduleUtils.trim(window.location.pathname, '/').split('/')[0];
-		return (dir === 'index.php' ? '' : dir + '/');
-	},
-	
 	urlForImageName : function (imageName) {
-		var url = '';
-		if (window.location.hostname.toLowerCase() === 'localhost') {
-			url = '/' + MScheduleUtils.getLocalhostMScheduleDir();
-		}
-		return url + '/static/images/' + imageName;
+		return '/mschedule/static/images/' + imageName;
 	},
 	
 	preloadImage : function (imageName) {

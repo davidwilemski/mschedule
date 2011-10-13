@@ -21,20 +21,20 @@
 <div id="header">
 		<?php $this->load->view('login_view'); ?>
 		<div id="header_title">
-			<?php
-				echo anchor('home', img(array('src' => 'static/images/mschedule_large.png', 'alt' => 'mschedule_logo')));
-			?>
+			<?php echo img(array('src' => 'static/images/mschedule_large.png', 'alt' => 'mschedule_logo', 'id' => 'mschedule_img')); ?>
 		</div>
 		
 		<h1>
 		<?php
+		
 		$nav_location_title = '&nbsp;';
 		if(isset($nav_location)) {
 			$nav_location_title = $nav_location;
 		}
 		?>
 		</h1>
-		<h1 id="nav_location"><?php echo $nav_location_title; ?></h1>
-		<?php $this->load->view('include/' . $navigation, $nav_data); ?>
-		<div class="clear"></div>
+		<?php if($this->session->userdata('userID')) {?>
+			<h1 id="nav_location"><?php echo $nav_location_title; ?></h1>
+			<?php $this->load->view('include/' . $navigation, $nav_data); ?>
+		<?php } ?>
 </div>
