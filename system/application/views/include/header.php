@@ -18,15 +18,11 @@
 <body>
 
 
-<div id="title_pane">
+<div id="header">
 		<?php $this->load->view('login_view'); ?>
-		<div id="<?php if(!$this->session->userdata('userID')) echo "title_name"; else echo "title_name_small";?>">
-			<?php if($this->session->userdata('userID')) {
-				echo anchor('dashboard', img(array('src' => 'static/images/mschedule_small.png', 'alt' => 'mschedule_logo')));
-			} 
-			else {
+		<div id="header_title">
+			<?php
 				echo anchor('home', img(array('src' => 'static/images/mschedule_large.png', 'alt' => 'mschedule_logo')));
-			}
 			?>
 		</div>
 		<?php if($this->session->userdata('userID')) { ?>
@@ -34,4 +30,6 @@
 				<?php if(isset($nav_location)) echo "<h1>" . $nav_location . "</h1>"; ?>
 			</div>
 		<?php } ?>
+		<?php $this->load->view('include/' . $navigation, $nav_data); ?>
+		<div class="clear"></div>
 </div>

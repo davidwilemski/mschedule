@@ -61,6 +61,10 @@ dl dt {
 	clear: left;
 }
 
+div.clear {
+	clear: both;
+}
+
 #body {
 	background:none repeat scroll 0 0 #fff;
 	margin:0 auto;
@@ -69,25 +73,18 @@ dl dt {
 	border-top: none;
 }
 
-#title_name {
+#header_title {
 	display:block;
-	height:106px;
-	width:1000px;
-	margin:auto;
+	width: 100%;
+	height: auto;
+	margin: 0 0 10px;
 }
 
-#title_name_small {
-	display:block;
-	height:42px;
-	width:100%;
-	margin:auto;
-}
-
-#title_pane {
+#header {
 	background-color: #39608f;
-	height:106px;
+	height:auto;
 	width:1000px;
-	margin: 0px auto;
+	margin: 0 auto;
 	background-repeat:repeat-x;
 	position: relative;
 }
@@ -282,7 +279,7 @@ a#signin_button {
 
 #nav_bar, #admin_nav_bar{
 	margin:0;
-	width:1000px;
+	width:100%;
 	padding:5px 0 2px;
 	text-align:right;
 }
@@ -313,16 +310,14 @@ li.nav_item a {
 }
 
 #nav_location {
-	bottom: -32px;
-	height: 54px;
-	padding: 10px 8px;
-	position: absolute;
+	float: left;
+	padding-left: 10px;
 }
 
 #nav_location h1 {
 	color: #fff;
 	font-weight: 100;
-	font-size: 60px;
+	font-size: 40px;
 	margin: 0;
 	padding: 0;
 }
@@ -371,10 +366,11 @@ li.nav_item a {
 }
 
 #navigation_pane, #admin_nav_pane {
-	width:1000px;
-	background-color:#39608f;
+	width:600px;
 	height:30px;
-	margin: 0 auto;
+	position: absolute;
+	bottom: 0;
+	right: 0;
 }
 
 #body_pane {
