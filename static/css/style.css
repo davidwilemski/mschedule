@@ -761,7 +761,7 @@ div#course_list_container ul li h1 {
 
 @-moz-document url-prefix() {
 	div#course_list_container ul li h1 {
-		padding-top: 2px;
+		padding-top: 3px;
 	}
 }
 
