@@ -754,14 +754,14 @@ div#course_list_container h1.heading {
 div#course_list_container ul {
 	list-style: none;
 	padding: 0;
-	margin: 0;
+	margin: 0 10px 0 15px;
 	overflow-y: auto;
 	overflow-x: hidden;
 	height: 420px;
 }
 
 div#course_list_container ul li {
-    margin: 10px 10px 10px 15px;
+    margin: 10px 0;
     padding: 0;
     position: relative;
     width: 100%;
@@ -769,22 +769,33 @@ div#course_list_container ul li {
 
 div#course_list_container ul li h1 {
 	font-size: 18px;
-    margin: 5px 10px;
+    margin: 0 10px 0 25px;
     padding: 0;
     text-align: left;
     font-weight: 600;
 }
 
+@-moz-document url-prefix() {
+	div#course_list_container ul li h1 {
+		padding-top: 2px;
+	}
+}
+
 div#course_list_container ul li a {
-	display: block;
-    font-size: 16px;
-    left: -15px;
+	display: none;
+	width: 18px;
+	height: 18px;
+    left: 0;
 	top: 0;
     margin: 0;
     padding: 0;
     position: absolute;
-    color: red;
     text-decoration: none;
+    background-image: url('/mschedule/static/images/red_x.png');
+}
+
+div#course_list_container ul li.hover a {
+	display: block;
 }
 
 div#course_list_container ul li ul {
@@ -831,6 +842,7 @@ div#course_list_container ul li ul li a {
     font-size: 20px;
     line-height: 9px;
     color: green;
+    background-image:none;
 }
 
 /* Scheduler Option List */

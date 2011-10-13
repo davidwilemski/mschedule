@@ -13,12 +13,20 @@ $j(document).ready(function() {
 	var backButton = $j('#backButton');
 	var courseListMap = {};
 	
-	
-	var deleteSymbolEntity = '&#10761;';
 	var checkMarkSymbolEntity = '&#10004;';
 	var forwardUnicodeEntity = '<span class="unicode_direction">&nbsp;&#8594;</span>';
 	var backwardUnicodeEntity = '<span class="unicode_direction">&#8592;&nbsp;</span>';
 	var spinnerImage = MScheduleUtils.preloadImage('spinner.gif');
+	
+	courseList.delegate('li', 'mouseenter', function () {
+		if (!$j(this).hasClass('hover')) {
+			$j(this).addClass('hover');
+		}
+	}).delegate('li', 'mouseleave', function () {
+		if ($j(this).hasClass('hover')) {
+			$j(this).removeClass('hover');
+		}
+	});
 	
 	deptListFactory.getDeptList(function(list) {	
 		var listView = new ScheduleItemListView(list, 'Departments');
@@ -45,7 +53,7 @@ $j(document).ready(function() {
 					if(!courseListMap.hasOwnProperty(courseObj.getAction())) {
 						courseListMap[courseObj.getAction()] = courseObj;
 						var listItem = $j('<li/>');
-						listItem.append($j('<a/>', {'href' : '#' + courseObj.getAction()}).html(deleteSymbolEntity));
+						listItem.append($j('<a/>', {'href' : '#' + courseObj.getAction()}));
 						listItem.append($j('<h1/>', {text:courseObj.getHeader()}));
 						courseList.append(listItem);
 						if(nextButton.hasClass('button_disabled')) {
