@@ -25,13 +25,9 @@ class account extends CI_Controller {
 		$this->load->library('form_validation');
 		
 		if(!$this->user_model->Secure(array('userType'=>array('admin', 'user')))) {
-		
 			$this->session->set_flashdata('flashError', 'You must be logged in to access this page.');
 			redirect('login');
-		
 		}
-		
-		
 	}
 	
 	function index() {
@@ -77,8 +73,8 @@ class account extends CI_Controller {
 				return false;
 			}
 		}
+
 		return true;
-		
 	}
 	
 	function _check_same($password) {
@@ -89,8 +85,8 @@ class account extends CI_Controller {
 				return false;
 			}
 		}
+
 		return true;
-		
 	}
 	
 	
@@ -106,9 +102,8 @@ class account extends CI_Controller {
 				}
 			}		
 		}
-		
+
 		return true;
-		
 	}
 	
 	function modify_user() {
@@ -172,7 +167,6 @@ class account extends CI_Controller {
 		
 		$this->form_validation->set_message('_check_email', 'Something went wrong. Try, try again.');
 		return false;
-		
 	}
 	
 }

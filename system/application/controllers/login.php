@@ -29,63 +29,51 @@ class login extends CI_Controller {
 	}
 	
 	function index() {
-        $username = false;
-        //check whether username is an email address, if so look up the username that matches the email
-        if(valid_email($this->input->post('username'))){
-            $username = $this->user_model->getUserByEmail($this->input->post('username'));
-            if($username === false){
-                $this->form_validation->set_message('_check_login', 'Your username / password combination is not correct. If you have not activated your account, please check your email.');
-                $this->form_validation->run();
-                //redirect('home');
-            }
+    $username = false;
+    //check whether username is an email address, if so look up the username that matches the email
+    if(valid_email($this->input->post('username'))) {
+        $username = $this->user_model->getUserByEmail($this->input->post('username'));
+        if($username === false){
+            $this->form_validation->set_message('_check_login', 'Your username / password combination is not correct. If you have not activated your account, please check your email.');
+            $this->form_validation->run();
+            //redirect('home');
         }
-        else{
-            $this->form_validation->set_rules('username', 'Username', 'trim|required|callback__check_login');
-        }
-
+    } else {
+        $this->form_validation->set_rules('username', 'Username', 'trim|required|callback__check_login');
+    }
 
 		$this->form_validation->set_rules('password', 'Password', 'trim|required');
 
 		if($this->form_validation->run()) {
 
-
 			if($username === false){
-                if($this->user_model->login(array('username' => $this->input->post('username'), 'password' => $this->input->post('password')))) {
-                    redirect($this->input->post('redirect'));
-                }
-            }
-
-            else if($this->user_model->login(array('username' => $username, 'password' => $this->input->post('password')))) {
-
-                redirect($this->input->post('redirect'));
-            }
-
-			
+        if($this->user_model->login(array('username' => $this->input->post('username'), 'password' => $this->input->post('password')))) {
+          redirect($this->input->post('redirect'));
+        }
+      } else if($this->user_model->login(array('username' => $username, 'password' => $this->input->post('password')))) {
+          redirect($this->input->post('redirect'));
+      }
 		}
 		
 		redirect('home');
 	}
 	
 	function _check_login($username) {
-        
-		
+
 		if($this->input->post('password')) {
+		  $user = false;
 			if($this->user_model->hasMigrated(array('username' => $username)) == 1)
 				$user = $this->user_model->getUsers(array('username' => $username, 'password' => hash('sha256', $username . $this->input->post('password')), 'status' => 'active'));
 			else if($this->user_model->hasMigrated(array('username' => $username)) == 0)
 				$user = $this->user_model->getUsers(array('username' => $username, 'password' => md5($this->input->post('password')), 'status' => 'active'));
 			else if($this->user_model->hasMigrated(array('username' => $username)) == -1){
-
 				$user = $this->user_model->getUsers(array('username' => $username, 'password' => $this->user_model->oldpass($this->input->post('password'))));
-
 			}
 
+      if($user !== false) 
+        return true;
 
-            if($user !== false) 
-                return true;
-
-            return false;
-						
+      return false;
 		}
 		
 		$this->form_validation->set_message('_check_login', 'Your username / password combination is not correct. If you have not activated your account, please check your email.');
@@ -118,9 +106,13 @@ class login extends CI_Controller {
 			if($this->user_model->addUser($user)) {
 				if($this->user_model->email_validation($user)) {
 					redirect('home/validation_sent');
+				} else {
+				  $this->session->set_flashdata('flashError', 'Couldn\'t send you the validation email. Contact MSchedule support.');
+				  error_log('### validation email fail: ' . $user['activate_code']);
+				  redirect('login/register');
 				}
 			} else {
-				$this->session->set_flashdata('flasherror', 'Something went wrong. Please contact mschedule support.');
+				$this->session->set_flashdata('flashError', 'Something went wrong. Please contact mschedule support.');
 				redirect('login/register');
 			}
 		}
@@ -189,7 +181,6 @@ class login extends CI_Controller {
 		}
 		
 		return true;
-		
 	}
 	
 	function logout() {
@@ -307,7 +298,7 @@ class login extends CI_Controller {
 			if($u) {
 				$user = $this->user_model->activate_account(array('userID' => $u->userID, 'password' => hash('sha256', $this->session->userdata('username') . $this->input->post('password')), 'status' => 'active'));
 				if($user) {
-					$this->session->set_flashdata('flashError', 'Password reset. Try logging in.');
+  					$this->session->set_flashdata('flashError', 'Password reset. Try logging in.');
 					redirect('login');
 				}
 			} else

@@ -36,17 +36,15 @@ $last_name_data = array(
 	'value'	=> set_value('last_name')
 );
 ?>
-<p><label for="first_name">First Name: </label><?php echo form_input($first_name_data); ?></p>
-<p><label for="last_name">Last Name: </label><?php echo form_input($last_name_data); ?></p>
-<p><label for="email">Umich Email: </label><?php echo form_input($email_data); ?></p>
-<p><label for="password">Password: </label><?php echo form_password($password_data); ?></p>
-<p><label for="password_confirm">Password (again): </label><?php echo form_password($password_confirm_data); ?></p>
-
-<?=form_submit('', 'Register', 'class = "button"')?>
-
-<?=anchor('login/forgot', 'Forgot Password')?>
-
-<div class="error"><?=$this->session->flashdata('flasherror')?><?=validation_errors()?></div>
+<table><tbody>
+<tr><td><label for="first_name">First Name: </label></td><td><?php echo form_input($first_name_data); ?></td></tr>
+<tr><td><label for="last_name">Last Name: </label></td><td><?php echo form_input($last_name_data); ?></td></tr>
+<tr><td><label for="email">Umich Email: </label></td><td><?php echo form_input($email_data); ?></td></tr>
+<tr><td><label for="password">Password: </label></td><td><?php echo form_password($password_data); ?></td></tr>
+<tr><td><label for="password_confirm">Password (again): </label></td><td><?php echo form_password($password_confirm_data); ?></td></tr>
+<tr><td></td><td><?=form_submit('', 'Register', 'class = "button"')?></td></tr>
+</tbody></table>
+<? if($this->session->flashdata('flashError') || validation_errors()) { ?><div class="error"><?=$this->session->flashdata('flashError')?><?=validation_errors()?></div> <? } ?>
 
 </fieldset>
 <?=form_close()?>

@@ -37,17 +37,20 @@ $data['css'] = $css;
 
 $js = '';
 if (isset($javascript)) {
-    $js = $javascript;
+  $js = $javascript;
 }
-
 $javascript = includeJSFile('jquery') . includeJSFile('jquery.noconflict') . includeJSFile('mschedule_utils') . $js;
 
 $this->load->view('include/header', $data);
-if($this->user_model->Secure(array('userType'=>'admin'))) {
+if($this->user_model->secure(array('userType'=>'admin'))) {
 	$this->load->view('include/admin_nav');
 }
 
 echo '<div id="body_pane">';
+
+if($this->session->flashdata('flashError')) {
+  echo '<div class="error">' . $this->session->flashdata('flashError') . '</div>';
+}
 
 if(isset($view_name)) 
 {
@@ -60,8 +63,6 @@ if(isset($view_name))
 	echo '</div>';
 	echo '</div>';
 }
-
-
 
 echo '</div>';
 
@@ -77,4 +78,7 @@ $footer_data['javascript'] = $javascript;
 
 $this->load->view('include/footer', $footer_data);
 
+if(ENVIRONMENT != 'production') {
+  print_r($this->session->userdata);
+}
 ?>

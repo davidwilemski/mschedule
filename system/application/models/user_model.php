@@ -47,13 +47,10 @@ class user_model extends CI_Model {
 		
 		// checks for required fields
 		foreach($required as $field) {
-			
 			if(!isset($data[$field]))
 				return false;
-			
 		}
 		return true;
-		
 	}
 	
 	function addUser($options = array()) {
@@ -88,7 +85,6 @@ class user_model extends CI_Model {
 		$this->db->insert('user_prefs', array('userID' => $id));
 
 		return;
-
 	}
 	
 	function updateUser($options = array()) {
@@ -169,14 +165,14 @@ class user_model extends CI_Model {
 		$this->db->select('migrated')->from('users')->where('username', $options['username']);
 		$q = $this->db->get();
 
-        //If user doesn't exist the return -100 XXX
-        if($q->num_rows() <= 0){
-            print_r($q->row());
-            return -100;
-        }
+    //If user doesn't exist the return -100 XXX
+    if($q->num_rows() <= 0){
+        //print_r($q->row());
+        return -100;
+    }
 
-        $usr = $q->row();
-        return $usr->migrated;
+    $usr = $q->row();
+    return $usr->migrated;
 	}
 	
 	function login($options = array()) {
@@ -234,9 +230,8 @@ class user_model extends CI_Model {
 			// Then the user doesn't have a record in user_prefs and needs one
 			$this->createPrefs($user->userID);
 		}
-		
+
 		return true;
-		
 	}
 	
 	function email_validation($u = array()) {
@@ -266,7 +261,6 @@ class user_model extends CI_Model {
 		$this->email->message($message);
 		
 		return $this->email->send();
-	
 	}
 	
 	function activate_account($options = array()) {
@@ -281,7 +275,6 @@ class user_model extends CI_Model {
 			
 		$this->session->set_flashdata('resent', 'oops');
 		return false;
-	
 	}
 	
 	function secure($options = array()) {
@@ -353,15 +346,14 @@ class user_model extends CI_Model {
 		return $r->pass;
 	}
 
-    function getUserByEmail($email){
-        $this->db->select('username')->from('users')->where('email', $email);
-        $query = $this->db->get();
+  function getUserByEmail($email){
+    $this->db->select('username')->from('users')->where('email', $email);
+    $query = $this->db->get();
 
-        if ($query->num_rows() == 0)
-            return false;
-        else 
-            return $query->row()->username;
-    }
-
+    if ($query->num_rows() == 0)
+      return false;
+    else 
+      return $query->row()->username;
+  }
 
 }

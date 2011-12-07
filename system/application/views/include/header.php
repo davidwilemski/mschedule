@@ -17,7 +17,6 @@
 
 <body>
 
-
 <div id="header">
 		<?php $this->load->view('login_view'); ?>
 		<div id="header_title">
@@ -33,8 +32,8 @@
 		}
 		?>
 		</h1>
-		<?php if($this->session->userdata('userID')) {?>
+		<?php //if($this->session->userdata('userID')) {?>
 			<h1 id="nav_location"><?php echo $nav_location_title; ?></h1>
 			<?php $this->load->view('include/' . $navigation, $nav_data); ?>
-		<?php } ?>
+		<?php //} ?>
 </div>

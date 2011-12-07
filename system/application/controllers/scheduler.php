@@ -19,16 +19,13 @@
 class scheduler extends CI_Controller {
 	
 	function __construct() {
-		
+
 		parent::__construct();
-		
-		if(!$this->user_model->Secure(array('userType'=>array('admin', 'user')))) {
-		
+
+		if(!$this->user_model->secure(array('userType'=>array('admin', 'user')))) {
 			$this->session->set_flashdata('flashError', 'You must be logged in to access this page.');
 			redirect('login');
-		
 		}
-		
 	}
 	
 	function index() {

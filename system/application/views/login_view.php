@@ -64,7 +64,7 @@ if($this->session->userdata('userID')) {
 			<a href="#" id="signin_submit" tabindex="6" class="gradient_button rounded_corners_small signin_button">Sign In</a>
 		</fieldset>
 	<?=form_close()?>
-	<p class="forgot"> <?=anchor('login/forgot', 'Forgot your username or password?', 'id="forgot_username_link" title="If you remember your password, then try logging in with your uniqname."')?></p>
+	<p class="forgot"> <?=anchor('login/forgot', 'Forgot your username or password?', 'id="forgot_username_link" title="If you remember your password, then try logging in with your uniqname."')?> <?=anchor('login/register', 'Register')?></p>
 	<div class="error"><?php echo validation_errors(); ?></div>
 </div>
 <?php } ?>
