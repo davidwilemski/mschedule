@@ -23,6 +23,7 @@ class account extends CI_Controller {
 		parent::__construct();
 		
 		$this->load->library('form_validation');
+		$this->load->library('password');
 		
 		if(!$this->user_model->Secure(array('userType'=>array('admin', 'user')))) {
 			$this->session->set_flashdata('flashError', 'You must be logged in to access this page.');
@@ -56,9 +57,9 @@ class account extends CI_Controller {
 		$this->form_validation->set_rules('new_password2', 'New Password Confirmation', 'trim|required|callback__check_same');
 		
 		if($this->form_validation->run()) {
-			if($this->user_model->updateUser(array('userID' => $this->session->userdata['userID'], 'password' => md5($this->input->post('new_password'))))) {
-				$this->session->set_flashdata('action', 'Your password has been changed');
-				redirect('dashboard');
+			if($this->user_model->updateUser(array('userID' => $this->session->userdata['userID'], 'password' => $this->password->hash($this->input->post('new_password'))))) {
+				$this->session->set_flashdata('flashError', 'Your password has been changed');
+				redirect('account');
 			}
 		}
 		
@@ -68,8 +69,9 @@ class account extends CI_Controller {
 	function _check_user_password($password) {
 		
 		if($this->input->post('password')) {
-			if(!$this->user_model->getUsers(array('userID' => $this->session->userdata['userID'], 'password' => md5($password)))) {
-				$this->form_validation->set_message('_check_user_password', 'Your passwords is incorrect. Try, try again.');
+		  $user = $this->user_model->getUsers(array('userID' => $this->session->userdata['userID']));
+			if(!$this->password->check_password($password, $user->password)) {
+				$this->form_validation->set_message('_check_user_password', 'Your password is incorrect. Try, try again.');
 				return false;
 			}
 		}
@@ -148,16 +150,9 @@ class account extends CI_Controller {
 		if($this->input->post('email')) {
 			
 			$user_1 = $this->user_model->getUsers(array('email' => $email));
-			$user_2 = $this->user_model->getUsers(array('username' => preg_replace('/@umich.edu/', '', $email)));
 			if($user_1) {
 				if($user_1->userID != $this->session->userdata('userID')) {
 					$this->form_validation->set_message('_check_email', 'That email is already registered. Try, try again.');
-					return false;
-				} else
-					return true;
-			} else if ($user_2) {
-				if($user_2->userID != $this->session->userdata('userID')) {
-					$this->form_validation->set_message('_check_email', 'That uniqname is already registered. Try, try again.');
 					return false;
 				} else
 					return true;

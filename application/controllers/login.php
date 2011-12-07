@@ -23,63 +23,30 @@ class login extends CI_Controller {
 		
 		parent::__construct();
 		
-        $this->load->library('form_validation');
-        $this->load->helper('email');
-		
+    $this->load->library('form_validation');
+    $this->load->helper('email');
 	}
 	
-	function index() {
-    $username = false;
-    //check whether username is an email address, if so look up the username that matches the email
-    if(valid_email($this->input->post('username'))) {
-      $username = $this->user_model->getUserByEmail($this->input->post('username'));
-      if($username === false){
-          $this->form_validation->set_message('_check_login', 'Your username / password combination is not correct. If you have not activated your account, please check your email.');
-          $this->form_validation->run();
-          //redirect('home');
-      }
-    } else {
-      $this->form_validation->set_rules('username', 'Username', 'trim|required|callback__check_login');
-    }
-
-		$this->form_validation->set_rules('password', 'Password', 'trim|required');
-
-		if($this->form_validation->run()) {
-			if($username === false){
-        if($this->user_model->login(array('username' => $this->input->post('username'), 'password' => $this->input->post('password')))) {
-          redirect($this->input->post('redirect'));
-        }
-      } else if($this->user_model->login(array('username' => $username, 'password' => $this->input->post('password')))) {
-        redirect($this->input->post('redirect'));
+  function index() {
+    $this->form_validation->set_rules('username', 'required|trim');
+    $this->form_validation->set_rules('password', 'required|trim');
+    if($this->form_validation->run()) {
+      error_log("logging in...");
+      if($this->user_model->login(array('username'=>$this->input->post('username'), 'password'=>$this->input->post('password')))) {
+        // We were logged in, yay!
+        error_log("logged in");
       } else {
-        $this->session->set_flashdata('flashError', 'Your username / password combination is not correct.');
+        error_log("problem logging in");
+        $this->session->set_flashdata('flashError', 'Username/password was not correct');
       }
-		}
-		
-		redirect('home');
-	}
-	
-	function _check_login($username) {
-
-		if($this->input->post('password')) {
-		  $user = false;
-			if($this->user_model->hasMigrated(array('username' => $username)) == 1)
-				$user = $this->user_model->getUsers(array('username' => $username, 'password' => hash('sha256', $username . $this->input->post('password')), 'status' => 'active'));
-			else if($this->user_model->hasMigrated(array('username' => $username)) == 0)
-				$user = $this->user_model->getUsers(array('username' => $username, 'password' => md5($this->input->post('password')), 'status' => 'active'));
-			else if($this->user_model->hasMigrated(array('username' => $username)) == -1){
-				$user = $this->user_model->getUsers(array('username' => $username, 'password' => $this->user_model->oldpass($this->input->post('password'))));
-			}
-
-      if($user !== false) 
-        return true;
-
-      return false;
-		}
-		
-		$this->form_validation->set_message('_check_login', 'Your username / password combination is not correct. If you have not activated your account, please check your email.');
-		return false;
-		
+      redirect('home');
+    } else {
+      error_log("validation error....");
+      if($this->input->post('redirect'))
+        redirect($this->input->post('redirect'));
+      else
+        redirect('home');
+    }
 	}
 	
 	function register() {
@@ -94,13 +61,13 @@ class login extends CI_Controller {
 		$this->form_validation->set_rules('password_confirm', 'Password Confirmation', 'trim|required');
 		
 		if($this->form_validation->run()) {
-		
+		  $this->load->library('password');
 			$user = array(
 				'first_name'=>$this->input->post('first_name'), 
 				'last_name'=>$this->input->post('last_name'),
 				'email'=>$this->input->post('email'),
 				'username'=>preg_replace('/@umich.edu/', '', $this->input->post('email')),
-				'password'=>hash('sha256', preg_replace('/@umich.edu/', '', $this->input->post('email')) . $this->input->post('password')),
+				'password'=>$this->password->hash($this->input->post('password')),
 				'activate_code'=>random_string('unique')
 			);
 			
@@ -237,7 +204,6 @@ class login extends CI_Controller {
 		}
 		
 		return false;
-		
 	}
 	
 	function forgot() {
@@ -266,21 +232,15 @@ class login extends CI_Controller {
 		if($this->input->post('email')) {
 			
 			$user_1 = $this->user_model->getUsers(array('email' => $email));
-			$user_2 = $this->user_model->getUsers(array('username' => preg_replace('/@umich.edu/', '', $this->input->post('email'))));
 			
 			if($user_1) {
 				$this->user_model->forgot_password(array('userID' => $user_1->userID));
 				return true;
-			} else if($user_2) {
-				$this->user_model->forgot_password(array('userID' => $user_2->userID));
-				return true;
 			}
-				
 		}
 		
 		$this->form_validation->set_message('_registered_email', 'This email does not match any of our records. Try, try again.');
 		return false;
-		
 	}
 	
 	function password_reset() {
@@ -292,19 +252,20 @@ class login extends CI_Controller {
 		$this->form_validation->set_rules('password', 'Password', 'trim|required|callback__check_password');
 		$this->form_validation->set_rules('password_confirm', 'Password Confirmation', 'trim|required');
 		
+		$this->load->library('password');
 		
 		if($this->form_validation->run()) {
 			
 			$u = $this->user_model->getUsers(array('activate_code' => $this->input->post('code'), 'status' => 'inactive'));
 			if($u) {
-				$user = $this->user_model->activate_account(array('userID' => $u->userID, 'password' => hash('sha256', $this->session->userdata('username') . $this->input->post('password')), 'status' => 'active'));
+				$user = $this->user_model->activate_account(array('userID' => $u->userID, 'password' => $this->password->hash($this->input->post('password')), 'status' => 'active'));
 				if($user) {
   					$this->session->set_flashdata('flashError', 'Password reset. Try logging in.');
 					redirect('login');
 				}
-			} else
-				$this->session->set_flashdata('resent', 'This code is no longer valid. Try logging in.');
-				
+			} else {
+				$this->session->set_flashdata('flashError', 'This is an invalid code. Try logging in.');
+		  }
 		}
 		
 		$data = array(
@@ -314,7 +275,6 @@ class login extends CI_Controller {
 		);
 		
 		$this->load->view('include/template', $data);
-		
 	}
 	
 	function _password_activate($code) {

@@ -147,32 +147,14 @@ class user_model extends CI_Model {
 		$this->db->from('users');
 		$q = $this->db->get();
 
-        if($q->num_rows() == 0){
-            return false;
-        }
+    if($q->num_rows() == 0){
+      return false;
+    }
 		
 		if(isset($options['username']) || isset($options['userID']) || isset($options['email']) || isset($options['activate_code']))
 			return $q->row(0);
 			
 		return $q->result();
-	}
-
-	//Returns migration code
-	//0 for md5 hash of just password
-	//-1 for OLD_PASSWORD hash of just password
-	//1 for sha256 hash of user+pass
-	function hasMigrated($options = array()){
-		$this->db->select('migrated')->from('users')->where('username', $options['username']);
-		$q = $this->db->get();
-
-    //If user doesn't exist the return -100 XXX
-    if($q->num_rows() <= 0){
-        //print_r($q->row());
-        return -100;
-    }
-
-    $usr = $q->row();
-    return $usr->migrated;
 	}
 	
 	function login($options = array()) {
@@ -180,37 +162,40 @@ class user_model extends CI_Model {
 		if(!$this->user_model->_required(array('username', 'password'), $options))
 			return false;
 
-		$user = null;
-
-        $migrated = $this->user_model->hasMigrated(array('username' => $options['username']));
-
-        if($migrated == -100){
-            return false;
-        }
-
-        else if($migrated == 1){
-			$user = $this->user_model->getUsers(array('username' => $options['username'], 'password' => hash('sha256', $options['username'] . $options['password'])));
-		}	
-		else if($migrated == 0){
-			//otherwise get user data, then if user data matches, migrate the password to the new hash (sha256(username + password))
-			$user = $this->user_model->getUsers(array('username' => $options['username'], 'password' => (md5($options['password']))));
-			if($user){//then migrate
-				$options['password'] = hash('sha256', $user->username . $options['password']);
-				$options['userID'] = $user->userID;
-				$options['migrated'] = 1;
-				$this->user_model->updateUser($options);
-			}
+    $this->load->library('password');
+		$user = $this->user_model->getUsers(array(
+		  'email'=>$options['username']
+		));
+		// let's save user IF the password checks
+		error_log(print_r($user, 1));
+		if($user) {
+		  $user = $this->password->check_password($options['password'], $user->password) ? $user : false;
 		}
-		else{ //otherwise we know to use the OLD_PASSWORD function - also migrate this
-			$this->load->helper('mysqlcrypt');
-			$user = $this->user_model->getUsers(array('username' => $options['username'], 'password' => $this->user_model->oldpass($options['password'])));
-			if($user){//then migrate
-				$options['password'] = hash('sha256', $user->username . $options['password']);
-				$options['userID'] = $user->userID;
-				$options['migrated'] = 1;
-				$this->user_model->updateUser($options);
 
-			}
+		if(!$user) {
+		  // if we didn't find the user with the salty password, we check with old passsword function
+		  $user = $this->user_model->getUsers(array(
+		    'email'=>$options['username'],
+		    'password'=>$this->user_model->oldpass($options['password'])
+		  ));
+
+		  if(!$user) {
+		    // we didn't find the old password - we really need too fail now
+		    return false;
+		  } else {
+		    // we found the user and need to update the password
+		    $rows = $this->user_model->updateUser(
+		      array(
+		        'userID' => $user->userID,
+		        'password' => $this->password->hash($options['password']),
+		        'migrated' => 1
+		      ));
+		    if($rows != 1) {
+		      $this->session->set_flashdata('flashError', 'Had an internal problem. Contact MSchedule for assistance.');
+		      error_log('could not migrate user ' . $user->userID);
+		      return false;
+		    }
+		  }
 		}
 		
 		if(!$user) return false;
