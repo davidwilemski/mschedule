@@ -32,26 +32,27 @@ class login extends CI_Controller {
     $username = false;
     //check whether username is an email address, if so look up the username that matches the email
     if(valid_email($this->input->post('username'))) {
-        $username = $this->user_model->getUserByEmail($this->input->post('username'));
-        if($username === false){
-            $this->form_validation->set_message('_check_login', 'Your username / password combination is not correct. If you have not activated your account, please check your email.');
-            $this->form_validation->run();
-            //redirect('home');
-        }
+      $username = $this->user_model->getUserByEmail($this->input->post('username'));
+      if($username === false){
+          $this->form_validation->set_message('_check_login', 'Your username / password combination is not correct. If you have not activated your account, please check your email.');
+          $this->form_validation->run();
+          //redirect('home');
+      }
     } else {
-        $this->form_validation->set_rules('username', 'Username', 'trim|required|callback__check_login');
+      $this->form_validation->set_rules('username', 'Username', 'trim|required|callback__check_login');
     }
 
 		$this->form_validation->set_rules('password', 'Password', 'trim|required');
 
 		if($this->form_validation->run()) {
-
 			if($username === false){
         if($this->user_model->login(array('username' => $this->input->post('username'), 'password' => $this->input->post('password')))) {
           redirect($this->input->post('redirect'));
         }
       } else if($this->user_model->login(array('username' => $username, 'password' => $this->input->post('password')))) {
-          redirect($this->input->post('redirect'));
+        redirect($this->input->post('redirect'));
+      } else {
+        $this->session->set_flashdata('flashError', 'Your username / password combination is not correct.');
       }
 		}
 		

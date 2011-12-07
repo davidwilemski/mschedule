@@ -7,7 +7,6 @@
 <?php 
 $this->load->helper('form');
 ?>
-<div class="error"><?=$this->session->flashdata('flashError')?></div>
 <?php
 
 $username_data = array(
