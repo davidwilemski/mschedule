@@ -102,7 +102,7 @@ if (defined('ENVIRONMENT'))
 	// if your controller is not in a sub-folder within the "controllers" folder
 	// $routing['directory'] = '';
 
-	// The controller class file name.  Example:  Mycontroller.php
+	// The controller class file name.  Example:  Mycontroller
 	// $routing['controller'] = '';
 
 	// The controller function you wish to be called.
@@ -125,6 +125,16 @@ if (defined('ENVIRONMENT'))
  *
  */
 	// $assign_to_config['name_of_config_item'] = 'value of config item';
+$assign_to_config['current_term'] = 'fall11';
+$assign_to_config['twitter_keys'] = array(
+	'consumer_key' => '8BzImmJY2FFEhgG1B8J5w',
+	'consumer_secret' => 'Wv4ws2D8H2kTuWiIVzsOXMY14cH9XV2AloAXTPW0SU'
+);
+$assign_to_config['twitter_urls'] = array(
+	'request' => 'http://twitter.com/oauth/request_token',
+	'access' => 'http://twitter.com/oauth/access_token',
+	'authorize' => 'http://twitter.com/oauth/authorize'
+);
 
 
 
@@ -167,6 +177,7 @@ if (defined('ENVIRONMENT'))
 	define('SELF', pathinfo(__FILE__, PATHINFO_BASENAME));
 
 	// The PHP file extension
+	// this global constant is deprecated.
 	define('EXT', '.php');
 
 	// Path to the system folder
@@ -202,7 +213,7 @@ if (defined('ENVIRONMENT'))
  * And away we go...
  *
  */
-require_once BASEPATH.'core/CodeIgniter'.EXT;
+require_once BASEPATH.'core/CodeIgniter.php';
 
 /* End of file index.php */
 /* Location: ./index.php */
