@@ -108,13 +108,12 @@ class login extends CI_Controller {
 		
 		if($this->input->post('email')) {
 			
-			$username = preg_replace('/@umich.edu/', '', $email);
-			$user = $this->user_model->getUsers(array('username' => $username));
+			$user = $this->user_model->getUsers(array('email' => $username));
 			if(!$user) 
 				return true;
 				
 		}
-		$this->form_validation->set_message('_check_username', 'Your uniqname (email) is already registered. Try, try again.');
+		$this->form_validation->set_message('_check_username', 'Your email is already registered. Try, try again.');
 		return false;
 		
 	}

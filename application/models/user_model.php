@@ -36,7 +36,6 @@
 				   returns false otherwise
 				   user this in the construct of a controller along with a redirect to secure parts of the site				  
 
-        getUserByEmail() - returns a username (string) given an email address (string)
 	*/
 ?>
 <?php
@@ -204,7 +203,6 @@ class user_model extends CI_Model {
 		$this->session->set_userdata('first_name', $user->first_name);
 		$this->session->set_userdata('last_name', $user->last_name);
 		$this->session->set_userdata('userType', $user->userType);
-		$this->session->set_userdata('username', $user->username);
 		$this->session->set_userdata('userID', $user->userID);
 		
 		// Some housekeeping:
@@ -268,18 +266,15 @@ class user_model extends CI_Model {
 			return false;
 		
 		$userType = $this->session->userdata('userType');
-		
-		
+
 		if(is_array($options['userType'])) {
 			foreach($options['userType'] as $optionUserType) {
 				if($optionUserType == $userType)
 					return true;
 			}
-		} else {
-			
+		} else {			
 			if($userType == $options['userType'])
 				return true;
-			
 		}
 			
 		return false;
@@ -330,15 +325,5 @@ class user_model extends CI_Model {
 		$r = $q->row();
 		return $r->pass;
 	}
-
-  function getUserByEmail($email){
-    $this->db->select('username')->from('users')->where('email', $email);
-    $query = $this->db->get();
-
-    if ($query->num_rows() == 0)
-      return false;
-    else 
-      return $query->row()->username;
-  }
 
 }
